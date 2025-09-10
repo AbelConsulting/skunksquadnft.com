@@ -332,10 +332,10 @@
       if (typeof window.ethereum !== 'undefined') {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
-          userAddress = accounts[0];
-          updateConnectButton(userAddress);
-            }
-          });
+                  userAddress = accounts[0];
+                  updateConnectButton(userAddress);
+                }
+              });
           </script>
         </body>
         </html>
