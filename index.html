@@ -334,33 +334,8 @@
         if (accounts.length > 0) {
           userAddress = accounts[0];
           updateConnectButton(userAddress);
-        }
-      }
-    });
-    
-    // Contact form submission via fetch
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(contactForm);
-        try {
-          const response = await fetch('/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(Object.fromEntries(formData))
+            }
           });
-          if (response.ok) {
-            alert('Message sent!');
-            contactForm.reset();
-          } else {
-            alert('Failed to send message.');
-          }
-        } catch (err) {
-          alert('Failed to send message.');
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+          </script>
+        </body>
+        </html>
