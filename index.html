@@ -240,7 +240,8 @@
       <h2 class="text-3xl sm:text-4xl font-extrabold text-black mb-6 text-center">Get In Touch</h2>
       <div class="max-w-md mx-auto space-y-4">
         <p class="text-gray-700 text-center">Have questions or want to collaborate? Reach out to us!</p>
-        <form action="mailto:skunksquad411@gmail.com" method="POST" class="space-y-4">
+         <form id="contactForm" method="POST" class="space-y-4">
+          <input type="text" id="website" name="website" class="hidden" tabindex="-1" autocomplete="off">
           <div>
             <label for="name" class="sr-only">Name</label>
             <input type="text" id="name" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" />
@@ -348,6 +349,30 @@
         }
       }
     });
+    
+    // Contact form submission via fetch
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(contactForm);
+        try {
+          const response = await fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.fromEntries(formData))
+          });
+          if (response.ok) {
+            alert('Message sent!');
+            contactForm.reset();
+          } else {
+            alert('Failed to send message.');
+          }
+        } catch (err) {
+          alert('Failed to send message.');
+        }
+      });
+    }
   </script>
 </body>
 </html>
