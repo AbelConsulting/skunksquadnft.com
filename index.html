@@ -259,7 +259,7 @@
         <a href="#roadmap" class="hover:text-white transition-colors duration-200">Roadmap</a>
         <a href="#contact" class="hover:text-white transition-colors duration-200">Contact</a>
       </div>
-      <p class="text-sm">&copy; 2025 Skunk Squad. All rights reserved.</p>      
+      <p class="text-sm">&copy; <span id="copyrightYear"></span> Skunk Squad. All rights reserved.</p>      
     </div>
   </footer>
 
@@ -329,6 +329,8 @@
               }
             }
           });
+        // Set copyright year dynamically
+        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
         </script>
       </body>
       </html>
