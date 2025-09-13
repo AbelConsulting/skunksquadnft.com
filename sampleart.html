@@ -6,6 +6,24 @@
   <title>Skunk Squad – sampleart</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
+  </noscript>
+  <style>
+    .title-gradient {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(90deg, #ef4444, #eab308, #991b1b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+      text-shadow: 0 2px 12px rgba(234,179,8,0.25), 0 0 2px #991b1b;
+      letter-spacing: 0.04em;
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-[#0b132b] text-white">
   <header class="max-w-5xl mx-auto p-6 flex items-center justify-between">
@@ -17,7 +35,7 @@
   </header>
 
     <main class="max-w-xl mx-auto p-6">
-        <h1 class="text-3xl font-extrabold mb-2">Sample Art</h1>
+  <h1 class="text-3xl sm:text-4xl font-extrabold mb-2 title-gradient">Skunk Squad Launch</h1>
         <p class="opacity-80 mb-6">Here are some sample artworks from the Skunk Squad collection these are actual traits and backgrounds 4 random rolls from root art.</p>
     
         <section class="grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Sample Art Gallery">
