@@ -11,12 +11,12 @@
   <!-- Google Fonts Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Preload the stylesheet, then swap rel to stylesheet onload -->
+  <!-- Preload Inter and Roboto Mono, then swap rel to stylesheet onload -->
   <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Mono:wght@700&display=swap"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
   </noscript>
 
   <!-- Open Graph Meta Tags for social sharing -->
@@ -41,6 +41,40 @@
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     section { backdrop-filter: blur(8px); background: rgba(255,255,255,0.92); border-radius: 18px; }
+    /* Countdown Card Enhancements */
+    .countdown-card {
+      background: linear-gradient(135deg, #0f172a 80%, #991b1b 100%);
+      box-shadow: 0 0 32px 0 rgba(234,179,8,0.18), 0 0 0 2px #991b1b inset;
+      border: 2px solid #991b1b;
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-card::before {
+      content: "";
+      position: absolute;
+      top: -40%; left: -40%; width: 180%; height: 180%;
+      background: radial-gradient(circle, rgba(234,179,8,0.12) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .countdown-timer .timer-num {
+      font-family: 'Roboto Mono', monospace;
+      color: #fff;
+      text-shadow: 0 0 12px #eab308, 0 0 2px #fff;
+      animation: pulseGlow 1.2s infinite alternate;
+      background: linear-gradient(90deg, #eab308 0%, #991b1b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 12px #eab308, 0 0 2px #fff; }
+      100% { text-shadow: 0 0 24px #eab308, 0 0 8px #fff; }
+    }
+    .countdown-timer .timer-label {
+      color: #eab308;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
     .neon:hover { box-shadow: 0 8px 30px rgba(111,255,233,0.35), 0 0 0 1px rgba(111,255,233,0.25) inset; transform: translateY(-2px); }
     .benefit-card { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
     .benefit-card:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(111,255,233,.40), 0 0 0 2px rgba(111,255,233,.22) inset, 0 0 22px rgba(111,255,233,.35); }
@@ -105,29 +139,29 @@
 
   <!-- Countdown Card -->
 <section class="mx-auto max-w-3xl my-10">
-  <div class="rounded-2xl bg-slate-900/80 text-white p-6 md:p-8 shadow-xl ring-1 ring-white/10">
+  <div class="countdown-card rounded-2xl text-white p-6 md:p-8 shadow-xl">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <div>
         <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Skunk Squad Launch</h2>
         <p class="text-sm md:text-base text-slate-300 mt-1">Countdown to mint — <span id="target-date-label" class="font-semibold"></span></p>
       </div>
       <!-- Timer -->
-  <div id="countdown" class="grid grid-cols-4 gap-3 text-center" aria-live="polite" data-target="2025-10-10T22:00:00">
+      <div id="countdown" class="countdown-timer grid grid-cols-4 gap-3 text-center" aria-live="polite" data-target="2025-10-10T22:00:00">
         <div class="rounded-xl bg-white/10 px-4 py-3">
-          <div class="text-3xl md:text-4xl font-bold tabular-nums" id="cd-days">0</div>
-          <div class="text-xs uppercase tracking-wide text-slate-300">Days</div>
+          <div class="text-3xl md:text-4xl font-bold timer-num" id="cd-days">0</div>
+          <div class="text-xs uppercase tracking-wide timer-label">Days</div>
         </div>
         <div class="rounded-xl bg-white/10 px-4 py-3">
-          <div class="text-3xl md:text-4xl font-bold tabular-nums" id="cd-hours">00</div>
-          <div class="text-xs uppercase tracking-wide text-slate-300">Hours</div>
+          <div class="text-3xl md:text-4xl font-bold timer-num" id="cd-hours">00</div>
+          <div class="text-xs uppercase tracking-wide timer-label">Hours</div>
         </div>
         <div class="rounded-xl bg-white/10 px-4 py-3">
-          <div class="text-3xl md:text-4xl font-bold tabular-nums" id="cd-mins">00</div>
-          <div class="text-xs uppercase tracking-wide text-slate-300">Mins</div>
+          <div class="text-3xl md:text-4xl font-bold timer-num" id="cd-mins">00</div>
+          <div class="text-xs uppercase tracking-wide timer-label">Mins</div>
         </div>
         <div class="rounded-xl bg-white/10 px-4 py-3">
-          <div class="text-3xl md:text-4xl font-bold tabular-nums" id="cd-secs">00</div>
-          <div class="text-xs uppercase tracking-wide text-slate-300">Secs</div>
+          <div class="text-3xl md:text-4xl font-bold timer-num" id="cd-secs">00</div>
+          <div class="text-xs uppercase tracking-wide timer-label">Secs</div>
         </div>
       </div>
     </div>
@@ -234,36 +268,38 @@
         <div class="flex items-start gap-4">
           <span class="text-2xl text-purple-600 flex-shrink-0">🚀</span>
           <div>
-            <h3 class="text-xl font-semibold text-gray-900">Pre-Launch: Whitelist & Grass Roots</h3>
-            <p>Official Launch is 10/10 email SkunkSquad411@gmail for access.</p>
+            <h3 class="text-xl font-semibold text-gray-900">Pre-Launch: Whitelist & Grassroots</h3>
+            <p>Official Launch: <strong>10/10/25</strong><br>
+              Email <a href="mailto:SkunkSquad411@gmail.com" class="font-semibold text-blue-700 underline">SkunkSquad411@gmail.com</a> to secure whitelist access. Limited spots available.
+            </p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="text-2xl text-purple-600 flex-shrink-0">🚀</span>
           <div>
             <h3 class="text-xl font-semibold text-gray-900">Phase 1: Launch & Community Building</h3>
-            <p>Initial mint, Discord setup, social media campaigns, and early adopter rewards.</p>
+            <p>Mint your Skunk, join the Discord, and claim early adopter rewards as we kick off social campaigns.</p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="text-2xl text-purple-600 flex-shrink-0">🎨</span>
           <div>
-            <h3 class="text-xl font-semibold text-gray-900">Phase 2: Skunkworks Members Only Expansions</h3>
-            <p>Launch the exclusive Members-Only site with advanced tools, analytics, and private drops.</p>
+            <h3 class="text-xl font-semibold text-gray-900">Phase 2: Skunkworks Expansions</h3>
+            <p>Unlock the Members-Only portal with advanced tools, rarity analytics, and exclusive drops for true collectors.</p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="text-2xl text-purple-600 flex-shrink-0">🛠️</span>
           <div>
             <h3 class="text-xl font-semibold text-gray-900">Phase 3: Evolution Unlocked</h3>
-            <p>Introduce the Evolution Trade-In mechanism, enabling holders to burn Skunks for new forms.</p>
+            <p>Trade in your Skunks and burn to evolve them into Steampunk, Cyber, or Forest forms. The next era of the Squad begins.</p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="text-2xl text-purple-600 flex-shrink-0">🗳️</span>
           <div>
             <h3 class="text-xl font-semibold text-gray-900">Phase 4: Decentralized Governance</h3>
-            <p>Implement DAO mechanics for community voting on future trait development.</p>
+            <p>The community takes control. DAO voting lets collectors decide future traits, drops, and the evolution of the Skunk Squad.</p>
           </div>
         </div>
       </div>
