@@ -360,16 +360,59 @@
      }
     connectWalletBtn.addEventListener('click', connectWallet);
     window.addEventListener('load', async () => {
-            if (typeof window.ethereum !== 'undefined') {
-              const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-              if (accounts.length > 0) {
-                userAddress = accounts[0];
-                updateConnectButton(userAddress);
-              }
-            }
-          });
-        // Set copyright year dynamically
-        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
-        </script>
+      // Wallet connect on load
+      if (typeof window.ethereum !== 'undefined') {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          userAddress = accounts[0];
+          updateConnectButton(userAddress);
+        }
+      }
+      // Countdown timer logic
+      const countdown = document.getElementById('countdown');
+      const targetDateLabel = document.getElementById('target-date-label');
+      const postLaunch = document.getElementById('post-launch');
+      const cdDays = document.getElementById('cd-days');
+      const cdHours = document.getElementById('cd-hours');
+      const cdMins = document.getElementById('cd-mins');
+      const cdSecs = document.getElementById('cd-secs');
+      if (countdown && countdown.dataset.target) {
+        const targetDate = new Date(countdown.dataset.target);
+        // Show formatted target date
+        if (targetDateLabel) {
+          const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+          targetDateLabel.textContent = targetDate.toLocaleString(undefined, options);
+        }
+        function updateCountdown() {
+          const now = new Date();
+          let diff = targetDate - now;
+          if (diff <= 0) {
+            cdDays.textContent = '0';
+            cdHours.textContent = '00';
+            cdMins.textContent = '00';
+            cdSecs.textContent = '00';
+            if (postLaunch) postLaunch.classList.remove('hidden');
+            countdown.setAttribute('aria-label', 'Mint is live');
+            return;
+          }
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          diff -= days * (1000 * 60 * 60 * 24);
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          diff -= hours * (1000 * 60 * 60);
+          const mins = Math.floor(diff / (1000 * 60));
+          diff -= mins * (1000 * 60);
+          const secs = Math.floor(diff / 1000);
+          cdDays.textContent = days;
+          cdHours.textContent = hours.toString().padStart(2, '0');
+          cdMins.textContent = mins.toString().padStart(2, '0');
+          cdSecs.textContent = secs.toString().padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+      // Set copyright year dynamically
+      document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+    });
+    </script>
       </body>
       </html>
