@@ -3,32 +3,36 @@
 Skunk Squad NFT Image & Metadata Generator
 
 Overview:
-        This script composes layered PNGs into final NFT images using a trait catalog CSV.
-        It also emits ERC-721 style metadata JSON files and a manifest of generated editions.
+"""
+Skunk Squad NFT Image & Metadata Generator
+
+Overview:
+This script composes layered PNGs into final NFT images using a trait catalog CSV.
+It also emits ERC-721 style metadata JSON files and a manifest of generated editions.
 
 Input:
-        - traits_catalog.csv (columns):
-                layer, trait_name, file, weight, rarity_tier, notes
-            * 'file' should be a path to a transparent PNG for that trait.
-            * If a layer is sometimes absent, include a 'None' trait that points to a 1x1 fully-transparent PNG.
-            * Weights are relative; they do not need to sum to 100.
+  - traits_catalog.csv (columns):
+      layer, trait_name, file, weight, rarity_tier, notes
+    * 'file' should be a path to a transparent PNG for that trait.
+    * If a layer is sometimes absent, include a 'None' trait that points to a 1x1 fully-transparent PNG.
+    * Weights are relative; they do not need to sum to 100.
 
 Layers:
-        - The drawing order is controlled by the order of 'layer' names in LAYER_ORDER below.
-            Ensure the order goes from background (bottom) to foreground (top).
+  - The drawing order is controlled by the order of 'layer' names in LAYER_ORDER below.
+    Ensure the order goes from background (bottom) to foreground (top).
 
 Usage:
-        python generate_skunks.py \
-                --csv traits_catalog.csv \
-                --outdir output \
-                --supply 100 \
-                --name-prefix "Skunk Squad #" \
-                --description "Skunk Squad: community-first, generative rarity, and Skunk Works access." \
-                --base-uri "ipfs://METADATA_CID/" \
-                --seed 42
+  python generate_skunks.py \
+      --csv traits_catalog.csv \
+      --outdir output \
+      --supply 100 \
+      --name-prefix "Skunk Squad #" \
+      --description "Skunk Squad: community-first, generative rarity, and Skunk Works access." \
+      --base-uri "ipfs://METADATA_CID/" \
+      --seed 42
 
-        After generation, upload the /output/images to IPFS/ArDrive, obtain an images base URI,
-        then update the JSON 'image' fields if you prefer an images-specific base URI.
+  After generation, upload the /output/images to IPFS/ArDrive, obtain an images base URI,
+  then update the JSON 'image' fields if you prefer an images-specific base URI.
 
 License: MIT
 """
