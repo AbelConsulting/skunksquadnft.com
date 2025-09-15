@@ -35,7 +35,6 @@ License: MIT
 import argparse
 import hashlib
 import json
-import os
 import random
 from collections import defaultdict, OrderedDict
 from pathlib import Path
@@ -49,10 +48,10 @@ DEFAULT_LAYER_ORDER = [
     "body",
     "tail",
     "head",
-    "eyes",
-    "mouth",
-    "shoes",
-    "accessory",
+    "arm_right",
+    "arm_left",
+    "badge",
+    "shoes",    
 ]
 
 def load_catalog(csv_path: Path) -> pd.DataFrame:
@@ -68,10 +67,12 @@ def load_catalog(csv_path: Path) -> pd.DataFrame:
     df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0.0)
     df["rarity_tier"] = df["rarity_tier"].astype(str)
     if "notes" not in df.columns:
+
         df["notes"] = ""
     return df
 
 def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, float, str]]]:
+
     tables: Dict[str, List[Tuple[str, Path, float, str]]] = defaultdict(list)
     for _, row in df.iterrows():
         layer = str(row["layer"])
@@ -82,8 +83,6 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
         tables[layer].append((trait, filepath, weight, rarity))
     return tables
 
-def choose_trait(options: List[Tuple[str, Path, float, str]]) -> Tuple[str, Path, str]:
-    # Weighted random choice
     names, paths, weights, rarities = zip(*options)
     # Avoid all-zero weights
     if sum(weights) <= 0:
@@ -153,7 +152,7 @@ def main():
     ap.add_argument("--description", type=str, default="Skunk Squad: community-first, generative rarity, and Skunk Works access.", help="Metadata description")
     ap.add_argument("--base-uri", type=str, default="ipfs://METADATA_CID/", help="Base URI for metadata directory (contract baseURI)")
     ap.add_argument("--images-suburi", type=str, default=None, help="Optional base URI specifically for images (e.g., ipfs://IMAGES_CID/)")
-    ap.add_argument("--layer-order", type=str, default=None, help="Comma-separated order (background,body,tail,head,eyes,mouth,shoes,accessory)")
+    ap.add_argument("--layer-order", type=str, default=None, help="Comma-separated order (background,body,tail,head,arm_right,arm_left,shoes,badge)")
     ap.add_argument("--seed", type=int, default=None, help="PRNG seed for reproducibility")
     ap.add_argument("--max-retries", type=int, default=100000, help="Max attempts to find unique combos")
     ap.add_argument("--image-width", type=int, default=None, help="Force output image width (optional)")
@@ -275,10 +274,10 @@ LAYER_ORDER = [
     "body",
     "tail",
     "head",
-    "eyes",
-    "mouth",
-    "shoes",
-    "accessory",
+    "arm_right",
+    "arm_left",
+    "badge",
+    "shoes"
 ]
 
 def load_catalog(csv_path: Path) -> pd.DataFrame:
@@ -299,106 +298,3 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
         rarity = str(row["rarity_tier"])
         tables[layer].append((trait, filepath, weight, rarity))
     return tables
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", type=Path, default=Path("traits_catalog.csv"))
-        LAYER_ORDER = [
-            "background",
-            "body",
-            "tail",
-            "head",
-            "hand_right",
-            "hand_left",
-            "shoes",
-            "badge",
-        ]
-    if args.seed is not None:
-        random.seed(args.seed)
-
-    df = load_catalog(args.csv)
-    tables = build_layer_tables(df)
-
-    # Ensure every layer in LAYER_ORDER exists in the CSV
-    missing_layers = [l for l in LAYER_ORDER if l not in tables]
-    if missing_layers:
-        raise ValueError(f"No traits found for layers: {', '.join(missing_layers)}")
-
-    out_images = args.outdir / "images"
-    out_meta   = args.outdir / "metadata"
-    out_images.mkdir(parents=True, exist_ok=True)
-    out_meta.mkdir(parents=True, exist_ok=True)
-
-    used = set()
-    manifest_rows = []
-    attempts = 0
-    created = 0
-
-    images_base_uri = args.images_suburi if args.images_suburi else (args.base_uri.rstrip("/") + "/images/")
-
-    while created < args.supply and attempts < args.max_retries:
-        attempts += 1
-
-        # Choose traits per layer
-        chosen_files: Dict[str, Path] = OrderedDict()
-        chosen_meta: Dict[str, Tuple[str,str]] = OrderedDict()  # layer -> (trait_name, rarity_tier)
-        for layer in LAYER_ORDER:
-            trait_name, path, rarity = choose_trait(tables[layer])
-            chosen_files[layer] = path
-            chosen_meta[layer] = (trait_name, rarity)
-
-        sig = combo_signature({layer: chosen_meta[layer][0] for layer in chosen_meta})
-        if sig in used:
-            continue
-        used.add(sig)
-
-        token_id = created + 1
-        # Compose image
-        img = compose_image(chosen_files)
-        img_path = out_images / f"{token_id}.png"
-        img.save(img_path, format="PNG")
-
-        # Create metadata
-        attributes = make_attributes(chosen_meta)
-        metadata = {
-            "name": f"{args.name_prefix}{token_id}",
-            "description": args.description,
-            "image": images_base_uri + f"{token_id}.png",
-            "https://Skunksquadnft.com": args.base_uri,  # you can point this to your website
-            "attributes": attributes,
-        }
-        meta_path = out_meta / f"{token_id}.json"
-        with open(meta_path, "w", encoding="utf-8") as f:
-            json.dump(metadata, f, ensure_ascii=False, indent=2)
-
-        manifest_rows.append({
-            "token_id": token_id,
-            "signature": sig,
-            **{f"{layer}": chosen_meta[layer][0] for layer in LAYER_ORDER}
-        })
-        created += 1
-
-    if created < args.supply:
-        raise RuntimeError(f"Could only create {created}/{args.supply} unique editions after {attempts} attempts. "
-                           "Consider adding more traits or layers, or increase --max-retries.")
-
-    # Write manifest
-    manifest_path = args.outdir / "txid.map.csv"
-    pd.DataFrame(manifest_rows).to_csv(manifest_path, index=False)
-
-    # Also write a quick README with next steps
-    readme_path = args.outdir / "README.txt"
-    with open(readme_path, "w", encoding="utf-8") as f:
-        f.write(
-            "Output structure:\n"
-            " - images/: final PNGs (upload to IPFS/ArDrive)\n"
-            " - metadata/: ERC-721 JSON metadata\n"
-            " - manifest.csv: a flat view of each token's chosen traits\n\n"
-            "Suggested next steps:\n"
-            "1) Upload images/ to IPFS/ArDrive and capture the CID/TxID.\n"
-            "2) If using a separate images base URI, re-run generator with --images-suburi.\n"
-            "3) Pin/Store metadata/ and point your contract's baseURI to the metadata directory.\n"
-        )
-
-    print(f"Done. Generated {created} editions into {args.outdir}")
-
-if __name__ == "__main__":
-    main()
