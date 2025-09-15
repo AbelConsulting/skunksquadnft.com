@@ -1,24 +1,23 @@
 layer,trait_name,file,weight,rarity_tier,notes
-background,Neon Alley,art/backgrounds/neon_alley.png,20,rare,
-background,Enchanted Forest,art/backgrounds/enchanted_forest.png,35,uncommon,
-background,Cosmic Blue,art/backgrounds/cosmic_blue.png,30,uncommon,
-background,Temple Ruins,art/backgrounds/temple_ruins.png,10,rare,
-background,Classic Gradient,art/backgrounds/classic_gradient.png,5,common,
-body,Base Body,art/body/base_body.png,100,common,required
-tail,Striped Tail,art/tails/striped_tail.png,70,common,
-tail,Spiked Tail,art/tails/spiked_tail.png,25,rare,
+background,Neon Alley,https://app.ardrive.io/#/file/afcbecdf-ae70-459f-a835-ff947fa03e34/view,25,common,
+background,Castle,https://app.ardrive.io/iMFcl1xuuElSi35Wz4ZgSlWTiTykcfhBSsGLKjQINOo,25,common,
+background,Temple Ruins,https://app.ardrive.io/#/file/cdfeea5c-eb03-4524-8ad5-b5bd3dbd0907/view,25,legendary,
+background,Space,https://app.ardrive.io/#/file/310b2222-c058-4445-a37d-e9f6bcb086ed/view,10,mythic,
+background,skunkworks,https://app.ardrive.io/#/file/32034982-e8f9-4a9b-9710-5f72c2168288/view,15,common,
+body,Base Body,https://app.ardrive.io/#/file/e542df5d-d2a5-4023-8288-8b1f560c8017/view,100,common,required
+tail,Gold Tail,https://app.ardrive.io/#/file/5531d910-afe5-4288-a444-a2ca43b27263/view,70,common,
+tail,EThertail,https://app.ardrive.io/#/file/eb58d6b1-7596-45c4-9c05-169bcbe8013a/view,25,rare,
 tail,None,/mnt/data/skunk_squad_generator/transparent.png,5,common,optional
-head,Standard Head,art/heads/standard_head.png,100,common,required
-eyes,Classic Eyes,art/eyes/classic.png,75,common,
-eyes,Holo Lenses,art/eyes/holo_lenses.png,15,legendary,
-eyes,Cyber Visor,art/eyes/cyber_visor.png,10,rare,
-mouth,Slight Smile,art/mouths/smile.png,70,common,
-mouth,Cyber Breather,art/mouths/cyber_breather.png,20,rare,
-mouth,Fanged Grin,art/mouths/fanged_grin.png,10,uncommon,
-shoes,None,/mnt/data/skunk_squad_generator/transparent.png,60,common,optional
-shoes,Purple Kicks,art/shoes/purple.png,25,rare,
-shoes,Cyber Boots,art/shoes/cyber_boots.png,15,uncommon,
-accessory,None,/mnt/data/skunk_squad_generator/transparent.png,70,common,optional
-accessory,Gemstone Orb (Right Hand),art/accessories/gem_orb_right.png,10,legendary,
-accessory,Flaming Sword (Left Hand),art/accessories/flaming_sword_left.png,5,mythic,
-accessory,Neon Halo,art/accessories/neon_halo.png,15,rare,
+head,Common Head,https://app.ardrive.io/#/file/28ff38e4-27f8-4551-80be-31f5d683134f/view,100,common,required
+arm_right,plain,https://app.ardrive.io/#/file/c26c455f-ab2e-4634-aa44-9b5e3b1e8f77/view,60,common,optional
+arm_right,Feather,https://app.ardrive.io/#/file/b615d032-44b0-4817-8bdc-71005214533e/view,20,legendary,
+arm_right,Katana,https://app.ardrive.io/#/file/9f75b7a4-32b1-4eb1-b911-f08929c5d7ac/view,20,rare,
+arm_left,Plain,https://app.ardrive.io/#/file/6fa6b423-61ff-42e5-8bb8-4c83348b62fc/view.png,65,common,optional
+arm_left,lighter,https://app.ardrive.io/#/file/3450ed1b-21e6-4f6a-9790-f07a94a37dda/view,20,rare,
+arm_left,nftrocket,https://app.ardrive.io/#/file/shield_plate.png,15,rare,optional
+badge,None,https://app.ardrive.io/#/file/7fb152a2-c22f-4fb9-ba70-0a66426b457e/view,80,common,optional
+badge,rare_grump,https://app.ardrive.io/#/file/700aa585-cb5d-401b-9892-b69220598519/view,10,rare,
+badge,opensail,https://app.ardrive.io/#/file/3d91b009-7e3c-40be-8fe4-6343522203d4/view,10,uncommon,
+shoes,BlackBoots,https://app.ardrive.io/#/file/a0fd23b9-ffcf-45e5-bdf2-2c2265462cf5/view,60,common,optional
+shoes,Greenheart,https://app.ardrive.io/#/file/cc2dd2fd-c894-45b9-afcc-f653698eddde/view,25,rare,
+shoes,Sandals,https://app.ardrive.io/#/file/aeb84fda-4372-4925-84f6-02dd456884da/view,15,legendary,
