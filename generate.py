@@ -55,6 +55,9 @@ DEFAULT_LAYER_ORDER = [
 ]
 
 def load_catalog(csv_path: Path) -> pd.DataFrame:
+    csv_path = Path(csv_path).expanduser()
+    if not csv_path.exists():
+        raise FileNotFoundError(f"Traits CSV not found at: {csv_path}")
     df = pd.read_csv(csv_path)
     required = {"layer","trait_name","file","weight","rarity_tier"}
     missing = required - set(df.columns)
@@ -92,13 +95,6 @@ def choose_trait(options: List[Tuple[str, Path, float, str]]) -> Tuple[str, Path
     choice_idx = random.choices(range(len(options)), weights=weights, k=1)[0]
     return names[choice_idx], paths[choice_idx], rarities[choice_idx]
 
-    names, paths, weights, rarities = zip(*options)
-    # Avoid all-zero weights
-    if sum(weights) <= 0:
-        weights = [1.0] * len(weights)
-    choice_idx = random.choices(range(len(options)), weights=weights, k=1)[0]
-    return names[choice_idx], paths[choice_idx], rarities[choice_idx]
-
 def combo_signature(traits_by_layer: Dict[str, str]) -> str:
     # Deterministic signature (sorted by layer name)
     sig_src = "|".join(f"{layer}:{traits_by_layer[layer]}" for layer in sorted(traits_by_layer.keys()))
@@ -111,7 +107,7 @@ def open_image_keep_size(path: Path, size_ref: Optional[Tuple[int,int]]) -> Imag
         canvas = Image.new("RGBA", size_ref, (0,0,0,0))
         x = (size_ref[0] - img.size[0]) // 2
         y = (size_ref[1] - img.size[1]) // 2
-        canvas.alpha_composite(img, (x,y))
+        canvas.paste(img, (x, y), img)
         return canvas
     return img
 
@@ -154,7 +150,7 @@ def parse_layer_order(arg: Optional[str]) -> List[str]:
 
 def main():
     ap = argparse.ArgumentParser(description="Skunk Squad image & metadata generator")
-    ap.add_argument("--csv", type=Path, default=Path("traits_catalog.csv"), help="Path to traits catalog CSV")
+    ap.add_argument("--csv", type=Path, default=Path(__file__).parent.joinpath("traits_catalog.csv"), help="Path to traits catalog CSV")
     ap.add_argument("--outdir", type=Path, default=Path("output"), help="Output directory")
     ap.add_argument("--supply", type=int, default=10, help="Number of editions to mint")
     ap.add_argument("--name-prefix", type=str, default="Skunk Squad #", help="Token name prefix")
