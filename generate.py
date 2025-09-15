@@ -1,3 +1,38 @@
+
+"""
+Skunk Squad NFT Image & Metadata Generator
+
+Overview:
+        This script composes layered PNGs into final NFT images using a trait catalog CSV.
+        It also emits ERC-721 style metadata JSON files and a manifest of generated editions.
+
+Input:
+        - traits_catalog.csv (columns):
+                layer, trait_name, file, weight, rarity_tier, notes
+            * 'file' should be a path to a transparent PNG for that trait.
+            * If a layer is sometimes absent, include a 'None' trait that points to a 1x1 fully-transparent PNG.
+            * Weights are relative; they do not need to sum to 100.
+
+Layers:
+        - The drawing order is controlled by the order of 'layer' names in LAYER_ORDER below.
+            Ensure the order goes from background (bottom) to foreground (top).
+
+Usage:
+        python generate_skunks.py \
+                --csv traits_catalog.csv \
+                --outdir output \
+                --supply 100 \
+                --name-prefix "Skunk Squad #" \
+                --description "Skunk Squad: community-first, generative rarity, and Skunk Works access." \
+                --base-uri "ipfs://METADATA_CID/" \
+                --seed 42
+
+        After generation, upload the /output/images to IPFS/ArDrive, obtain an images base URI,
+        then update the JSON 'image' fields if you prefer an images-specific base URI.
+
+License: MIT
+"""
+
 import argparse
 import hashlib
 import json
@@ -9,45 +44,6 @@ from typing import Dict, List, Tuple
 
 from PIL import Image
 import pandas as pd
-
-
-Overview
---------
-This script composes layered PNGs into final NFT images using a trait catalog CSV.
-It also emits ERC-721 style metadata JSON files and a manifest of generated editions.
-
-Input
------
-- traits_catalog.csv (columns):
-    layer, trait_name, file, weight, rarity_tier, notes
-
-  * 'file' should be a path to a transparent PNG for that trait.
-  * If a layer is sometimes absent, include a 'None' trait that points to a 1x1 fully-transparent PNG.
-  * Weights are relative; they do not need to sum to 100.
-
-Layers
-------
-- The drawing order is controlled by the order of 'layer' names in LAYER_ORDER below.
-  Ensure the order goes from background (bottom) to foreground (top).
-
-Usage
------
-python generate_skunks.py \
-    --csv traits_catalog.csv \
-    --outdir output \
-    --supply 100 \
-    --name-prefix "Skunk Squad #" \
-    --description "Skunk Squad: community-first, generative rarity, and Skunk Works access." \
-    --base-uri "ipfs://METADATA_CID/" \
-    --seed 42
-
-After generation, upload the /output/images to IPFS/ArDrive, obtain an images base URI,
-then update the JSON 'image' fields if you prefer an images-specific base URI.
-
-
-License
--------
-MIT
 
 
 LAYER_ORDER = [
@@ -71,10 +67,11 @@ def load_catalog(csv_path: Path) -> pd.DataFrame:
 
 def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, float, str]]]:
     tables: Dict[str, List[Tuple[str, Path, float, str]]] = defaultdict(list)
-    for _, row in df.iterrows():
-        layer = str(row["layer"])
-        trait = str(row["trait_name"])
-
+    filepath = Path(str(row["file"]))
+    weight = float(row["weight"])
+    rarity = str(row["rarity_tier"])
+    tables[layer].append((trait, filepath, weight, rarity))
+return tables
         """
         Overview:
             This script composes layered PNGs into final NFT images using a trait catalog CSV.
@@ -125,10 +122,10 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
             "body",
             "tail",
             "head",
-            "eyes",
-            "mouth",
+            "hand_right",
+            "hand_left",
             "shoes",
-            "accessory",
+            "badge",
         ]
     if args.seed is not None:
         random.seed(args.seed)
@@ -181,7 +178,7 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
             "name": f"{args.name_prefix}{token_id}",
             "description": args.description,
             "image": images_base_uri + f"{token_id}.png",
-            "external_url": args.base_uri,  # you can point this to your website
+            "https://Skunksquadnft.com": args.base_uri,  # you can point this to your website
             "attributes": attributes,
         }
         meta_path = out_meta / f"{token_id}.json"
@@ -200,7 +197,7 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
                            "Consider adding more traits or layers, or increase --max-retries.")
 
     # Write manifest
-    manifest_path = args.outdir / "manifest.csv"
+    manifest_path = args.outdir / "txid.map.csv"
     pd.DataFrame(manifest_rows).to_csv(manifest_path, index=False)
 
     # Also write a quick README with next steps
