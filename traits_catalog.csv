@@ -1,0 +1,24 @@
+layer,trait_name,file,weight,rarity_tier,notes
+background,Neon Alley,art/backgrounds/neon_alley.png,20,rare,
+background,Enchanted Forest,art/backgrounds/enchanted_forest.png,35,uncommon,
+background,Cosmic Blue,art/backgrounds/cosmic_blue.png,30,uncommon,
+background,Temple Ruins,art/backgrounds/temple_ruins.png,10,rare,
+background,Classic Gradient,art/backgrounds/classic_gradient.png,5,common,
+body,Base Body,art/body/base_body.png,100,common,required
+tail,Striped Tail,art/tails/striped_tail.png,70,common,
+tail,Spiked Tail,art/tails/spiked_tail.png,25,rare,
+tail,None,/mnt/data/skunk_squad_generator/transparent.png,5,common,optional
+head,Standard Head,art/heads/standard_head.png,100,common,required
+eyes,Classic Eyes,art/eyes/classic.png,75,common,
+eyes,Holo Lenses,art/eyes/holo_lenses.png,15,legendary,
+eyes,Cyber Visor,art/eyes/cyber_visor.png,10,rare,
+mouth,Slight Smile,art/mouths/smile.png,70,common,
+mouth,Cyber Breather,art/mouths/cyber_breather.png,20,rare,
+mouth,Fanged Grin,art/mouths/fanged_grin.png,10,uncommon,
+shoes,None,/mnt/data/skunk_squad_generator/transparent.png,60,common,optional
+shoes,Purple Kicks,art/shoes/purple.png,25,rare,
+shoes,Cyber Boots,art/shoes/cyber_boots.png,15,uncommon,
+accessory,None,/mnt/data/skunk_squad_generator/transparent.png,70,common,optional
+accessory,Gemstone Orb (Right Hand),art/accessories/gem_orb_right.png,10,legendary,
+accessory,Flaming Sword (Left Hand),art/accessories/flaming_sword_left.png,5,mythic,
+accessory,Neon Halo,art/accessories/neon_halo.png,15,rare,
