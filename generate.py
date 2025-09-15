@@ -83,6 +83,15 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
         tables[layer].append((trait, filepath, weight, rarity))
     return tables
 
+def choose_trait(options: List[Tuple[str, Path, float, str]]) -> Tuple[str, Path, str]:
+    # Weighted random choice
+    names, paths, weights, rarities = zip(*options)
+    # Avoid all-zero weights
+    if sum(weights) <= 0:
+        weights = [1.0] * len(weights)
+    choice_idx = random.choices(range(len(options)), weights=weights, k=1)[0]
+    return names[choice_idx], paths[choice_idx], rarities[choice_idx]
+
     names, paths, weights, rarities = zip(*options)
     # Avoid all-zero weights
     if sum(weights) <= 0:
