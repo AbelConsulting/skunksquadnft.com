@@ -231,6 +231,8 @@ def main():
     ap.add_argument("--csv", type=Path, default=Path(__file__).parent.joinpath("traits_catalog.csv"), help="Path to traits catalog CSV")
     ap.add_argument("--traits-dir", type=Path, default=None, help="Path to a traits directory (alternative to --csv)")
     ap.add_argument("--outdir", type=Path, default=Path("output"), help="Output directory")
+    ap.add_argument("--preflight", action="store_true", help="Validate all referenced assets and exit")
+    ap.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     ap.add_argument("--supply", type=int, default=10, help="Number of editions to mint")
     ap.add_argument("--name-prefix", type=str, default="Skunk Squad #", help="Token name prefix")
     ap.add_argument("--description", type=str, default="Skunk Squad: community-first, generative rarity, and Skunk Works access.", help="Metadata description")
@@ -252,11 +254,59 @@ def main():
         df = load_catalog(args.csv)
     tables = build_layer_tables(df)
 
-    layer_order = parse_layer_order(args.layer_order)
-    # Ensure every layer exists in the TSV
-    missing_layers = [l for l in layer_order if l not in tables]
-    if missing_layers:
-        raise ValueError(f"No traits found for layers: {', '.join(missing_layers)}")
+    def vprint(*a, **k):
+        if args.verbose:
+            print(*a, **k)
+
+    def preflight_assets(tables: Dict[str, List[Tuple[str, Path, float, str]]]) -> List[str]:
+        """Return a list of missing asset descriptions (empty if all present)."""
+        missing = []
+        for layer, opts in tables.items():
+            for trait, path, weight, rarity in opts:
+                s = str(path)
+                s = s.replace("\\", "/")
+                s = re.sub(r'^(https?):/+', r"\1://", s)
+                p = Path(s)
+                if p.exists():
+                    vprint(f"OK: {layer} -> {s}")
+                    continue
+                if re.match(r'^[a-zA-Z]+://', s):
+                    try:
+                        with urllib.request.urlopen(s) as resp:
+                            if resp.status >= 400:
+                                missing.append(f"{layer}:{trait} -> URL error {resp.status} {s}")
+                                continue
+                    except Exception as e:
+                        missing.append(f"{layer}:{trait} -> {s} ({e})")
+                        continue
+                else:
+                    missing.append(f"{layer}:{trait} -> {s} (local file missing)")
+        return missing
+
+    if args.preflight:
+        vprint("Running preflight asset check...")
+        missing = preflight_assets(tables)
+        if missing:
+            print("Preflight failed. Missing assets:")
+            for m in missing:
+                print(" -", m)
+            raise SystemExit(2)
+        print("Preflight OK: all assets reachable")
+        raise SystemExit(0)
+
+    if args.layer_order:
+        layer_order = parse_layer_order(args.layer_order)
+        # Ensure specified layers exist
+        missing_layers = [l for l in layer_order if l not in tables]
+        if missing_layers:
+            raise ValueError(f"No traits found for layers: {', '.join(missing_layers)}")
+    else:
+        # Build a sensible default: include DEFAULT_LAYER_ORDER entries that exist,
+        # then append any remaining layers discovered in the traits tables.
+        layer_order = [l for l in DEFAULT_LAYER_ORDER if l in tables]
+        for l in list(tables.keys()):
+            if l not in layer_order:
+                layer_order.append(l)
 
     out_images = args.outdir / "images"
     out_meta   = args.outdir / "metadata"
