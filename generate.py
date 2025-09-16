@@ -75,19 +75,66 @@ def load_catalog(csv_path: Path) -> pd.DataFrame:
     if "notes" not in df.columns:
 
         df["notes"] = ""
+    # Attach the resolved CSV path for callers that need to resolve relative asset paths
+    df.attrs["__csv_path__"] = csv_path
     return df
 
 def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, float, str]]]:
 
     tables: Dict[str, List[Tuple[str, Path, float, str]]] = defaultdict(list)
+    csv_parent = None
+    if "__csv_path__" in df.attrs:
+        csv_parent = Path(df.attrs["__csv_path__"]).parent
+
     for _, row in df.iterrows():
         layer = str(row["layer"])
         trait = str(row["trait_name"])
-        filepath = Path(str(row["file"])).expanduser()
+        raw_path = str(row["file"]).strip()
+        # Resolve relative paths against the CSV directory if provided
+        if csv_parent and not re.match(r'^[a-zA-Z]+://', raw_path) and not Path(raw_path).is_absolute():
+            filepath = (csv_parent / raw_path).resolve()
+        else:
+            filepath = Path(raw_path).expanduser()
         weight = float(row["weight"])
         rarity = str(row["rarity_tier"])
         tables[layer].append((trait, filepath, weight, rarity))
     return tables
+
+
+def load_from_dir(dir_path: Path) -> pd.DataFrame:
+    """
+    Build a DataFrame similar to the CSV format from a directory structure.
+    Expects directories named with a leading number and layer name (e.g. '1.background').
+    Files inside are treated as trait files; trait_name is derived from filename.
+    """
+    dir_path = Path(dir_path).expanduser()
+    if not dir_path.exists() or not dir_path.is_dir():
+        raise FileNotFoundError(f"Traits directory not found: {dir_path}")
+
+    rows = []
+    for child in sorted(dir_path.iterdir()):
+        if not child.is_dir():
+            continue
+        # derive layer name from directory (strip numeric prefix and dot)
+        layer_name = child.name
+        if "." in layer_name:
+            layer_name = layer_name.split(".", 1)[1]
+        for f in sorted(child.iterdir()):
+            if f.is_file() and f.suffix.lower() in {".png", ".webp", ".jpg", ".jpeg"}:
+                trait_name = f.stem
+                rows.append({
+                    "layer": layer_name,
+                    "trait_name": trait_name,
+                    "file": str(f.resolve()),
+                    "weight": 1.0,
+                    "rarity_tier": "common",
+                    "notes": ""
+                })
+    if not rows:
+        raise RuntimeError(f"No trait files found in directory: {dir_path}")
+    df = pd.DataFrame(rows)
+    df.attrs["__csv_path__"] = str(dir_path)
+    return df
 
 def choose_trait(options: List[Tuple[str, Path, float, str]]) -> Tuple[str, Path, str]:
     # Weighted random choice
@@ -107,6 +154,8 @@ def open_image_keep_size(path: Path, size_ref: Optional[Tuple[int,int]]) -> Imag
     s = str(path)
     # Normalize Windows backslashes which may appear in CSV URLs
     s = s.replace("\\", "/")
+    # Fix malformed scheme like 'https:/...' -> 'https://'
+    s = re.sub(r'^(https?):/+', r"\1://", s)
 
     img = None
     # If it's a local file path that exists, open directly
@@ -180,6 +229,7 @@ def parse_layer_order(arg: Optional[str]) -> List[str]:
 def main():
     ap = argparse.ArgumentParser(description="Skunk Squad image & metadata generator")
     ap.add_argument("--csv", type=Path, default=Path(__file__).parent.joinpath("traits_catalog.csv"), help="Path to traits catalog CSV")
+    ap.add_argument("--traits-dir", type=Path, default=None, help="Path to a traits directory (alternative to --csv)")
     ap.add_argument("--outdir", type=Path, default=Path("output"), help="Output directory")
     ap.add_argument("--supply", type=int, default=10, help="Number of editions to mint")
     ap.add_argument("--name-prefix", type=str, default="Skunk Squad #", help="Token name prefix")
@@ -196,7 +246,10 @@ def main():
     if args.seed is not None:
         random.seed(args.seed)
 
-    df = load_catalog(args.csv)
+    if args.traits_dir:
+        df = load_from_dir(args.traits_dir)
+    else:
+        df = load_catalog(args.csv)
     tables = build_layer_tables(df)
 
     layer_order = parse_layer_order(args.layer_order)
