@@ -39,6 +39,9 @@ import random
 from collections import defaultdict, OrderedDict
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+import io
+import re
+import urllib.request
 
 from PIL import Image
 import pandas as pd
@@ -101,7 +104,27 @@ def combo_signature(traits_by_layer: Dict[str, str]) -> str:
     return hashlib.sha256(sig_src.encode("utf-8")).hexdigest()
 
 def open_image_keep_size(path: Path, size_ref: Optional[Tuple[int,int]]) -> Image.Image:
-    img = Image.open(path).convert("RGBA")
+    s = str(path)
+    # Normalize Windows backslashes which may appear in CSV URLs
+    s = s.replace("\\", "/")
+
+    img = None
+    # If it's a local file path that exists, open directly
+    p = Path(s)
+    if p.exists():
+        img = Image.open(p).convert("RGBA")
+    else:
+        # If it looks like a URL (scheme://...), try to fetch it
+        if re.match(r'^[a-zA-Z]+://', s):
+            try:
+                with urllib.request.urlopen(s) as resp:
+                    data = resp.read()
+                img = Image.open(io.BytesIO(data)).convert("RGBA")
+            except Exception as e:
+                raise FileNotFoundError(f"Unable to fetch image from URL '{s}': {e}")
+        else:
+            raise FileNotFoundError(f"Missing file for asset: {s}")
+
     if size_ref and img.size != size_ref:
         # If the layer asset differs in size, paste centered onto a transparent canvas
         canvas = Image.new("RGBA", size_ref, (0,0,0,0))
