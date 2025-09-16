@@ -48,12 +48,12 @@ import pandas as pd
 
 DEFAULT_LAYER_ORDER = [
     "background",
-    "body",
+    "badge",
     "tail",
     "head",
     "arm_right",
     "arm_left",
-    "badge",
+    "body",
     "shoes",    
 ]
 
@@ -112,6 +112,15 @@ def load_from_dir(dir_path: Path) -> pd.DataFrame:
         raise FileNotFoundError(f"Traits directory not found: {dir_path}")
 
     rows = []
+    # optional weights.json in the root of the traits dir
+    weights_map = {}
+    weights_file = dir_path / "weights.json"
+    if weights_file.exists():
+        try:
+            with open(weights_file, "r", encoding="utf-8") as wf:
+                weights_map = json.load(wf)
+        except Exception:
+            weights_map = {}
     for child in sorted(dir_path.iterdir()):
         if not child.is_dir():
             continue
@@ -122,12 +131,19 @@ def load_from_dir(dir_path: Path) -> pd.DataFrame:
         for f in sorted(child.iterdir()):
             if f.is_file() and f.suffix.lower() in {".png", ".webp", ".jpg", ".jpeg"}:
                 trait_name = f.stem
+                rarity = "common"
+                # try to infer rarity from filename token (if present)
+                m = re.search(r'_(common|rare|epic|legendary|mythic|moonshot)', f.name, re.IGNORECASE)
+                if m:
+                    rarity = m.group(1).lower()
+                # weight from weights_map if available
+                weight = weights_map.get(rarity, 1.0)
                 rows.append({
                     "layer": layer_name,
                     "trait_name": trait_name,
                     "file": str(f.resolve()),
-                    "weight": 1.0,
-                    "rarity_tier": "common",
+                    "weight": float(weight),
+                    "rarity_tier": rarity,
                     "notes": ""
                 })
     if not rows:
@@ -233,6 +249,7 @@ def main():
     ap.add_argument("--outdir", type=Path, default=Path("output"), help="Output directory")
     ap.add_argument("--preflight", action="store_true", help="Validate all referenced assets and exit")
     ap.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    ap.add_argument("--rarity-weights", type=str, default=None, help="Comma-separated rarity=weight pairs, e.g. 'legendary=0.1,rare=1,common=10'")
     ap.add_argument("--supply", type=int, default=10, help="Number of editions to mint")
     ap.add_argument("--name-prefix", type=str, default="Skunk Squad #", help="Token name prefix")
     ap.add_argument("--description", type=str, default="Skunk Squad: community-first, generative rarity, and Skunk Works access.", help="Metadata description")
@@ -252,7 +269,28 @@ def main():
         df = load_from_dir(args.traits_dir)
     else:
         df = load_catalog(args.csv)
+    # Parse rarity weight mapping
+    rarity_weights = {}
+    if args.rarity_weights:
+        for pair in args.rarity_weights.split(","):
+            if "=" in pair:
+                k, v = pair.split("=", 1)
+                try:
+                    rarity_weights[k.strip()] = float(v.strip())
+                except ValueError:
+                    print(f"Warning: invalid rarity weight for '{pair}', skipping")
     tables = build_layer_tables(df)
+    # Apply rarity weight mapping (override weights)
+    if rarity_weights:
+        for layer, opts in tables.items():
+            new_opts = []
+            for trait, path, weight, rarity in opts:
+                rw = rarity_weights.get(rarity, rarity_weights.get(rarity.lower(), None))
+                if rw is not None:
+                    new_opts.append((trait, path, float(rw), rarity))
+                else:
+                    new_opts.append((trait, path, weight, rarity))
+            tables[layer] = new_opts
 
     def vprint(*a, **k):
         if args.verbose:
