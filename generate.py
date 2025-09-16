@@ -138,19 +138,25 @@ def compose_image(chosen_files: "OrderedDict[str, Path]", enforce_size: Optional
     base_img = None
     size_ref = enforce_size
     for idx, (layer, p) in enumerate(chosen_files.items()):
-        if not p.exists():
-            raise FileNotFoundError(f"Missing file for layer '{layer}': {p}")
-        if base_img is None:
-            # First layer sets the canvas size (or use enforce_size if provided)
-            first = Image.open(p).convert("RGBA")
-            if size_ref is None:
-                size_ref = first.size
-                base_img = first
+        s = str(p).replace("\\", "/")
+        try:
+            if base_img is None:
+                # First layer sets the canvas size (or use enforce_size if provided)
+                first = open_image_keep_size(s, None)
+                if size_ref is None:
+                    size_ref = first.size
+                    base_img = first
+                else:
+                    base_img = Image.new("RGBA", size_ref, (0,0,0,0))
+                    # Paste centered
+                    x = (size_ref[0] - first.size[0]) // 2
+                    y = (size_ref[1] - first.size[1]) // 2
+                    base_img.paste(first, (x, y), first)
             else:
-                base_img = Image.new("RGBA", size_ref, (0,0,0,0))
-                base_img.alpha_composite(open_image_keep_size(p, size_ref))
-        else:
-            base_img.alpha_composite(open_image_keep_size(p, size_ref))
+                layer_img = open_image_keep_size(s, size_ref)
+                base_img.alpha_composite(layer_img)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Missing file for layer '{layer}': {p}")
     return base_img
 
 def make_attributes(chosen_meta: "OrderedDict[str, Tuple[str,str]]") -> List[Dict[str,str]]:
