@@ -1,24 +1,35 @@
 layer,trait_name,file,weight,rarity_tier,notes
-background,Neon Alley,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background,25,common,
-background,Castle,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background,25,common,
-background,Temple Ruins,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background,25,legendary,
-background,Space,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background,10,mythic,
-background,skunkworks,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background,15,common,
-body,Base Body,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.body,100,common,required
-tail,Gold Tail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.tail,70,common,
-tail,EThertail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.tail,25,rare,
-tail,None,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.tail,5,common,optional
-head,Common Head,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.head,100,common,required
-arm_right,plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right,60,common,optional
-arm_right,Feather,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right,20,legendary,
-arm_right,Katana,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right,20,rare,
-arm_left,Plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left,65,common,optional
-arm_left,lighter,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left,20,rare,
-arm_left,nftrocket,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left,15,rare,optional
-badge,None,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge,80,common,optional
-badge,rare_grump,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge,10,rare,
-badge,opensail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge,10,uncommon,
-shoes,BlackBoots,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes,60,common,optional
-shoes,Greenheart,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes,25,rare,
-shoes,Sandals,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes,15,legendary,
-    
+background,Neon Alley,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background\background_common_alley.png,25,common,
+background,Castle,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background\Background_common_castle.png,25,common,
+background,Temple Ruins,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background\Background_legendary_temple_ruins.png,25,legendary,
+background,Space,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background\Background_mythic_space.png,10,mythic,
+background,skunkworks,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.background\Background_common_skunkworks.png,15,common,
+body,Base Body,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.body\Body_common_base.png,100,common,required
+tail,Gold Tail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.tail\Tail_common_gold.png,70,common,
+tail,EThertail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.tail\Tail_rare_ethertail.png,25,rare,
+Tail_common_gold,common Gold,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_common_gold.png,5,common
+tail_common_green,common Green,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_common_green.png,5,common
+tail_common_plain,common Plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_common_plain.png,5,common
+tail_common_red,common Red,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_common_red.png,5,common
+tail_rare_splittail_blue,rare Splittail Blue,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_rare_splittail_blue.png,5,rare
+tail_rare_splittail_gold,rare Splittail Gold,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_rare_splittail_gold.png,5,rare
+tail_rare_splittail_plain,rare Splittail Plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_rare_splittail_plain.png,5,rare
+tail_rare_splittail_purple,rare Splittail Purple,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_rare_splittail_purple.png,5,rare
+tail_legendary_nuclearneon,legendary Nuclearneon,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_legendary_nuclearneon.png,5,legendary
+tail_legendary_ruby_gold,legendary Ruby Gold,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_legendary_ruby_gold.png,5,legendary
+tail_legendary_starry,legendary Starry,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_legendary_starry.png,5,legendary
+tail_legendary_ruby_red,legendary Ruby Red,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\3.Tail\tail_legendary_ruby_red.png,5,legendary
+head,Common burger,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\4.head\head_common_burger.png,100,common,required
+head,
+arm_right,plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right\Arm_right_common_plain.png,60,common,optional
+arm_right,Feather,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right\Arm_right_legendary_feather.png,20,legendary,
+arm_right,Katana,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_right\Arm_right_rare_katana.png,20,rare,
+arm_left,Plain,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left\Arm_left_common_plain.png,65,common,optional
+arm_left,lighter,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left\Arm_left_rare_lighter.png,20,rare,
+arm_left,nftrocket,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.arm_left\Arm_left_rare_nftrocket.png,15,rare,optional
+badge,None,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge\Badge_common_none.png,80,common,optional
+badge,rare_grump,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge\Badge_rare_grump.png,10,rare,
+badge,opensail,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.badge\Badge_uncommon_opensail.png,10,uncommon,
+shoes,BlackBoots,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes\Shoes_common_blackboots.png,60,common,optional
+shoes,Greenheart,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes\Shoes_rare_greenheart.png,25,rare,
+shoes,Sandals,C:\Users\marcf\Desktop\SkunkSquad\skunk_squad_traits.json\1.shoes\Shoes_legendary_sandals.png,15,legendary,
