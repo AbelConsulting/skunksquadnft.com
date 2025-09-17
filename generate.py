@@ -12,7 +12,7 @@ Input CSV columns (traits_catalog.csv):
     * Weights are relative; they do NOT need to sum to 100.
 
 Layer order:
-  - Default order (background → foreground): background, body, tail, head, arm_right, arm_left, badge, shoes
+    - Default order (background → foreground): background, tail, body, head, arm_right, arm_left, emblem, badge, shoes
   - You can override with:
       --layer-order "background,body,tail,head,arm_right,arm_left,badge,shoes"
 
@@ -54,6 +54,7 @@ DEFAULT_LAYER_ORDER = [
     "head",
     "arm_right",
     "arm_left",
+    "emblem",
     "badge",
     "shoes",
 ]
