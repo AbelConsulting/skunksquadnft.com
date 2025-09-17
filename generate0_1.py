@@ -92,13 +92,6 @@ def choose_trait(options: List[Tuple[str, Path, float, str]]) -> Tuple[str, Path
     choice_idx = random.choices(range(len(options)), weights=weights, k=1)[0]
     return names[choice_idx], paths[choice_idx], rarities[choice_idx]
 
-    names, paths, weights, rarities = zip(*options)
-    # Avoid all-zero weights
-    if sum(weights) <= 0:
-        weights = [1.0] * len(weights)
-    choice_idx = random.choices(range(len(options)), weights=weights, k=1)[0]
-    return names[choice_idx], paths[choice_idx], rarities[choice_idx]
-
 def combo_signature(traits_by_layer: Dict[str, str]) -> str:
     # Deterministic signature (sorted by layer name)
     sig_src = "|".join(f"{layer}:{traits_by_layer[layer]}" for layer in sorted(traits_by_layer.keys()))
@@ -132,6 +125,8 @@ def compose_image(chosen_files: "OrderedDict[str, Path]", enforce_size: Optional
                 base_img.alpha_composite(open_image_keep_size(p, size_ref))
         else:
             base_img.alpha_composite(open_image_keep_size(p, size_ref))
+    if base_img is None:
+        raise ValueError("No layers provided to compose_image")
     return base_img
 
 def make_attributes(chosen_meta: "OrderedDict[str, Tuple[str,str]]") -> List[Dict[str,str]]:
