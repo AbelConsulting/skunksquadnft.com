@@ -50,12 +50,11 @@ import pandas as pd
 DEFAULT_LAYER_ORDER = [
     "background",
     "tail",
-    "body",
-    "head",
     "arm_right",
     "arm_left",
+    "body",
+    "head",
     "emblem",
-    "badge",
     "shoes",
 ]
 
@@ -322,5 +321,124 @@ def main():
                 else:
                     missing.append(f"{layer}:{trait} -> {s} (local file missing)")
         return missing
+
+    # --- generation start ---
+    layer_order = parse_layer_order(args.layer_order)
+
+    # Ensure required layers exist in tables
+    for L in layer_order:
+        if L not in tables:
+            vprint(f"Warning: layer '{L}' not present in CSV (will be skipped if empty)")
+
+    missing = preflight_assets(tables)
+    if missing:
+        vprint("Preflight found missing assets:")
+        for m in missing:
+            vprint("  ", m)
+    if args.preflight:
+        if missing:
+            print("Preflight failed: missing assets listed above.")
+            raise SystemExit(1)
+        print("Preflight OK: all assets present.")
+        raise SystemExit(0)
+
+    out_images = Path(args.outdir) / "images"
+    out_meta = Path(args.outdir) / "metadata"
+    out_images.mkdir(parents=True, exist_ok=True)
+    out_meta.mkdir(parents=True, exist_ok=True)
+
+    enforce_size = None
+    if args.image_width and args.image_height:
+        enforce_size = (int(args.image_width), int(args.image_height))
+
+    used_signatures = set()
+    manifest_rows = []
+    edition = 1
+    attempts = 0
+
+    # Pre-filter options to those that exist or are URLs
+    usable_tables = {}
+    for layer, opts in tables.items():
+        usable = []
+        for trait, path, weight, rarity in opts:
+            s = str(path).replace('\\','/')
+            p = Path(s)
+            if p.exists() or re.match(r'^[a-zA-Z]+://', s):
+                usable.append((trait, s, float(weight), rarity))
+            else:
+                vprint(f"Skipping missing file for layer {layer}: {s}")
+        if usable:
+            usable_tables[layer] = usable
+
+    # If any layer in layer_order has no usable entries, generation will fail
+    for L in layer_order:
+        if L not in usable_tables:
+            print(f"Error: no usable assets found for layer '{L}'. Cannot generate images.")
+            raise SystemExit(1)
+
+    while edition <= args.supply and attempts < args.max_retries:
+        attempts += 1
+        chosen_files = OrderedDict()
+        chosen_meta = OrderedDict()
+        try:
+            for layer in layer_order:
+                opts = usable_tables[layer]
+                name, path_str, rarity = choose_trait([(t, Path(p), w, r) for (t,p,w,r) in opts])
+                chosen_files[layer] = Path(path_str)
+                chosen_meta[layer] = (name, rarity)
+
+            sig = combo_signature({k: v[0] for k,v in chosen_meta.items()})
+            if sig in used_signatures:
+                # duplicate, retry
+                continue
+
+            # Compose and save image
+            img = compose_image(chosen_files, enforce_size=enforce_size)
+            img_path = out_images.joinpath(f"{edition}.png")
+            img.save(img_path)
+
+            # Build metadata
+            image_ref = (args.images_suburi.rstrip('/') + '/' + f"{edition}.png") if args.images_suburi else (args.base_uri.rstrip('/') + '/' + f"images/{edition}.png")
+            meta = {
+                "name": f"{args.name_prefix}{edition}",
+                "description": args.description,
+                "image": image_ref,
+                "attributes": make_attributes(chosen_meta)
+            }
+            meta_path = out_meta.joinpath(f"{edition}.json")
+            with open(meta_path, 'w', encoding='utf-8') as mf:
+                json.dump(meta, mf, indent=2)
+
+            manifest_rows.append({
+                'edition': edition,
+                'signature': sig,
+                'image': str(img_path),
+                'metadata': str(meta_path)
+            })
+            used_signatures.add(sig)
+            if args.verbose:
+                print(f"Created edition {edition} (sig={sig})")
+            edition += 1
+
+        except FileNotFoundError as e:
+            print(f"Asset error during generation: {e}")
+            raise
+
+    if edition <= args.supply:
+        print(f"Stopped after {attempts} attempts; produced {edition-1} unique editions.")
+    else:
+        print(f"Successfully generated {args.supply} editions.")
+
+    # Write manifest CSV
+    import csv
+    manifest_path = Path(args.outdir) / 'manifest.csv'
+    with open(manifest_path, 'w', newline='', encoding='utf-8') as mf:
+        writer = csv.DictWriter(mf, fieldnames=['edition','signature','image','metadata'])
+        writer.writeheader()
+        for r in manifest_rows:
+            writer.writerow(r)
+
+if __name__ == '__main__':
+    main()
 
  

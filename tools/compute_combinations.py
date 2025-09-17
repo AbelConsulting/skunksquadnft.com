@@ -12,7 +12,7 @@ DEFAULT_LAYER_ORDER = [
     "arm_right",
     "arm_left",
     "emblem",
-    "badge",
+        # "badge",  # Removed badge from default layer order
     "shoes",
 ]
 
