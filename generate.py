@@ -46,11 +46,11 @@ import urllib.request
 from PIL import Image
 import pandas as pd
 
-# ✅ Updated default order per your spec
+# ✅ Updated default order per your spec (Background, Tail, Body)
 DEFAULT_LAYER_ORDER = [
     "background",
-    "body",
     "tail",
+    "body",
     "head",
     "arm_right",
     "arm_left",
