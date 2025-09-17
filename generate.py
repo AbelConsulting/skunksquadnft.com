@@ -1,4 +1,3 @@
-
 """
 Skunk Squad NFT Image & Metadata Generator
 
@@ -13,8 +12,9 @@ Input CSV columns (traits_catalog.csv):
     * Weights are relative; they do NOT need to sum to 100.
 
 Layer order:
-  - Default order is defined by LAYER_ORDER below (background → foreground).
-  - You can override with --layer-order "background,body,tail,head,eyes,mouth,shoes,accessory"
+  - Default order (background → foreground): background, body, tail, head, arm_right, arm_left, badge, shoes
+  - You can override with:
+      --layer-order "background,body,tail,head,arm_right,arm_left,badge,shoes"
 
 Usage:
   python generate.py \
@@ -46,15 +46,16 @@ import urllib.request
 from PIL import Image
 import pandas as pd
 
+# ✅ Updated default order per your spec
 DEFAULT_LAYER_ORDER = [
     "background",
-    "badge",
+    "body",
     "tail",
     "head",
     "arm_right",
     "arm_left",
-    "body",
-    "shoes",    
+    "badge",
+    "shoes",
 ]
 
 def load_catalog(csv_path: Path) -> pd.DataFrame:
@@ -73,22 +74,19 @@ def load_catalog(csv_path: Path) -> pd.DataFrame:
     df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0.0)
     df["rarity_tier"] = df["rarity_tier"].astype(str)
     if "notes" not in df.columns:
-
         df["notes"] = ""
-    # Attach the resolved CSV path for callers that need to resolve relative asset paths
     df.attrs["__csv_path__"] = csv_path
     return df
 
 def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, float, str]]]:
-
     tables: Dict[str, List[Tuple[str, Path, float, str]]] = defaultdict(list)
     csv_parent = None
     if "__csv_path__" in df.attrs:
         csv_parent = Path(df.attrs["__csv_path__"]).parent
 
     for _, row in df.iterrows():
-        layer = str(row["layer"])
-        trait = str(row["trait_name"])
+        layer = str(row["layer"]).strip()
+        trait = str(row["trait_name"]).strip()
         raw_path = str(row["file"]).strip()
         # Resolve relative paths against the CSV directory if provided
         if csv_parent and not re.match(r'^[a-zA-Z]+://', raw_path) and not Path(raw_path).is_absolute():
@@ -96,16 +94,16 @@ def build_layer_tables(df: pd.DataFrame) -> Dict[str, List[Tuple[str, Path, floa
         else:
             filepath = Path(raw_path).expanduser()
         weight = float(row["weight"])
-        rarity = str(row["rarity_tier"])
+        rarity = str(row["rarity_tier"]).strip()
         tables[layer].append((trait, filepath, weight, rarity))
     return tables
-
 
 def load_from_dir(dir_path: Path) -> pd.DataFrame:
     """
     Build a DataFrame similar to the CSV format from a directory structure.
     Expects directories named with a leading number and layer name (e.g. '1.background').
     Files inside are treated as trait files; trait_name is derived from filename.
+    Optional root weights.json can map rarity→weight.
     """
     dir_path = Path(dir_path).expanduser()
     if not dir_path.exists() or not dir_path.is_dir():
@@ -137,12 +135,12 @@ def load_from_dir(dir_path: Path) -> pd.DataFrame:
                 if m:
                     rarity = m.group(1).lower()
                 # weight from weights_map if available
-                weight = weights_map.get(rarity, 1.0)
+                weight = float(weights_map.get(rarity, 1.0))
                 rows.append({
                     "layer": layer_name,
                     "trait_name": trait_name,
                     "file": str(f.resolve()),
-                    "weight": float(weight),
+                    "weight": weight,
                     "rarity_tier": rarity,
                     "notes": ""
                 })
@@ -255,7 +253,7 @@ def main():
     ap.add_argument("--description", type=str, default="Skunk Squad: community-first, generative rarity, and Skunk Works access.", help="Metadata description")
     ap.add_argument("--base-uri", type=str, default="ipfs://METADATA_CID/", help="Base URI for metadata directory (contract baseURI)")
     ap.add_argument("--images-suburi", type=str, default=None, help="Optional base URI specifically for images (e.g., ipfs://IMAGES_CID/)")
-    ap.add_argument("--layer-order", type=str, default=None, help="Comma-separated order (background,body,tail,head,arm_right,arm_left,shoes,badge)")
+    ap.add_argument("--layer-order", type=str, default=None, help="Comma-separated order (background,body,tail,head,arm_right,arm_left,badge,shoes)")
     ap.add_argument("--seed", type=int, default=None, help="PRNG seed for reproducibility")
     ap.add_argument("--max-retries", type=int, default=100000, help="Max attempts to find unique combos")
     ap.add_argument("--image-width", type=int, default=None, help="Force output image width (optional)")
@@ -269,6 +267,7 @@ def main():
         df = load_from_dir(args.traits_dir)
     else:
         df = load_catalog(args.csv)
+
     # Parse rarity weight mapping
     rarity_weights = {}
     if args.rarity_weights:
@@ -279,7 +278,9 @@ def main():
                     rarity_weights[k.strip()] = float(v.strip())
                 except ValueError:
                     print(f"Warning: invalid rarity weight for '{pair}', skipping")
+
     tables = build_layer_tables(df)
+
     # Apply rarity weight mapping (override weights)
     if rarity_weights:
         for layer, opts in tables.items():
@@ -321,113 +322,8 @@ def main():
                     missing.append(f"{layer}:{trait} -> {s} (local file missing)")
         return missing
 
-    if args.preflight:
-        vprint("Running preflight asset check...")
-        missing = preflight_assets(tables)
-        if missing:
-            print("Preflight failed. Missing assets:")
-            for m in missing:
-                print(" -", m)
-            raise SystemExit(2)
-        print("Preflight OK: all assets reachable")
-        raise SystemExit(0)
-
+    # Build layer order: explicit, else default constrained to available layers then extras
     if args.layer_order:
         layer_order = parse_layer_order(args.layer_order)
-        # Ensure specified layers exist
-        missing_layers = [l for l in layer_order if l not in tables]
-        if missing_layers:
-            raise ValueError(f"No traits found for layers: {', '.join(missing_layers)}")
-    else:
-        # Build a sensible default: include DEFAULT_LAYER_ORDER entries that exist,
-        # then append any remaining layers discovered in the traits tables.
-        layer_order = [l for l in DEFAULT_LAYER_ORDER if l in tables]
-        for l in list(tables.keys()):
-            if l not in layer_order:
-                layer_order.append(l)
-
-    out_images = args.outdir / "images"
-    out_meta   = args.outdir / "metadata"
-    out_images.mkdir(parents=True, exist_ok=True)
-    out_meta.mkdir(parents=True, exist_ok=True)
-
-    used = set()
-    manifest_rows = []
-    attempts = 0
-    created = 0
-
-    images_base_uri = args.images_suburi if args.images_suburi else (args.base_uri.rstrip("/") + "/images/")
-
-    enforce_size = None
-    if args.image_width and args.image_height:
-        enforce_size = (args.image_width, args.image_height)
-
-    while created < args.supply and attempts < args.max_retries:
-        attempts += 1
-
-        # Choose traits per layer
-        chosen_files: "OrderedDict[str, Path]" = OrderedDict()
-        chosen_meta: "OrderedDict[str, Tuple[str,str]]" = OrderedDict()  # layer -> (trait_name, rarity_tier)
-        for layer in layer_order:
-            trait_name, path, rarity = choose_trait(tables[layer])
-            chosen_files[layer] = path
-            chosen_meta[layer] = (trait_name, rarity)
-
-        sig = combo_signature({layer: chosen_meta[layer][0] for layer in chosen_meta})
-        if sig in used:
-            continue
-        used.add(sig)
-
-        token_id = created + 1
-        # Compose image
-        img = compose_image(chosen_files, enforce_size=enforce_size)
-        img_path = out_images / f"{token_id}.png"
-        img.save(img_path, format="PNG")
-
-        # Create metadata
-        attributes = make_attributes(chosen_meta)
-        metadata = {
-            "name": f"{args.name_prefix}{token_id}",
-            "description": args.description,
-            "image": images_base_uri.rstrip("/") + f"/{token_id}.png",
-            "external_url": "https://skunksquadnft.com",
-            "attributes": attributes,
-        }
-        meta_path = out_meta / f"{token_id}.json"
-        with open(meta_path, "w", encoding="utf-8") as f:
-            json.dump(metadata, f, ensure_ascii=False, indent=2)
-
-        manifest_rows.append({
-            "token_id": token_id,
-            "signature": sig,
-            **{f"{layer}": chosen_meta[layer][0] for layer in layer_order}
-        })
-        created += 1
-
-    if created < args.supply:
-        raise RuntimeError(f"Could only create {created}/{args.supply} unique editions after {attempts} attempts. "
-                           "Consider adding more traits or layers, or increase --max-retries.")
-
-    # Write manifest
-    manifest_path = args.outdir / "manifest.csv"
-    pd.DataFrame(manifest_rows).to_csv(manifest_path, index=False)
-
-    # Also write a quick README with next steps
-    readme_path = args.outdir / "README.txt"
-    with open(readme_path, "w", encoding="utf-8") as f:
-        f.write(
-            "Output structure:\n"
-            " - images/: final PNGs (upload to IPFS/ArDrive)\n"
-            " - metadata/: ERC-721 JSON metadata\n"
-            " - manifest.csv: a flat view of each token's chosen traits\n\n"
-            "Suggested next steps:\n"
-            "1) Upload images/ to IPFS/ArDrive and capture the CID/TxID.\n"
-            "2) If using a separate images base URI, re-run generator with --images-suburi.\n"
-            "3) Pin/Store metadata/ and point your contract's baseURI to the metadata directory.\n"
-        )
-
-    print(f"Done. Generated {created} editions into {args.outdir} (attempts={attempts})")
-
-if __name__ == "__main__":
-    main()
+        missing_layers = [l]()_
 
