@@ -322,8 +322,4 @@ def main():
                     missing.append(f"{layer}:{trait} -> {s} (local file missing)")
         return missing
 
-    # Build layer order: explicit, else default constrained to available layers then extras
-    if args.layer_order:
-        layer_order = parse_layer_order(args.layer_order)
-        missing_layers = [l]()_
-
+ 
