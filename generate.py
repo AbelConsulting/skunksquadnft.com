@@ -409,12 +409,22 @@ def main():
             with open(meta_path, 'w', encoding='utf-8') as mf:
                 json.dump(meta, mf, indent=2)
 
-            manifest_rows.append({
+            # Build enriched manifest row with per-layer trait/file/rarity
+            row = {
                 'edition': edition,
                 'signature': sig,
                 'image': str(img_path),
                 'metadata': str(meta_path)
-            })
+            }
+            # Add per-layer columns: for each layer add '<layer>_trait', '<layer>_file', '<layer>_rarity'
+            for layer, (tname, rarity) in chosen_meta.items():
+                key_trait = f"{layer}_trait"
+                key_file = f"{layer}_file"
+                key_rarity = f"{layer}_rarity"
+                row[key_trait] = tname
+                row[key_file] = str(chosen_files[layer])
+                row[key_rarity] = rarity
+            manifest_rows.append(row)
             used_signatures.add(sig)
             if args.verbose:
                 print(f"Created edition {edition} (sig={sig})")
@@ -432,8 +442,19 @@ def main():
     # Write manifest CSV
     import csv
     manifest_path = Path(args.outdir) / 'manifest.csv'
+    # Determine all fieldnames (base fields + per-layer fields present in rows)
+    base_fields = ['edition', 'signature', 'image', 'metadata']
+    # Collect all dynamic keys across manifest rows to ensure consistent columns
+    dyn_keys = set()
+    for r in manifest_rows:
+        for k in r.keys():
+            if k not in base_fields:
+                dyn_keys.add(k)
+    # Sort dynamic keys for stable ordering
+    dyn_keys = sorted(dyn_keys)
+    fieldnames = base_fields + dyn_keys
     with open(manifest_path, 'w', newline='', encoding='utf-8') as mf:
-        writer = csv.DictWriter(mf, fieldnames=['edition','signature','image','metadata'])
+        writer = csv.DictWriter(mf, fieldnames=fieldnames)
         writer.writeheader()
         for r in manifest_rows:
             writer.writerow(r)
