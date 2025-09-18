@@ -1,11 +1,11 @@
 # skunksquadnft.com
 
-THe Skunk Squad are designed to be an artistic masterpiece
+The Skunk Squad are designed to be an artistic masterpiece 
 
-
-skunk squad nft 
+skunk squad nft
+and
 Skunk Squad NFT Image & Metadata Generator
-
+Generating Mathematical Wheighted rarity while keeping artistic Flare
 Overview:
   - Composes layered PNGs into final NFT images using a trait catalog CSV.
   - Emits ERC-721 style metadata JSON files and a manifest of generated editions.
