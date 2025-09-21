@@ -1,0 +1,41 @@
+# Robots.txt for SkunkSquad NFT Website
+
+User-agent: *
+Allow: /
+
+# Main sitemap
+Sitemap: https://skunksquadnft.com/sitemap.xml
+
+# Allow all content for search engines
+Allow: /src/
+Allow: /public/
+Allow: /images/
+
+# Social media crawlers
+User-agent: facebookexternalhit/*
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Block specific paths that shouldn't be indexed
+Disallow: /src/js/
+Disallow: /src/styles/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Allow important files
+Allow: /manifest.json
+Allow: /favicon.ico
+Allow: /og-image.png
+Allow: /twitter-card.png
+
+# Crawl delay for politeness
+Crawl-delay: 1
+
+# Host directive
+Host: https://skunksquadnft.com
