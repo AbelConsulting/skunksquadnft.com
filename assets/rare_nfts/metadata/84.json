@@ -1,0 +1,47 @@
+{
+  "name": "Skunk Squad #84",
+  "description": "Skunk Squad: community-first, generative rarity, and Skunk Works access.",
+  "image": "ipfs://METADATA_CID/images/84.png",
+  "attributes": [
+    {
+      "trait_type": "background",
+      "value": "Temple Ruins",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "tail",
+      "value": "common Plain",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "arm_right",
+      "value": "Martini",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "arm_left",
+      "value": "Plain",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "body",
+      "value": "Base Body",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "head",
+      "value": "Rare pink halo",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "emblem",
+      "value": "common Grump",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "shoes",
+      "value": "legendary SkPlus",
+      "rarity_tier": "legendary"
+    }
+  ]
+}

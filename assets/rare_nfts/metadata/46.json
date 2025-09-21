@@ -1,0 +1,47 @@
+{
+  "name": "Skunk Squad #46",
+  "description": "Skunk Squad: community-first, generative rarity, and Skunk Works access.",
+  "image": "ipfs://METADATA_CID/images/46.png",
+  "attributes": [
+    {
+      "trait_type": "background",
+      "value": "Temple Ruins",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "tail",
+      "value": "Gold Tail",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "arm_right",
+      "value": "Scroll",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "arm_left",
+      "value": "lighter",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "body",
+      "value": "Base Body",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "head",
+      "value": "Legendary nuclear neon",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "emblem",
+      "value": "common None",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "shoes",
+      "value": "rare Greenheart",
+      "rarity_tier": "rare"
+    }
+  ]
+}

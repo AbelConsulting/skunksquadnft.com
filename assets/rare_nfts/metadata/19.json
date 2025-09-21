@@ -1,0 +1,47 @@
+{
+  "name": "Skunk Squad #19",
+  "description": "Skunk Squad: community-first, generative rarity, and Skunk Works access.",
+  "image": "ipfs://METADATA_CID/images/19.png",
+  "attributes": [
+    {
+      "trait_type": "background",
+      "value": "Castle",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "tail",
+      "value": "Gold Tail",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "arm_right",
+      "value": "Katana",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "arm_left",
+      "value": "Katana",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "body",
+      "value": "Base Body",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "head",
+      "value": "Common rocker",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "emblem",
+      "value": "legendary Fire",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "shoes",
+      "value": "rare SkSneakers",
+      "rarity_tier": "rare"
+    }
+  ]
+}
