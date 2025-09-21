@@ -16,11 +16,27 @@ SkunkSquad isn't just another NFT collection—it's a **complete intelligent eco
 
 | Feature | Description | Benefit |
 |---------|-------------|---------|
-| **🔥 Dynamic Pricing** | AI-powered pricing that adjusts based on demand and time | Fair market pricing, optimized revenue |
+| **� Credit Card Payments** | Buy NFTs directly with credit cards - no crypto needed | Mainstream accessibility, 10x larger market |
+| **�🔥 Dynamic Pricing** | AI-powered pricing that adjusts based on demand and time | Fair market pricing, optimized revenue |
 | **📊 Advanced Analytics** | Deep user behavior tracking and insights | Understand your community like never before |
 | **🏆 Gamification System** | 10 achievements, XP points, loyalty scoring | Increased engagement and retention |
 | **👥 Social Features** | Built-in referral system and NFT gifting | Viral organic growth |
 | **🔮 Predictive Analytics** | Machine learning pattern recognition | Anticipate market trends |
+
+## 💳 **Revolutionary Payment System**
+
+**WORLD'S FIRST: Buy NFTs with Credit Cards!**
+
+- **💳 Fiat-to-NFT Gateway**: Purchase directly with Visa, Mastercard, American Express
+- **⚡ Instant Delivery**: NFTs delivered to your wallet in seconds after payment
+- **🛡️ Enterprise Security**: PCI-compliant payments with cryptographic verification
+- **🌍 Global Access**: Accept international payments in 40+ countries
+- **📱 Mobile Optimized**: Seamless checkout experience on any device
+
+**How it works:**
+1. Connect your wallet → 2. Enter quantity → 3. Pay with credit card → 4. Receive NFTs instantly!
+
+[**📖 Full Payment Gateway Documentation →**](./PAYMENT_GATEWAY_GUIDE.md)
 
 ## 🎨 **Collection Details**
 
