@@ -1,0 +1,100 @@
+{
+  "name": "skunksquad-nft-website",
+  "version": "1.0.0",
+  "description": "World's First Ultra-Smart NFT Collection with Credit Card Payments",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -l 3000",
+    "build": "npm run optimize",
+    "dev": "live-server --port=3000 --open=index.html",
+    "optimize": "npm run optimize-images && npm run minify-css && npm run minify-js",
+    "optimize-images": "imagemin src/images/* --out-dir=dist/images",
+    "minify-css": "cleancss -o dist/styles/main.min.css src/styles/*.css",
+    "minify-js": "uglifyjs src/js/*.js -o dist/js/main.min.js",
+    "lint": "eslint src/js/*.js",
+    "format": "prettier --write \"src/**/*.{js,css,html}\"",
+    "test": "jest",
+    "deploy": "npm run build && gh-pages -d dist",
+    "preview": "serve -s dist -l 3001"
+  },
+  "keywords": [
+    "nft",
+    "ethereum",
+    "blockchain",
+    "crypto",
+    "credit-card",
+    "payments",
+    "stripe",
+    "web3",
+    "smart-contracts",
+    "ai",
+    "ultra-smart"
+  ],
+  "author": "SkunkSquad Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcf/skunksquadnft.com"
+  },
+  "homepage": "https://skunksquadnft.com",
+  "dependencies": {
+    "web3": "^4.0.0",
+    "@stripe/stripe-js": "^2.0.0",
+    "ethers": "^6.0.0"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0",
+    "live-server": "^1.2.2",
+    "imagemin": "^8.0.1",
+    "imagemin-cli": "^7.0.0",
+    "clean-css-cli": "^5.6.0",
+    "uglify-js": "^3.17.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "jest": "^29.0.0",
+    "gh-pages": "^6.0.0",
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off"
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 80,
+    "tabWidth": 2
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}
