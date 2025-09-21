@@ -1,0 +1,12 @@
+{
+  "name": "Skunk Squad NFT",
+  "description": "This Skunk Squad NFT has not been revealed yet. Stay tuned for the big reveal!",
+  "image": "https://api.skunksquadnft.com/images/unrevealed.png",
+  "external_url": "https://skunksquadnft.com",
+  "attributes": [
+    {
+      "trait_type": "Status",
+      "value": "Unrevealed"
+    }
+  ]
+}

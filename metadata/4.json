@@ -1,0 +1,32 @@
+{
+  "name": "Skunk Squad #4",
+  "description": "Skunk Squad #4 is a unique NFT with 3 traits from the Skunk Squad collection.",
+  "image": "https://api.skunksquadnft.com/images/4.png",
+  "external_url": "https://skunksquadnft.com/token/4",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "City"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Armor"
+    },
+    {
+      "trait_type": "Head",
+      "value": "Bandana"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Sleepy"
+    },
+    {
+      "trait_type": "Mouth",
+      "value": "Grin"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 66
+    }
+  ]
+}

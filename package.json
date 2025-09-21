@@ -12,7 +12,10 @@
     "verify:sepolia": "hardhat verify --network sepolia",
     "verify:mainnet": "hardhat verify --network mainnet",
     "node": "hardhat node",
-    "clean": "hardhat clean"
+    "clean": "hardhat clean",
+    "setup-opensea": "hardhat run scripts/setup-opensea.js --network sepolia",
+    "metadata-server": "node scripts/metadata-server.js",
+    "update-uris": "hardhat run scripts/update-uris.js --network sepolia"
   },
   "keywords": [
     "nft",
@@ -45,8 +48,10 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.3",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "erc721a": "^4.2.3",
+    "express": "^4.21.2",
     "merkletreejs": "^0.3.11"
   }
 }

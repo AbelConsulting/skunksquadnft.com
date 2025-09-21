@@ -1,0 +1,54 @@
+{
+  "steps": [
+    {
+      "step": 1,
+      "title": "Upload Metadata to Hosting",
+      "description": "Upload all metadata files to your hosting solution",
+      "files": [
+        "contract.json",
+        "unrevealed.json",
+        "1.json to {maxSupply}.json"
+      ],
+      "hosting_options": [
+        "IPFS (recommended for decentralization)",
+        "Your website (https://api.skunksquadnft.com/)",
+        "CDN service (Cloudflare, AWS CloudFront)"
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Update Contract URIs",
+      "description": "Update the contract to point to your hosted metadata",
+      "functions": [
+        "setBaseURI('https://api.skunksquadnft.com/metadata/')",
+        "setContractURI('https://api.skunksquadnft.com/contract.json')"
+      ]
+    },
+    {
+      "step": 3,
+      "title": "OpenSea Integration",
+      "description": "Set up your collection on OpenSea",
+      "actions": [
+        "Visit https://testnets.opensea.io/ (for testnet)",
+        "Connect wallet and find your collection",
+        "Edit collection details and upload images",
+        "Configure royalties and settings"
+      ]
+    },
+    {
+      "step": 4,
+      "title": "Test Integration",
+      "description": "Verify everything works correctly",
+      "checks": [
+        "Metadata loads correctly",
+        "Images display properly",
+        "Royalties are configured",
+        "Trading functions work"
+      ]
+    }
+  ],
+  "urls": {
+    "testnet_collection": "https://testnets.opensea.io/assets/sepolia/0x6ba18b88b64af8898bbb42262ed18ec13dc81315",
+    "contract_etherscan": "https://sepolia.etherscan.io/address/0x6BA18b88b64af8898bbb42262ED18EC13DC81315"
+  }
+}

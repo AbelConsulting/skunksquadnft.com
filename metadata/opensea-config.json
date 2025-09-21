@@ -1,0 +1,27 @@
+{
+  "contract_address": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "network": "sepolia",
+  "collection_slug": "skunk-squad-nft",
+  "urls": {
+    "testnet": "https://testnets.opensea.io/collection/skunk-squad-nft",
+    "mainnet": "https://opensea.io/collection/skunk-squad-nft",
+    "contract": "https://testnets.opensea.io/assets/sepolia/0x6ba18b88b64af8898bbb42262ed18ec13dc81315"
+  },
+  "metadata_endpoints": {
+    "contract_uri": "https://api.skunksquadnft.com/contract.json",
+    "base_uri": "https://api.skunksquadnft.com/metadata/",
+    "unrevealed_uri": "https://api.skunksquadnft.com/unrevealed.json"
+  },
+  "collection_settings": {
+    "name": "Skunk Squad NFT",
+    "description": "A collection of 10,000 unique Skunk Squad NFTs with various traits and rarities.",
+    "category": "Art",
+    "blockchain": "ethereum",
+    "payment_tokens": [
+      "ETH",
+      "WETH"
+    ],
+    "royalty_percentage": 2.5,
+    "explicit_content": false
+  }
+}

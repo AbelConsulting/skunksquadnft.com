@@ -1,0 +1,32 @@
+{
+  "name": "Skunk Squad #2",
+  "description": "Skunk Squad #2 is a unique NFT with 3 traits from the Skunk Squad collection.",
+  "image": "https://api.skunksquadnft.com/images/2.png",
+  "external_url": "https://skunksquadnft.com/token/2",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Ocean"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Suit"
+    },
+    {
+      "trait_type": "Head",
+      "value": "Crown"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "3D"
+    },
+    {
+      "trait_type": "Mouth",
+      "value": "Tongue"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 32
+    }
+  ]
+}
