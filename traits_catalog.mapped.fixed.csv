@@ -43,7 +43,7 @@ arm_right,Tennis Ball,skunk_squad_traits.json/5.hand-right/hand_right_rare_tenni
 arm_right,Chartphone,skunk_squad_traits.json/5.hand-right/hand_right_legendary_chartphone.png,10,legendary,
 arm_left,Plain,skunk_squad_traits.json/6.hand_left/hand_left_common_plain.png,65,common,
 arm_left,lighter,skunk_squad_traits.json/6.hand_left/hand_left_rare_lighter.png,20,rare,
-arm_left,nftrocket,skunk_squad_traits.json/6.hand_left/hand_left_legendary_nftrocket.png,15,rare,optional
+arm_left,nftrocket,skunk_squad_traits.json/6.hand_left/hand_left_legendary_nftrocket.png,15,rare,
 arm_left,Katana,skunk_squad_traits.json/6.hand_left/hand_left_legendary_katana.png,15,legendary,
 arm_left,Amethyst Staff,skunk_squad_traits.json/6.hand_left/hand_left_rare_amethyststaff.png,20,rare,
 arm_left,Ruby Staff,skunk_squad_traits.json/6.hand_left/hand_left_rare_rubystaff.png,20,rare,
@@ -55,7 +55,7 @@ emblem,rare Yinyang,skunk_squad_traits.json/8.emblem/emblem_rare_yinyang.png,5,r
 emblem,rare Ether,skunk_squad_traits.json/8.emblem/emblem_rare_ether.png,15,rare,
 emblem,legendary Fire,skunk_squad_traits.json/8.emblem/emblem_legendary_fire.png,5,legendary,
 emblem,mythic Opensail,skunk_squad_traits.json/8.emblem/emblem_mythic_opensail.png,10,mythic,
-shoes,common BlackBoots,skunk_squad_traits.json/7.Shoes/shoes_common_blackboots.png,60,common,optional
+shoes,common BlackBoots,skunk_squad_traits.json/7.Shoes/shoes_common_blackboots.png,60,common,
 shoes,common Rainboots,skunk_squad_traits.json/7.Shoes/shoes_common_rainboots.png,40,common,
 shoes,rare Suade,skunk_squad_traits.json/7.Shoes/shoes_rare_suede.png,20,rare,
 shoes,rare Sandals,skunk_squad_traits.json/7.Shoes/shoes_rare_sandals.png,20,rare,
