@@ -8,8 +8,27 @@ require('dotenv').config();
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "0x0000000000000000000000000000000000000000000000000000000000000000";
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID || "";
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
+
+// Helper function to get RPC URL with fallback
+function getRpcUrl(network) {
+  if (ALCHEMY_API_KEY) {
+    const alchemyUrls = {
+      sepolia: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      mainnet: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+    };
+    return alchemyUrls[network];
+  } else if (INFURA_PROJECT_ID) {
+    const infuraUrls = {
+      sepolia: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+      mainnet: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`
+    };
+    return infuraUrls[network];
+  }
+  throw new Error("Please provide either ALCHEMY_API_KEY or INFURA_PROJECT_ID in your .env file");
+}
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -31,12 +50,12 @@ module.exports = {
       chainId: 31337,
     },
     sepolia: {
-      url: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+      url: getRpcUrl("sepolia"),
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 11155111,
     },
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+      url: getRpcUrl("mainnet"),
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
       chainId: 1,
     },
