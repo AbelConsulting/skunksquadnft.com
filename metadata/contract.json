@@ -1,0 +1,13 @@
+{
+  "name": "Skunk Squad NFT",
+  "description": "A collection of 10,000 unique Skunk Squad NFTs with various traits and rarities.",
+  "image": "https://api.skunksquadnft.com/images/collection-banner.png",
+  "external_link": "https://skunksquadnft.com",
+  "seller_fee_basis_points": 250,
+  "fee_recipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "schema_version": "1.0.0",
+  "collection": {
+    "name": "Skunk Squad NFT",
+    "family": "Skunk Squad"
+  }
+}
