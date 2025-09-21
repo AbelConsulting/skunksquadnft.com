@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkunkSquad Ultra Smart Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #1a1a1a; color: white; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #444; }
+        .stat-value { font-size: 2em; font-weight: bold; color: #4CAF50; }
+        .chart-container { margin: 20px 0; }
+        .live-events { max-height: 300px; overflow-y: auto; }
+        .event-item { padding: 10px; margin: 5px 0; background: #333; border-radius: 5px; }
+        .refresh-btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 SkunkSquad Ultra Smart Analytics</h1>
+        <button class="refresh-btn" onclick="loadData()">🔄 Refresh Data</button>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>📊 Collection Stats</h3>
+            <div id="collection-stats">Loading...</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>💰 Dynamic Pricing</h3>
+            <div id="pricing-stats">Loading...</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>📈 Revenue Trends</h3>
+            <canvas id="revenue-chart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="stat-card">
+            <h3>🎯 Hourly Mints</h3>
+            <canvas id="mints-chart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <h3>🔴 Live Events</h3>
+        <div id="live-events" class="live-events">Loading...</div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                // Load stats
+                const stats = await fetch('/api/stats').then(r => r.json());
+                document.getElementById('collection-stats').innerHTML = `
+                    <div class="stat-value">${stats.totalSupply}/${stats.maxSupply}</div>
+                    <div>Minted (${stats.mintedPercentage}%)</div>
+                    <div>Phase: ${stats.currentPhase}</div>
+                    <div>Revenue: ${stats.revenue.total} ETH</div>
+                `;
+                
+                // Load pricing
+                const pricing = await fetch('/api/pricing').then(r => r.json());
+                document.getElementById('pricing-stats').innerHTML = `
+                    <div class="stat-value">${pricing.current.price} ETH</div>
+                    <div>Demand: ${pricing.current.demandMultiplier}%</div>
+                    <div>Range: ${pricing.bounds.min} - ${pricing.bounds.max} ETH</div>
+                `;
+                
+                // Load trends and create charts
+                const trends = await fetch('/api/trends').then(r => r.json());
+                createRevenueChart(trends.dailyRevenue);
+                createMintsChart(pricing.hourlyMints);
+                
+                // Load events
+                const events = await fetch('/api/events').then(r => r.json());
+                document.getElementById('live-events').innerHTML = events.map(event => `
+                    <div class="event-item">
+                        <strong>${event.type.toUpperCase()}</strong> - ${event.user.substring(0, 8)}... 
+                        - ${new Date(event.timestamp).toLocaleTimeString()}
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Failed to load data:', error);
+            }
+        }
+        
+        function createRevenueChart(data) {
+            const ctx = document.getElementById('revenue-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.date),
+                    datasets: [{
+                        label: 'Daily Revenue (ETH)',
+                        data: data.map(d => parseFloat(d.revenue)),
+                        borderColor: '#4CAF50',
+                        tension: 0.1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+        
+        function createMintsChart(data) {
+            const ctx = document.getElementById('mints-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.hour + ':00'),
+                    datasets: [{
+                        label: 'Hourly Mints',
+                        data: data.map(d => parseInt(d.mints)),
+                        backgroundColor: '#2196F3'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
+        
+        // Initial load
+        loadData();
+    </script>
+</body>
+</html>
