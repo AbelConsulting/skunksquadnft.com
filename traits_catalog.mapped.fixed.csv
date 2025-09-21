@@ -39,6 +39,7 @@ arm_right,Cigar,skunk_squad_traits.json/5.hand-right/hand_right_mythic_cigar.png
 arm_right,Burger,skunk_squad_traits.json/5.hand-right/hand_right_rare_burger.png,15,rare,
 arm_right,Martini,skunk_squad_traits.json/5.hand-right/hand_right_rare_martini.png,15,rare,
 arm_right,Tennis Ball,skunk_squad_traits.json/5.hand-right/hand_right_rare_tennisball.png,15,rare,
+arm_right,Chartphone,skunk_squad_traits.json/5.hand-right/hand_right_legendary_chartphone.png,10,legendary,
 arm_left,Plain,skunk_squad_traits.json/6.hand_left/hand_left_common_plain.png,65,common,
 arm_left,lighter,skunk_squad_traits.json/6.hand_left/hand_left_rare_lighter.png,20,rare,
 arm_left,nftrocket,skunk_squad_traits.json/6.hand_left/hand_left_legendary_nftrocket.png,15,rare,optional
@@ -50,6 +51,7 @@ emblem,common Grump,skunk_squad_traits.json/8.emblem/emblem_common_grump.png,30,
 emblem,rare Cammoglobe,skunk_squad_traits.json/8.emblem/emblem_rare_cammoglobe.png,15,rare,
 emblem,rare Sassy,skunk_squad_traits.json/8.emblem/emblem_rare_sassy.png,5,rare,
 emblem,rare Yinyang,skunk_squad_traits.json/8.emblem/emblem_rare_yinyang.png,5,rare,
+emblem,rare Ether,skunk_squad_traits.json/8.emblem/emblem_rare_ether.png,15,rare,
 emblem,legendary Fire,skunk_squad_traits.json/8.emblem/emblem_legendary_fire.png,5,legendary,
 emblem,mythic Opensail,skunk_squad_traits.json/8.emblem/emblem_mythic_opensail.png,10,mythic,
 shoes,common BlackBoots,skunk_squad_traits.json/7.Shoes/shoes_common_blackboots.png,60,common,optional
