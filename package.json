@@ -11,6 +11,8 @@
     "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet",
     "deploy-enhanced": "hardhat run scripts/deploy-enhanced.js --network sepolia",
     "deploy-ultra": "hardhat run scripts/deploy-ultra-smart.js --network sepolia",
+    "deploy-payment-gateway": "hardhat run scripts/deploy-payment-gateway.js --network sepolia",
+    "deploy-payment-mainnet": "hardhat run scripts/deploy-payment-gateway.js --network mainnet",
     "test-contract": "hardhat run scripts/test-contract.js --network sepolia",
     "test-ultra": "hardhat run scripts/test-ultra-smart.js --network sepolia",
     "verify:sepolia": "hardhat verify --network sepolia",
@@ -21,7 +23,9 @@
     "metadata-server": "node scripts/metadata-server.js",
     "update-uris": "hardhat run scripts/update-uris.js --network sepolia",
     "analytics": "node scripts/analytics-dashboard.js",
-    "dashboard": "node scripts/analytics-dashboard.js"
+    "dashboard": "node scripts/analytics-dashboard.js",
+    "payment-server": "node scripts/payment-server.js",
+    "payment-dev": "NODE_ENV=development node scripts/payment-server.js"
   },
   "keywords": [
     "nft",
@@ -58,6 +62,7 @@
     "dotenv": "^17.2.2",
     "erc721a": "^4.2.3",
     "express": "^4.21.2",
-    "merkletreejs": "^0.3.11"
+    "merkletreejs": "^0.3.11",
+    "stripe": "^14.21.0"
   }
 }
