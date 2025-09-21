@@ -27,8 +27,8 @@ class SmartContractAnalytics {
             this.contract = await ethers.getContractAt("SkunkSquadNFTUltraSmart", this.contractAddress);
             console.log("✅ Contract connected:", this.contractAddress);
             
-            // Setup event listeners
-            this.setupEventListeners();
+            // Setup event listeners after contract is initialized
+            await this.setupEventListeners();
             
         } catch (error) {
             console.error("❌ Failed to initialize:", error.message);
@@ -295,38 +295,49 @@ class SmartContractAnalytics {
         ];
     }
 
-    setupEventListeners() {
+    async setupEventListeners() {
+        if (!this.contract) {
+            console.log("⚠️ Contract not initialized, skipping event listeners");
+            return;
+        }
+        
         console.log("🎧 Setting up event listeners...");
 
-        // Listen for mints
-        this.contract.on("Transfer", (from, to, tokenId) => {
-            if (from === ethers.ZeroAddress) {
-                console.log(`🎉 New mint: Token ${tokenId} → ${to}`);
-                this.broadcastEvent('mint', { tokenId: tokenId.toString(), to });
-            }
-        });
-
-        // Listen for XP awards
-        this.contract.on("XPAwarded", (user, amount, reason) => {
-            console.log(`⭐ XP Awarded: ${amount} to ${user} for ${reason}`);
-            this.broadcastEvent('xp', { user, amount: amount.toString(), reason });
-        });
-
-        // Listen for achievements
-        this.contract.on("AchievementUnlocked", (user, achievementId, name) => {
-            console.log(`🏆 Achievement unlocked: ${name} by ${user}`);
-            this.broadcastEvent('achievement', { user, achievementId: achievementId.toString(), name });
-        });
-
-        // Listen for price changes
-        this.contract.on("DynamicPriceUpdated", (oldPrice, newPrice, demandMultiplier) => {
-            console.log(`💰 Price updated: ${ethers.utils.formatEther(oldPrice)} → ${ethers.utils.formatEther(newPrice)} ETH`);
-            this.broadcastEvent('price', { 
-                oldPrice: ethers.utils.formatEther(oldPrice), 
-                newPrice: ethers.utils.formatEther(newPrice),
-                demandMultiplier: demandMultiplier.toString()
+        try {
+            // Listen for mints
+            this.contract.on("Transfer", (from, to, tokenId) => {
+                if (from === ethers.constants.AddressZero) {
+                    console.log(`🎉 New mint: Token ${tokenId.toString()} → ${to}`);
+                    this.broadcastEvent('mint', { tokenId: tokenId.toString(), to });
+                }
             });
-        });
+
+            // Listen for XP awards
+            this.contract.on("XPAwarded", (user, amount, reason) => {
+                console.log(`⭐ XP Awarded: ${amount} to ${user} for ${reason}`);
+                this.broadcastEvent('xp', { user, amount: amount.toString(), reason });
+            });
+
+            // Listen for achievements
+            this.contract.on("AchievementUnlocked", (user, achievementId, name) => {
+                console.log(`🏆 Achievement unlocked: ${name} by ${user}`);
+                this.broadcastEvent('achievement', { user, achievementId: achievementId.toString(), name });
+            });
+
+            // Listen for price changes
+            this.contract.on("DynamicPriceUpdated", (oldPrice, newPrice, demandMultiplier) => {
+                console.log(`💰 Price updated: ${ethers.utils.formatEther(oldPrice)} → ${ethers.utils.formatEther(newPrice)} ETH`);
+                this.broadcastEvent('price', { 
+                    oldPrice: ethers.utils.formatEther(oldPrice), 
+                    newPrice: ethers.utils.formatEther(newPrice),
+                    demandMultiplier: demandMultiplier.toString()
+                });
+            });
+            
+            console.log("✅ Event listeners setup complete");
+        } catch (error) {
+            console.error("❌ Failed to setup event listeners:", error.message);
+        }
     }
 
     broadcastEvent(type, data) {
