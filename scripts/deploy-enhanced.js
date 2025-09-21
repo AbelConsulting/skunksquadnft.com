@@ -31,9 +31,9 @@ async function main() {
   
   // Check deployer balance
   const balance = await ethers.provider.getBalance(deployer.address);
-  console.log("- Deployer Balance:", ethers.formatEther(balance), "ETH");
+  console.log("- Deployer Balance:", ethers.utils.formatEther(balance), "ETH");
   
-  if (balance < ethers.parseEther("0.1")) {
+  if (balance.lt(ethers.utils.parseEther("0.1"))) {
     console.warn("⚠️  Warning: Low deployer balance. Make sure you have enough ETH for deployment and gas fees.");
   }
   
@@ -53,16 +53,16 @@ async function main() {
     royaltyFee
   );
   
-  await contract.waitForDeployment();
-  const contractAddress = await contract.getAddress();
+  await contract.deployed();
+  const contractAddress = contract.address;
   
   console.log("✅ SkunkSquadNFTEnhanced deployed to:", contractAddress);
-  console.log("📝 Transaction hash:", contract.deploymentTransaction().hash);
+  console.log("📝 Transaction hash:", contract.deployTransaction.hash);
   
   // Wait for block confirmations on live networks
   if (hre.network.name !== "hardhat" && hre.network.name !== "localhost") {
     console.log("⏳ Waiting for block confirmations...");
-    await contract.deploymentTransaction().wait(5);
+    await contract.deployTransaction.wait(5);
     console.log("✅ Contract confirmed on blockchain");
   }
   
@@ -89,15 +89,15 @@ async function main() {
     const publicConfig = await contract.phaseConfigs(3); // PUBLIC
     
     console.log("\n📊 Phase Configurations:");
-    console.log("- Presale: Price:", ethers.formatEther(presaleConfig.price), "ETH, Max/Wallet:", presaleConfig.maxPerWallet.toString());
-    console.log("- Whitelist: Price:", ethers.formatEther(whitelistConfig.price), "ETH, Max/Wallet:", whitelistConfig.maxPerWallet.toString());
-    console.log("- Public: Price:", ethers.formatEther(publicConfig.price), "ETH, Max/Wallet:", publicConfig.maxPerWallet.toString());
+    console.log("- Presale: Price:", ethers.utils.formatEther(presaleConfig.price), "ETH, Max/Wallet:", presaleConfig.maxPerWallet.toString());
+    console.log("- Whitelist: Price:", ethers.utils.formatEther(whitelistConfig.price), "ETH, Max/Wallet:", whitelistConfig.maxPerWallet.toString());
+    console.log("- Public: Price:", ethers.utils.formatEther(publicConfig.price), "ETH, Max/Wallet:", publicConfig.maxPerWallet.toString());
     
     // Check royalty info
-    const [royaltyReceiver, royaltyAmount] = await contract.royaltyInfo(1, ethers.parseEther("1"));
+    const [royaltyReceiver, royaltyAmount] = await contract.royaltyInfo(1, ethers.utils.parseEther("1"));
     console.log("\n💰 Royalty Configuration:");
     console.log("- Royalty Recipient:", royaltyReceiver);
-    console.log("- Royalty Fee:", ethers.formatEther(royaltyAmount * 100n), "%");
+    console.log("- Royalty Fee:", ethers.utils.formatEther(royaltyAmount.mul(100)), "%");
     
     // Check security features
     const operatorFilteringEnabled = await contract.operatorFilteringEnabled();
@@ -119,7 +119,7 @@ async function main() {
     contractAddress: contractAddress,
     contractName: "SkunkSquadNFTEnhanced",
     deployerAddress: deployer.address,
-    deploymentTransaction: contract.deploymentTransaction().hash,
+    deploymentTransaction: contract.deployTransaction.hash,
     deploymentBlock: await ethers.provider.getBlockNumber(),
     timestamp: new Date().toISOString(),
     configuration: {
