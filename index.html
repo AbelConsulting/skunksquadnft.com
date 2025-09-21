@@ -53,6 +53,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
+    <!-- Essential Plugins -->
+    <!-- Stripe SDK for Credit Card Payments -->
+    <script src="https://js.stripe.com/v3/" defer></script>
+    
+    <!-- Chart.js for Analytics Dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js" defer></script>
+    
+    <!-- Ethers.js for Enhanced Web3 Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
     <!-- CSS -->
     <link rel="stylesheet" href="./styles/main.css">
     <link rel="stylesheet" href="./styles/components.css">
@@ -672,17 +691,50 @@
     </div>
 
     <!-- Scripts -->
-    <script src="./src/js/main.js"></script>
-    <script src="./src/js/payment.js"></script>
-    <script src="./src/js/wallet.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/payment.js"></script>
+    <script src="./js/wallet.js"></script>
     
-    <!-- Web3 Integration -->
-    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
-    
-    <!-- Analytics -->
+    <!-- Enhanced Web3 Integration -->
     <script>
-        // Add your analytics code here
-        console.log('🦨 SkunkSquad NFT Website Loaded');
+        // Enhanced Web3 Integration with Ethers.js
+        window.SkunkSquad = {
+            stripe: null,
+            provider: null,
+            signer: null,
+            contract: null,
+            
+            // Initialize Stripe
+            initStripe() {
+                if (typeof Stripe !== 'undefined') {
+                    this.stripe = Stripe('pk_test_your_stripe_publishable_key_here');
+                    console.log('✅ Stripe SDK loaded');
+                }
+            },
+            
+            // Initialize Web3
+            async initWeb3() {
+                if (typeof window.ethereum !== 'undefined' && typeof ethers !== 'undefined') {
+                    this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                    console.log('✅ Ethers.js loaded');
+                }
+            },
+            
+            // Initialize Analytics
+            trackEvent(eventName, parameters = {}) {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', eventName, parameters);
+                }
+                console.log('📊 Event tracked:', eventName, parameters);
+            }
+        };
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            window.SkunkSquad.initStripe();
+            window.SkunkSquad.initWeb3();
+            console.log('🦨 SkunkSquad NFT Website Loaded with Enhanced Plugins');
+        });
     </script>
 </body>
 </html>
