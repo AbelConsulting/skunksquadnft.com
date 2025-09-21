@@ -1,0 +1,952 @@
+[
+  {
+    "rank": 1,
+    "edition": 72,
+    "rarity_score": 98,
+    "legendary_traits": 3,
+    "rare_traits": 3,
+    "signature": "18217bb54e982ddbf7bb99bc027c4e0afa6226ce46cc28f75e7d363993992809",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "legendary Nuclearneon",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Burger",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "lighter",
+        "rarity": "rare"
+      },
+      "head": {
+        "trait": "Rare blindfold",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "common None",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "legendary Sandals",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 2,
+    "edition": 88,
+    "rarity_score": 98,
+    "legendary_traits": 3,
+    "rare_traits": 3,
+    "signature": "af52f32dce9aaeb69ae3926df45af05dc8493d48b075cc82ccc8ccf4d61e6706",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "legendary Ruby Red",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "lighter",
+        "rarity": "rare"
+      },
+      "head": {
+        "trait": "Rare blindfold",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "rare Yinyang",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "common BlackBoots",
+        "rarity": "common"
+      }
+    }
+  },
+  {
+    "rank": 3,
+    "edition": 25,
+    "rarity_score": 93,
+    "legendary_traits": 4,
+    "rare_traits": 0,
+    "signature": "0fe6ec31c8283d132a5575f610c5161158503989a90c9d8a04f52871c0ed7594",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Starry",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Amethyst Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Common burger",
+        "rarity": "common"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "legendary Sandals",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 4,
+    "edition": 44,
+    "rarity_score": 88,
+    "legendary_traits": 3,
+    "rare_traits": 2,
+    "signature": "0006d3e1d43f905de53837e6bd0edb45c39ea62b27c9c46e849797d08c526d69",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Ruby Gold",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Chartphone",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare halo blue",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "rare Sandals",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 5,
+    "edition": 42,
+    "rarity_score": 88,
+    "legendary_traits": 3,
+    "rare_traits": 2,
+    "signature": "a38ef7387bd7bb4cc3f4dad982c698f543321e2876288841d32e70c83a969af8",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "legendary Ruby Gold",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Martini",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Common burger",
+        "rarity": "common"
+      },
+      "emblem": {
+        "trait": "rare Ether",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "legendary SkPlus",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 6,
+    "edition": 23,
+    "rarity_score": 86,
+    "legendary_traits": 3,
+    "rare_traits": 1,
+    "signature": "37e9e25a793ebd0562ffbdfb097e7cd800b2492ea52a63f03b27604391043338",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "lighter",
+        "rarity": "rare"
+      },
+      "head": {
+        "trait": "Legendary sasstache",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "common BlackBoots",
+        "rarity": "common"
+      }
+    }
+  },
+  {
+    "rank": 7,
+    "edition": 47,
+    "rarity_score": 86,
+    "legendary_traits": 3,
+    "rare_traits": 1,
+    "signature": "61fc429de088c993fed1af6cad2ea3e23503d9f12d367c791fdd665f3f70b3bf",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Starry",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Katana",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Katana",
+        "rarity": "legendary"
+      },
+      "head": {
+        "trait": "Legendary sasstache",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "common None",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "common BlackBoots",
+        "rarity": "common"
+      }
+    }
+  },
+  {
+    "rank": 8,
+    "edition": 99,
+    "rarity_score": 59,
+    "legendary_traits": 2,
+    "rare_traits": 3,
+    "signature": "633547e0a847ec2a4343edd6b8bc8f5489c0718a844bffea3c2b2bd0f1a1b6df",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Nuclearneon",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Chartphone",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare halo blue",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "rare Ether",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare Suade",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 9,
+    "edition": 7,
+    "rarity_score": 59,
+    "legendary_traits": 2,
+    "rare_traits": 3,
+    "signature": "6a671d8e4e95ed802643714846c0cdfe45f8a1a8671182c4ceb965173eba4f23",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare blindfold",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "rare Cammoglobe",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare SkSneakers",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 10,
+    "edition": 5,
+    "rarity_score": 59,
+    "legendary_traits": 2,
+    "rare_traits": 3,
+    "signature": "fe2c62b6b0102395ce38525134fffee0c53f4695cfec2d853daaaee2d09501cd",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "common Purple",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "nftrocket",
+        "rarity": "rare"
+      },
+      "head": {
+        "trait": "Legendary nuclear neon",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "rare Ether",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare Sandals",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 11,
+    "edition": 35,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "fc5566ad05e03fcf38e5182e712291fa54d471c09be2d1d5f2a3dfb74793424c",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "legendary Ruby Red",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "plain",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare pink halo",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "common None",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "rare SkSneakers",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 12,
+    "edition": 28,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "94ab6cef2fb5ecde70f65566312af89fd1788374db87df0bcc6745e6bbe7e970",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "rare Splittail Gold",
+        "rarity": "rare"
+      },
+      "arm_right": {
+        "trait": "plain",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary nuclear neon",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "common Grump",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "rare Greenheart",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 13,
+    "edition": 46,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "6a4045fe849546d1970f3562609f684489e5d2449180dc7b5c2e62b75a8d1c6f",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Scroll",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "lighter",
+        "rarity": "rare"
+      },
+      "head": {
+        "trait": "Legendary nuclear neon",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "common None",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "rare Greenheart",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 14,
+    "edition": 60,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "4ec3c0c45398fcc0b60b8de46a6f92311075e7415a6e7f7146a9bec8dbfe31d8",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Ruby Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary sasstache",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "rare Ether",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare Greenheart",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 15,
+    "edition": 19,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "48213396fb28bb7dc03827b8f9671a9c5be8bfbe4d816a93d582036a5127264f",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Katana",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Katana",
+        "rarity": "legendary"
+      },
+      "head": {
+        "trait": "Common rocker",
+        "rarity": "common"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "rare SkSneakers",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 16,
+    "edition": 13,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "065bf85bddb2c3693abd4fc09790ef06f0e44dcdf49846ca7d7bb08f4ec260c6",
+    "traits": {
+      "background": {
+        "trait": "skunkworks",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "common Gold",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Chartphone",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Amethyst Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary sasstache",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "rare Cammoglobe",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare Sandals",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 17,
+    "edition": 32,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "a4119550e798f0a8b9950390ac7d4d8f93a3b5693bb438c76eac12849609280c",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "plain",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Amethyst Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare pink halo",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "rare Brown",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 18,
+    "edition": 79,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "bd5eb7a9d42b7b0e1808ce9f5fb37be61547975e0aff69397edf6980d219ddfe",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "rare Splittail Plain",
+        "rarity": "rare"
+      },
+      "arm_right": {
+        "trait": "plain",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary sasstache",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "legendary Fire",
+        "rarity": "legendary"
+      },
+      "shoes": {
+        "trait": "rare Sandals",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 19,
+    "edition": 56,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "4b5bacf41e5a56c07b078670fdd332d729e03f403d2b5c1027b08df0f1f04b82",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "common Purple",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Scroll",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Ruby Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary nuclear neon",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "rare Cammoglobe",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "rare Suade",
+        "rarity": "rare"
+      }
+    }
+  },
+  {
+    "rank": 20,
+    "edition": 76,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "e0d303395d2f7dc3ba417bd30297dd9c7050e49db9c1b1b09d8a2ee163f93fef",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "rare Splittail Gold",
+        "rarity": "rare"
+      },
+      "arm_right": {
+        "trait": "Katana",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Amethyst Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Legendary nuclear neon",
+        "rarity": "legendary"
+      },
+      "emblem": {
+        "trait": "common Grump",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "legendary Sandals",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 21,
+    "edition": 84,
+    "rarity_score": 49,
+    "legendary_traits": 2,
+    "rare_traits": 2,
+    "signature": "67317e57aac49b13d89b740e57ef58455be025fb5bf806cc0440468dbda8dff4",
+    "traits": {
+      "background": {
+        "trait": "Temple Ruins",
+        "rarity": "legendary"
+      },
+      "tail": {
+        "trait": "common Plain",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Martini",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare pink halo",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "common Grump",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "legendary SkPlus",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 22,
+    "edition": 55,
+    "rarity_score": 47,
+    "legendary_traits": 2,
+    "rare_traits": 1,
+    "signature": "87915a12c333fc90ff7a3f144532bc901ae1fa27d628ef12e708b2d560cbb698",
+    "traits": {
+      "background": {
+        "trait": "Neon Alley",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Ruby Red",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "Katana",
+        "rarity": "rare"
+      },
+      "arm_left": {
+        "trait": "Plain",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Common punk",
+        "rarity": "common"
+      },
+      "emblem": {
+        "trait": "common Grump",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "legendary Sandals",
+        "rarity": "legendary"
+      }
+    }
+  },
+  {
+    "rank": 23,
+    "edition": 73,
+    "rarity_score": 47,
+    "legendary_traits": 2,
+    "rare_traits": 1,
+    "signature": "f1441044f42c5713cc0f6c67af723cf2c907b3da069c7f03ee963c3e7cebecad",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Feather",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Katana",
+        "rarity": "legendary"
+      },
+      "head": {
+        "trait": "Common punk",
+        "rarity": "common"
+      },
+      "emblem": {
+        "trait": "rare Yinyang",
+        "rarity": "rare"
+      },
+      "shoes": {
+        "trait": "common BlackBoots",
+        "rarity": "common"
+      }
+    }
+  },
+  {
+    "rank": 24,
+    "edition": 95,
+    "rarity_score": 47,
+    "legendary_traits": 2,
+    "rare_traits": 1,
+    "signature": "6000c2a913568f2b0772ad5058d298ea9ec278d43e533762ca119be75e054583",
+    "traits": {
+      "background": {
+        "trait": "Castle",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "Gold Tail",
+        "rarity": "common"
+      },
+      "arm_right": {
+        "trait": "Chartphone",
+        "rarity": "legendary"
+      },
+      "arm_left": {
+        "trait": "Katana",
+        "rarity": "legendary"
+      },
+      "head": {
+        "trait": "Rare halo blue",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "common None",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "common Rainboots",
+        "rarity": "common"
+      }
+    }
+  },
+  {
+    "rank": 25,
+    "edition": 100,
+    "rarity_score": 47,
+    "legendary_traits": 2,
+    "rare_traits": 1,
+    "signature": "10c54635e884eed4c929f7c9a7e733e31fb192daf7f1c84a42ec4adf22d14491",
+    "traits": {
+      "background": {
+        "trait": "skunkworks",
+        "rarity": "common"
+      },
+      "tail": {
+        "trait": "legendary Ruby Gold",
+        "rarity": "legendary"
+      },
+      "arm_right": {
+        "trait": "plain",
+        "rarity": "common"
+      },
+      "arm_left": {
+        "trait": "Amethyst Staff",
+        "rarity": "common"
+      },
+      "head": {
+        "trait": "Rare blindfold",
+        "rarity": "rare"
+      },
+      "emblem": {
+        "trait": "common Grump",
+        "rarity": "common"
+      },
+      "shoes": {
+        "trait": "legendary Sandals",
+        "rarity": "legendary"
+      }
+    }
+  }
+]

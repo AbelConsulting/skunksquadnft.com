@@ -1,0 +1,47 @@
+{
+  "name": "Skunk Squad #42",
+  "description": "Skunk Squad: community-first, generative rarity, and Skunk Works access.",
+  "image": "ipfs://METADATA_CID/images/42.png",
+  "attributes": [
+    {
+      "trait_type": "background",
+      "value": "Temple Ruins",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "tail",
+      "value": "legendary Ruby Gold",
+      "rarity_tier": "legendary"
+    },
+    {
+      "trait_type": "arm_right",
+      "value": "Martini",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "arm_left",
+      "value": "Plain",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "body",
+      "value": "Base Body",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "head",
+      "value": "Common burger",
+      "rarity_tier": "common"
+    },
+    {
+      "trait_type": "emblem",
+      "value": "rare Ether",
+      "rarity_tier": "rare"
+    },
+    {
+      "trait_type": "shoes",
+      "value": "legendary SkPlus",
+      "rarity_tier": "legendary"
+    }
+  ]
+}
