@@ -131,7 +131,7 @@ def load_from_dir(dir_path: Path) -> pd.DataFrame:
                 trait_name = f.stem
                 rarity = "common"
                 # try to infer rarity from filename token (if present)
-                m = re.search(r'_(common|rare|epic|legendary|mythic|moonshot)', f.name, re.IGNORECASE)
+                m = re.search(r'_(common|rare|epic|legendary|ultra|moonshot)', f.name, re.IGNORECASE)
                 if m:
                     rarity = m.group(1).lower()
                 # weight from weights_map if available

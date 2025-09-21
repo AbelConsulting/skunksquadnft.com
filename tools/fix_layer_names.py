@@ -11,7 +11,7 @@ NORMALIZE = {
     'head': ['head', 'head_common', 'head_rare', 'head_common_burger', 'head_common burger', 'head_common_commando'],
     'arm_right': ['arm_right', 'hand-right', 'hand_right', 'hand-right_common', 'hand_right_common'],
     'arm_left': ['arm_left', 'hand_left', 'hand-left', 'hand_left_common'],
-    'badge': ['badge', 'emblem', 'emblem_common', 'emblem-legendary_fire', 'emblem_mythic_opensail'],
+    'badge': ['badge', 'emblem', 'emblem_common', 'emblem-legendary_fire', 'emblem_ultra_opensail'],
     'shoes': ['shoes', 'shoe', 'shoes_common', 'shoe_common'],
     'emblem': ['emblem'],
 }
