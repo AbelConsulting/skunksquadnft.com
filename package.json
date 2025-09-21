@@ -25,7 +25,9 @@
     "analytics": "node scripts/analytics-dashboard.js",
     "dashboard": "node scripts/analytics-dashboard.js",
     "payment-server": "node scripts/payment-server.js",
-    "payment-dev": "NODE_ENV=development node scripts/payment-server.js"
+    "payment-dev": "NODE_ENV=development node scripts/payment-server.js",
+    "setup-payments": "npm install stripe && echo 'Payment dependencies installed! Configure .env and run: npm run deploy-payment-gateway'",
+    "start-payment-system": "npm run deploy-payment-gateway && npm run payment-server"
   },
   "keywords": [
     "nft",
