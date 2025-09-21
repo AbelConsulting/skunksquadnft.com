@@ -1,0 +1,27 @@
+{
+  "network": "sepolia",
+  "contractAddress": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "contractName": "SkunkSquadNFTEnhanced",
+  "deployerAddress": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "deploymentTransaction": "0x664722ed8d59e1160122ac809ef6c2ab246c166e515e67030fdaa21c38bd5783",
+  "deploymentBlock": 9250711,
+  "timestamp": "2025-09-21T19:15:18.989Z",
+  "configuration": {
+    "name": "Skunk Squad",
+    "symbol": "SKUNK",
+    "baseURI": "https://metadata.skunksquadnft.com/",
+    "contractURI": "https://metadata.skunksquadnft.com/contract.json",
+    "unrevealedURI": "https://metadata.skunksquadnft.com/unrevealed.json",
+    "royaltyRecipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+    "royaltyFee": 250
+  },
+  "features": [
+    "Multi-phase minting",
+    "Configurable pricing",
+    "Enhanced security",
+    "Operator filtering",
+    "Emergency controls",
+    "Split withdrawals",
+    "Advanced analytics"
+  ]
+}

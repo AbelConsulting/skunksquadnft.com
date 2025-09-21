@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.3",
+    "dotenv": "^17.2.2",
     "erc721a": "^4.2.3",
     "merkletreejs": "^0.3.11"
   }
