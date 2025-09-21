@@ -8,9 +8,10 @@ async function main() {
   // Get deployment parameters from environment or use defaults
   const CONTRACT_NAME = process.env.CONTRACT_NAME || "Skunk Squad";
   const CONTRACT_SYMBOL = process.env.CONTRACT_SYMBOL || "SKUNK";
-  const BASE_URI = process.env.BASE_URI || "https://metadata.skunksquadnft.com/";
-  const CONTRACT_URI = process.env.CONTRACT_URI || "https://metadata.skunksquadnft.com/contract.json";
-  const UNREVEALED_URI = process.env.UNREVEALED_URI || "https://metadata.skunksquadnft.com/unrevealed.json";
+  // Use placeholder URIs for testnet - will be updated after artwork upload
+  const BASE_URI = process.env.BASE_URI || "https://api.skunksquadnft.com/metadata/";
+  const CONTRACT_URI = process.env.CONTRACT_URI || "https://api.skunksquadnft.com/contract.json";
+  const UNREVEALED_URI = process.env.UNREVEALED_URI || "https://api.skunksquadnft.com/unrevealed.json";
   
   // Get deployer account
   const [deployer] = await ethers.getSigners();
