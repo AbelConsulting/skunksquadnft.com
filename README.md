@@ -1,12 +1,13 @@
 # 🦨 SkunkSquad NFT Collection
 
-**The World's First Ultra-Smart NFT Collection with AI-Powered Features**
+**The World's First Ultra-Smart NFT Collection with AI-Powered Features + Credit Card Payments**
 
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-blue.svg)](https://solidity.readthedocs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-yellow.svg)](https://hardhat.org/)
 [![OpenZeppelin](https://img.shields.io/badge/OpenZeppelin-Contracts-blue.svg)](https://openzeppelin.com/)
 [![Security](https://img.shields.io/badge/Security-Policy-red.svg)](./SECURITY.md)
+[![Payment](https://img.shields.io/badge/Credit%20Cards-Accepted-green.svg)](./PAYMENT_GATEWAY_GUIDE.md)
 
 ## 🚀 **Revolutionary Smart Contract Technology**
 
@@ -34,6 +35,7 @@ SkunkSquad isn't just another NFT collection—it's a **complete intelligent eco
 - **📱 Mobile Optimized**: Seamless checkout experience on any device
 
 **How it works:**
+
 1. Connect your wallet → 2. Enter quantity → 3. Pay with credit card → 4. Receive NFTs instantly!
 
 [**📖 Full Payment Gateway Documentation →**](./PAYMENT_GATEWAY_GUIDE.md)
@@ -47,8 +49,9 @@ SkunkSquad isn't just another NFT collection—it's a **complete intelligent eco
 - **Metadata**: Fully decentralized with IPFS integration
 
 ### 🎭 **Trait Categories**
+
 - **Backgrounds** (8 variants)
-- **Bodies** (6 variants) 
+- **Bodies** (6 variants)
 - **Heads** (9 variants)
 - **Eyes** (8 variants)
 - **Mouths** (7 variants)
@@ -59,21 +62,81 @@ SkunkSquad isn't just another NFT collection—it's a **complete intelligent eco
 ## 🏗️ **Technical Architecture**
 
 ### **Smart Contract Stack**
-```
+
+```text
 SkunkSquadNFTUltraSmart.sol (715+ lines)
 ├── ERC-721A Base (Azuki's gas-optimized standard)
 ├── OpenZeppelin Security Extensions
 ├── Dynamic Pricing Engine
 ├── User Analytics System
 ├── Achievement & XP Framework
-├── Social Features Module
-└── Predictive Analytics Engine
+├── Social Features (Referrals & Gifting)
+├── Predictive Analytics Engine
+└── Advanced Access Controls
+
+SkunkSquadPaymentGateway.sol (NEW!)
+├── Credit Card Payment Processing
+├── Stripe Integration & Webhooks
+├── Cryptographic Payment Verification
+├── Automatic NFT Delivery
+├── Refund & Dispute Handling
+└── PCI Compliance & Security
 ```
 
 ### **Key Contracts**
-- **Main Contract**: `0x7649366eeb2F996513C4A929d9A980779Cf2364C` (Sepolia)
-- **Royalties**: EIP-2981 standard (5% to creator)
-- **Operator Filtering**: Enforced marketplace royalties
+
+- **Ultra Smart Contract**: `0x7649366eeb2F996513C4A929d9A980779Cf2364C` (Sepolia)
+- **Payment Gateway**: `[Deploy with npm run deploy-payment-gateway]` (Revolutionary fiat-to-NFT bridge)
+- **Network**: Ethereum Sepolia Testnet
+- **Gas Optimized**: ERC-721A for batch minting
+- **Verified**: Etherscan verified source code
+- **Security**: Comprehensive audit and monitoring
+
+## 💳 **Payment System API Endpoints**
+
+**Base URL**: `http://localhost:3002/api` (Development) | `https://api.skunksquadnft.com/api` (Production)
+
+### **Core Payment Endpoints**
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/pricing` | GET | Get current NFT pricing in USD |
+| `/calculate-total` | POST | Calculate total cost for quantity |
+| `/create-payment-intent` | POST | Create Stripe payment for NFTs |
+| `/payment-status/:id` | GET | Check payment and delivery status |
+
+### **Payment Flow**
+
+```mermaid
+graph LR
+    A[User Selects NFTs] --> B[Create Payment Intent]
+    B --> C[Stripe Card Processing]
+    C --> D[Webhook Confirmation]
+    D --> E[Smart Contract Verification]
+    E --> F[NFT Auto-Delivery]
+```
+
+**Example Usage:**
+
+```javascript
+// 1. Create payment intent
+const response = await fetch('/api/create-payment-intent', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    quantity: 2,
+    walletAddress: '0x...'
+  })
+});
+
+// 2. Process with Stripe Elements
+const { clientSecret } = await response.json();
+const result = await stripe.confirmCardPayment(clientSecret, {
+  payment_method: { card: cardElement }
+});
+
+// 3. NFTs automatically delivered to wallet!
+```
 
 ## 💰 **Smart Pricing System**
 
@@ -85,24 +148,29 @@ Our revolutionary pricing adapts to market conditions:
 - **Demand Multipliers**: Price increases with minting velocity
 - **Fair Pricing**: Protects against extreme volatility
 
-## 🎮 **Gamification & Rewards**
+## 🎮 **Gamification Features**
+
+**Transform collecting into an engaging game with achievements, XP, and social interaction.**
 
 ### **Achievement System**
+
 1. **First Mint** - Mint your first NFT (50 XP)
-2. **Collector** - Own 5 NFTs (200 XP)
-3. **Whale** - Own 20 NFTs (1,000 XP)
-4. **Early Bird** - Mint in first 100 (500 XP)
-5. **Social Butterfly** - Refer 5 friends (300 XP)
-6. **Speed Demon** - Mint within 1 minute (150 XP)
-7. **Loyalty** - Hold for 30 days (400 XP)
-8. **Big Spender** - Spend 1 ETH total (800 XP)
-9. **Pattern Master** - Consistent minting (600 XP)
-10. **Community Leader** - Refer 20 friends (1,500 XP)
+2. **Collector** - Own 5+ NFTs (100 XP)
+3. **Whale** - Own 10+ NFTs (250 XP)
+4. **Diamond Hands** - Hold for 30+ days (150 XP)
+5. **Social Butterfly** - Refer 3+ friends (200 XP)
+6. **Early Bird** - Among first 100 minters (300 XP)
+7. **Completionist** - Own all trait categories (500 XP)
+8. **Legendary** - Own an Ultra-tier NFT (750 XP)
+9. **Community Leader** - Top 10 XP globally (1000 XP)
+10. **Ultimate Skunk** - Unlock all achievements (2000 XP)
 
 ### **XP Benefits**
+
 - **Social Recognition**: Leaderboards and status
-- **Future Utility**: Staking rewards, governance voting
-- **Exclusive Access**: Special events and drops
+- **Future Airdrops**: Higher XP = better rewards
+- **Community Access**: VIP channels and events
+- **Governance Power**: Voting weight in decisions
 
 ## 👥 **Social Features**
 
@@ -131,12 +199,15 @@ Our revolutionary pricing adapts to market conditions:
 ## 🛠️ **Development Setup**
 
 ### **Prerequisites**
+
 ```bash
-node >= 16.0.0
-npm >= 8.0.0
+# Node.js 18+ and npm
+node --version
+npm --version
 ```
 
 ### **Installation**
+
 ```bash
 git clone https://github.com/AbelConsulting/skunksquadnft.com.git
 cd skunksquadnft.com
@@ -144,19 +215,36 @@ npm install
 ```
 
 ### **Environment Setup**
+
 Create `.env` file:
+
 ```env
+# Blockchain Configuration
 ALCHEMY_API_KEY=your_alchemy_key
 PRIVATE_KEY=your_wallet_private_key
 ETHERSCAN_API_KEY=your_etherscan_key
+
+# Payment Gateway (NEW!)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_VALIDATOR_ADDRESS=your_backend_wallet
+
+# Server Configuration
+PORT=3002
+NODE_ENV=development
 ```
 
 ### **Available Scripts**
 
 #### **Smart Contract Deployment**
+
 ```bash
 # Deploy Ultra Smart Contract
 npm run deploy-ultra
+
+# Deploy Payment Gateway (NEW!)
+npm run deploy-payment-gateway
 
 # Test all smart features
 npm run test-ultra
@@ -165,7 +253,21 @@ npm run test-ultra
 npx hardhat run scripts/quick-test-ultra.js --network sepolia
 ```
 
+#### **Payment System (NEW!)**
+
+```bash
+# Start payment API server
+npm run payment-server
+
+# Development mode with hot reload
+npm run payment-dev
+
+# Test payment endpoints
+curl http://localhost:3002/api/pricing
+```
+
 #### **Analytics & Monitoring**
+
 ```bash
 # Start real-time analytics dashboard
 npm run analytics
