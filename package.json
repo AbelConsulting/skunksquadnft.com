@@ -9,13 +9,19 @@
     "deploy:localhost": "hardhat run scripts/deploy.js --network localhost",
     "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet",
+    "deploy-enhanced": "hardhat run scripts/deploy-enhanced.js --network sepolia",
+    "deploy-ultra": "hardhat run scripts/deploy-ultra-smart.js --network sepolia",
+    "test-contract": "hardhat run scripts/test-contract.js --network sepolia",
+    "test-ultra": "hardhat run scripts/test-ultra-smart.js --network sepolia",
     "verify:sepolia": "hardhat verify --network sepolia",
     "verify:mainnet": "hardhat verify --network mainnet",
     "node": "hardhat node",
     "clean": "hardhat clean",
     "setup-opensea": "hardhat run scripts/setup-opensea.js --network sepolia",
     "metadata-server": "node scripts/metadata-server.js",
-    "update-uris": "hardhat run scripts/update-uris.js --network sepolia"
+    "update-uris": "hardhat run scripts/update-uris.js --network sepolia",
+    "analytics": "node scripts/analytics-dashboard.js",
+    "dashboard": "node scripts/analytics-dashboard.js"
   },
   "keywords": [
     "nft",
