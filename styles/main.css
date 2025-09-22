@@ -83,7 +83,8 @@ html {
 
 body {
     font-family: var(--font-primary);
-    background-color: var(--black);
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
+    background-attachment: fixed;
     color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
@@ -374,12 +375,16 @@ a:hover {
     right: 0;
     bottom: 0;
     z-index: var(--z-background);
-    background-image: url('../assets/charlesskunk.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    opacity: 0.15;
+    background: 
+        linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 25%, rgba(236, 72, 153, 0.1) 50%, rgba(245, 158, 11, 0.1) 75%, rgba(99, 102, 241, 0.1) 100%),
+        url('../assets/charlesskunk.webp'),
+        url('../assets/skunksample1.png');
+    background-size: 400% 400%, cover, cover;
+    background-position: 0% 50%, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-attachment: scroll, fixed, fixed;
+    opacity: 0.4;
+    animation: gradient-shift 15s ease infinite;
 }
 
 .hero-background::after {

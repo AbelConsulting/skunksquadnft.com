@@ -33,6 +33,18 @@
     }
 }
 
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%, center;
+    }
+    50% {
+        background-position: 100% 50%, center;
+    }
+    100% {
+        background-position: 0% 50%, center;
+    }
+}
+
 @keyframes glow {
     0%, 100% {
         opacity: 0.5;
