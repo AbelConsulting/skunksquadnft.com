@@ -34,7 +34,8 @@
     "stripe-listen": "stripe listen --forward-to localhost:3002/webhooks/stripe",
     "setup-stripe-webhook": "echo 'Install Stripe CLI and run: stripe listen --forward-to localhost:3002/webhooks/stripe'",
     "test-payment-system": "node test-payment-system.js",
-    "configure-stripe": "node configure-stripe.js"
+    "configure-stripe": "node configure-stripe.js",
+    "setup-webhook": "powershell -ExecutionPolicy Bypass -File setup-webhook.ps1"
   },
   "keywords": [
     "nft",
