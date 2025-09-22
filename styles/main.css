@@ -315,6 +315,22 @@ a:hover {
     animation: float 3s ease-in-out infinite;
 }
 
+.logo-image {
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+}
+
+.stat-icon-image {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: cover;
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+}
+
 .brand-text {
     font-size: 1.5rem;
     font-weight: 800;
