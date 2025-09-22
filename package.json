@@ -25,9 +25,16 @@
     "analytics": "node scripts/analytics-dashboard.js",
     "dashboard": "node scripts/analytics-dashboard.js",
     "payment-server": "node scripts/payment-server.js",
-    "payment-dev": "NODE_ENV=development node scripts/payment-server.js",
+    "payment-dev": "NODE_ENV=development nodemon scripts/payment-server.js",
     "setup-payments": "npm install stripe && echo 'Payment dependencies installed! Configure .env and run: npm run deploy-payment-gateway'",
-    "start-payment-system": "npm run deploy-payment-gateway && npm run payment-server"
+    "start-payment-system": "npm run deploy-payment-gateway && npm run payment-server",
+    "dev": "concurrently \"npm run payment-dev\" \"serve . -p 3000\"",
+    "serve": "serve . -p 3000",
+    "test-payments": "echo 'Testing payment flow...' && curl -X GET http://localhost:3002/api/pricing",
+    "stripe-listen": "stripe listen --forward-to localhost:3002/webhooks/stripe",
+    "setup-stripe-webhook": "echo 'Install Stripe CLI and run: stripe listen --forward-to localhost:3002/webhooks/stripe'",
+    "test-payment-system": "node test-payment-system.js",
+    "configure-stripe": "node configure-stripe.js"
   },
   "keywords": [
     "nft",
@@ -64,7 +71,12 @@
     "dotenv": "^17.2.2",
     "erc721a": "^4.2.3",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
     "merkletreejs": "^0.3.11",
-    "stripe": "^14.21.0"
+    "serve": "^14.2.1",
+    "stripe": "^14.21.0",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
   }
 }

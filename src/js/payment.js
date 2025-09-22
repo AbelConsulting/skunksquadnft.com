@@ -16,9 +16,16 @@ class PaymentSystem {
         console.log('💳 Initializing Payment System...');
         
         try {
-            // Initialize Stripe (using test key for demo)
-            // In production, this would come from environment variables
-            this.stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+            // Get Stripe publishable key from environment or meta tag
+            const stripeKey = this.getStripePublishableKey();
+            
+            if (!stripeKey) {
+                throw new Error('Stripe publishable key not configured');
+            }
+            
+            // Initialize Stripe
+            this.stripe = Stripe(stripeKey);
+            console.log('✅ Stripe initialized with key:', stripeKey.substring(0, 12) + '...');
             
             // Setup payment form if exists
             this.setupPaymentForm();
@@ -33,6 +40,32 @@ class PaymentSystem {
             console.error('❌ Payment system initialization failed:', error);
             this.showPaymentError('Payment system unavailable. Please try again later.');
         }
+    }
+
+    getStripePublishableKey() {
+        // Try to get from environment variable (if using bundler)
+        if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
+            return process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+        }
+        
+        // Try to get from meta tag
+        const metaTag = document.querySelector('meta[name="stripe-publishable-key"]');
+        if (metaTag) {
+            return metaTag.getAttribute('content');
+        }
+        
+        // Try to get from window object
+        if (window.STRIPE_PUBLISHABLE_KEY) {
+            return window.STRIPE_PUBLISHABLE_KEY;
+        }
+        
+        // Default test key for development (remove in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.warn('⚠️ Using default test Stripe key for localhost development');
+            return 'pk_test_51HdSGqLkSIpbx8xjk5XYZ...'; // Replace with your actual test key
+        }
+        
+        return null;
     }
 
     setupPaymentForm() {
@@ -320,34 +353,72 @@ class PaymentSystem {
 
     async createPaymentIntent(quantity, metadata) {
         try {
-            // In a real implementation, this would call your backend API
-            // For demo purposes, we'll simulate the API call
-            const response = await fetch('/api/create-payment-intent', {
+            // Get API URL from environment or default to localhost
+            const apiUrl = this.getApiUrl();
+            
+            const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     quantity,
-                    metadata
+                    walletAddress: metadata.walletAddress,
+                    metadata: {
+                        billingName: metadata.billingName,
+                        billingEmail: metadata.billingEmail
+                    }
                 }),
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to create payment intent');
+            }
+            
+            return {
+                success: true,
+                clientSecret: result.data.clientSecret,
+                paymentIntentId: result.data.paymentIntentId
+            };
             
         } catch (error) {
             console.error('❌ Create payment intent error:', error);
             
-            // For demo purposes, return a mock response
+            // Check if it's a network error vs API error
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                return {
+                    success: false,
+                    error: 'Unable to connect to payment server. Please check if the payment server is running on port 3002.'
+                };
+            }
+            
             return {
                 success: false,
-                error: 'Demo mode: Payment processing unavailable. This would work with a live backend.'
+                error: error.message || 'Failed to create payment intent'
             };
         }
+    }
+
+    getApiUrl() {
+        // Try to get from environment variable
+        if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) {
+            return process.env.REACT_APP_API_URL;
+        }
+        
+        // Try to get from window object
+        if (window.API_URL) {
+            return window.API_URL;
+        }
+        
+        // Default to localhost for development
+        return 'http://localhost:3002';
     }
 
     handlePaymentSuccess(paymentIntent, quantity, walletAddress) {
