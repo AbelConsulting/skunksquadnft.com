@@ -850,7 +850,7 @@ a:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--space-xl);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -913,6 +913,16 @@ a:hover {
 .gallery-rarity.ultra {
     background: var(--gradient-accent);
     color: var(--black);
+}
+
+.gallery-rarity.legendary {
+    background: rgba(255, 215, 0, 0.2);
+    color: rgb(255, 215, 0);
+}
+
+.gallery-rarity.mythic {
+    background: rgba(255, 0, 128, 0.2);
+    color: rgb(255, 0, 128);
 }
 
 .rarity-badge {
