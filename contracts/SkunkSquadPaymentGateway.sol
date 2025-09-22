@@ -178,12 +178,13 @@ contract SkunkSquadPaymentGateway is Ownable, ReentrancyGuard, Pausable {
         processedPayments[paymentId] = true;
         payment.status = PaymentStatus.Confirmed;
         
-        // Mint NFTs to buyer
-        try nftContract.mint(payment.buyer, payment.quantity) returns (uint256 firstTokenId) {
-            // Record minted token IDs
+        // Mint NFTs to buyer using teamMint (payment gateway has this privilege)
+        try nftContract.teamMint(payment.buyer, payment.quantity) {
+            // Since teamMint doesn't return token IDs directly, we need to calculate them
+            uint256 totalSupply = nftContract.totalSupply();
             uint256[] memory tokenIds = new uint256[](payment.quantity);
             for (uint256 i = 0; i < payment.quantity; i++) {
-                tokenIds[i] = firstTokenId + i;
+                tokenIds[i] = totalSupply - payment.quantity + i + 1;
             }
             payment.tokenIds = tokenIds;
             payment.status = PaymentStatus.Delivered;
