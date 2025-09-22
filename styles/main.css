@@ -772,6 +772,7 @@ a:hover {
 @media (max-width: 768px) {
     .container {
         padding: 0 var(--space-lg);
+        max-width: 100%;
     }
     
     .nav-menu {
@@ -782,26 +783,75 @@ a:hover {
         display: flex;
     }
     
+    .nav-brand {
+        flex-grow: 1;
+        justify-content: flex-start;
+    }
+    
+    .nav-actions {
+        gap: var(--space-sm);
+    }
+    
+    .nav-actions .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.875rem;
+    }
+    
     .hero {
         flex-direction: column;
         text-align: center;
         padding-top: 120px;
+        min-height: auto;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: var(--space-xl);
+    }
+    
+    .hero-badges {
+        justify-content: center;
+        margin-bottom: var(--space-lg);
     }
     
     .hero-title {
         font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: var(--space-lg);
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        margin-bottom: var(--space-lg);
+    }
+    
+    .hero-features {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+        margin-bottom: var(--space-lg);
     }
     
     .hero-actions {
         justify-content: center;
+        flex-direction: column;
+        gap: var(--space-md);
+        margin-bottom: var(--space-lg);
+    }
+    
+    .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+        margin-bottom: var(--space-xl);
     }
     
     .hero-visual {
-        margin-top: var(--space-2xl);
+        margin-top: 0;
+        display: flex;
+        justify-content: center;
     }
     
     .nft-card.featured {
-        width: 250px;
+        width: 280px;
         transform: none;
     }
     
@@ -811,6 +861,44 @@ a:hover {
     
     .section-title {
         font-size: 2rem;
+        text-align: center;
+    }
+    
+    .section-subtitle {
+        text-align: center;
+        margin-bottom: var(--space-xl);
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .collection-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+    
+    .payment-flow {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-lg);
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        font-size: 1.5rem;
+    }
+    
+    .payment-benefits {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+        text-align: center;
     }
     
     h1 { font-size: 2.5rem; }
@@ -819,26 +907,128 @@ a:hover {
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-md);
+    }
+    
+    .nav-container {
+        padding: var(--space-sm) 0;
+    }
+    
+    .nav-brand {
+        gap: var(--space-sm);
+    }
+    
+    .brand-text {
+        font-size: 1.25rem;
+    }
+    
+    .beta-badge {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.375rem;
+    }
+    
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.875rem;
+        line-height: 1.3;
     }
     
-    .hero-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-large {
-        padding: var(--space-md) var(--space-xl);
+    .hero-description {
         font-size: 0.875rem;
+        line-height: 1.6;
     }
     
     .hero-features {
         grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+    
+    .feature-item {
+        padding: var(--space-sm);
+        font-size: 0.875rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-md);
+    }
+    
+    .btn-large {
+        padding: var(--space-md);
+        font-size: 0.875rem;
+        width: 100%;
+        justify-content: center;
     }
     
     .hero-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+    
+    .stat {
+        padding: var(--space-md);
+        text-align: center;
+    }
+    
+    .nft-card.featured {
+        width: 240px;
+        margin: 0 auto;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: var(--space-md);
+    }
+    
+    .section-subtitle {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        margin-bottom: var(--space-lg);
+    }
+    
+    .collection-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    .stat-card {
+        padding: var(--space-md);
+        text-align: center;
+    }
+    
+    .flow-step {
+        padding: var(--space-md);
+        text-align: center;
+        width: 100%;
+    }
+    
+    .step-content h3 {
+        font-size: 1rem;
+        margin-bottom: var(--space-sm);
+    }
+    
+    .step-content p {
+        font-size: 0.875rem;
+    }
+    
+    .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+    
+    .footer-content {
+        text-align: center;
+    }
+    
+    .footer-section h4 {
+        margin-bottom: var(--space-sm);
+    }
+    
+    .social-links {
+        justify-content: center;
+        gap: var(--space-md);
     }
 }
 
@@ -853,5 +1043,58 @@ a:hover {
     .hero {
         min-height: auto;
         padding-top: 0;
+    }
+}
+
+/* Mobile Touch Improvements */
+@media (max-width: 768px) {
+    /* Better touch targets */
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .nav-link {
+        padding: var(--space-md);
+    }
+    
+    /* Improved scrolling */
+    body {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+    
+    /* Better text selection */
+    .hero-title,
+    .section-title {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    /* Prevent zoom on input focus */
+    input,
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}
+
+/* Extra small devices improvements */
+@media (max-width: 320px) {
+    .container {
+        padding: 0 var(--space-sm);
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .nft-card.featured {
+        width: 200px;
+    }
+    
+    .btn-large {
+        padding: var(--space-sm);
+        font-size: 0.75rem;
     }
 }
