@@ -468,30 +468,30 @@
                 <h3>Rarity Distribution</h3>
                 <div class="rarity-grid">
                     <div class="rarity-tier common">
-                        <div class="tier-header">
-                            <span class="tier-name">Common</span>
-                            <span class="tier-percentage">60%</span>
+                        <div class="rarity-tier-header">
+                            <h3>Common</h3>
+                            <span class="rarity-percentage">60%</span>
                         </div>
                         <p>Base traits, widely available for all collectors</p>
                     </div>
                     <div class="rarity-tier rare">
-                        <div class="tier-header">
-                            <span class="tier-name">Rare</span>
-                            <span class="tier-percentage">30%</span>
+                        <div class="rarity-tier-header">
+                            <h3>Rare</h3>
+                            <span class="rarity-percentage">30%</span>
                         </div>
                         <p>Enhanced traits with moderate scarcity and value</p>
                     </div>
                     <div class="rarity-tier epic">
-                        <div class="tier-header">
-                            <span class="tier-name">Epic</span>
-                            <span class="tier-percentage">9%</span>
+                        <div class="rarity-tier-header">
+                            <h3>Epic</h3>
+                            <span class="rarity-percentage">9%</span>
                         </div>
                         <p>Premium traits with high value and exclusivity</p>
                     </div>
                     <div class="rarity-tier ultra">
-                        <div class="tier-header">
-                            <span class="tier-name">Ultra</span>
-                            <span class="tier-percentage">1%</span>
+                        <div class="rarity-tier-header">
+                            <h3>Ultra</h3>
+                            <span class="rarity-percentage">1%</span>
                         </div>
                         <p>Ultra-rare traits representing maximum rarity</p>
                     </div>
@@ -569,7 +569,7 @@
                         <img src="./assets/skunksample10.png" alt="SkunkSquad Sample #10" class="gallery-img">
                         <div class="gallery-info">
                             <span class="gallery-id">#1234</span>
-                            <span class="gallery-rarity mythic">Mythic</span>
+                            <span class="gallery-rarity ultra">Ultra</span>
                         </div>
                     </div>
                     <div class="gallery-item">
@@ -611,7 +611,7 @@
                         <img src="./assets/skunksample16.png" alt="SkunkSquad Sample #16" class="gallery-img">
                         <div class="gallery-info">
                             <span class="gallery-id">#1357</span>
-                            <span class="gallery-rarity mythic">Mythic</span>
+                            <span class="gallery-rarity ultra">Ultra</span>
                         </div>
                     </div>
                     <div class="gallery-item">
@@ -838,7 +838,7 @@
     <script src="./src/js/payment.js"></script>
     <script src="./src/js/wallet.js"></script>
     
-    <!-- Countdown Timer Script - Optimized -->
+    <!-- Countdown Timer Script - Clean Version -->
     <script>
         // Optimized Countdown Timer for Launch Date: October 10, 2025 at 10:10 AM EST
         (function() {
@@ -884,9 +884,7 @@
                 const minutes = Math.floor((distance % 3600000) / 60000); // 1000 * 60
                 const seconds = Math.floor((distance % 60000) / 1000);
                 
-                // Update DOM efficiently with batched changes
-                const fragment = document.createDocumentFragment();
-                
+                // Update DOM efficiently
                 if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
                 if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
                 if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
@@ -903,7 +901,7 @@
                 // Update immediately
                 updateCountdown();
                 
-                // Start interval with more efficient timing
+                // Start interval
                 countdownInterval = setInterval(updateCountdown, 1000);
             }
             
