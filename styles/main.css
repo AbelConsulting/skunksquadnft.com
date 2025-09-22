@@ -365,7 +365,6 @@ a:hover {
     border-bottom: 1px solid var(--gray);
     z-index: 1000;
     transition: var(--transition-normal);
-    min-height: 70px;
     /* Ensure immediate visibility on all devices */
     display: block;
     opacity: 1;
@@ -384,6 +383,70 @@ a:hover {
     min-height: 70px;
     /* Prevent flexbox issues on mobile */
     flex-wrap: nowrap;
+}
+
+/* Secondary Navigation Row */
+.nav-secondary {
+    background: rgba(0, 0, 0, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-secondary-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xl);
+    padding: var(--space-md) 0;
+}
+
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.nav-link.active::after {
+    width: 80%;
 }
 
 .nav-brand {
@@ -462,7 +525,7 @@ a:hover {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 130px; /* Account for top-bar (40px) + navbar (70px) + padding (20px) */
+    padding-top: 170px; /* Account for top-bar (40px) + navbar (70px) + nav-secondary (50px) + padding (10px) */
     overflow: hidden;
 }
 
@@ -884,7 +947,6 @@ a:hover {
     
     /* Main Navbar Mobile */
     .navbar {
-        min-height: 60px;
         background: rgba(0, 0, 0, 0.98);
         top: 36px; /* Adjust for smaller top bar */
     }
@@ -896,7 +958,8 @@ a:hover {
         box-sizing: border-box;
     }
     
-    .nav-menu {
+    /* Hide secondary navigation on mobile */
+    .nav-secondary {
         display: none;
     }
     
@@ -1054,7 +1117,6 @@ a:hover {
     
     /* Compact main navbar */
     .navbar {
-        min-height: 56px;
         background: rgba(0, 0, 0, 0.99);
         top: 32px;
     }
@@ -1063,6 +1125,11 @@ a:hover {
         padding: var(--space-sm) var(--space-md);
         min-height: 56px;
         gap: var(--space-sm);
+    }
+    
+    /* Keep secondary nav hidden on mobile */
+    .nav-secondary {
+        display: none;
     }
     
     .nav-brand {
