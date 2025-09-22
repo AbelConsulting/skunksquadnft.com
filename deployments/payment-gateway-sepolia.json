@@ -1,0 +1,9 @@
+{
+  "network": "sepolia",
+  "paymentGatewayAddress": "0x55A3ee558b447d42C44B6a330a3102A1eC77FDEF",
+  "nftContractAddress": "0x7649366eeb2F996513C4A929d9A980779Cf2364C",
+  "stripeValidatorAddress": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "initialPriceUSD": "5000",
+  "deploymentTime": "2025-09-22T02:03:09.116Z",
+  "deploymentHash": "0xcc1634c22185ebc482b5a877b7423f2c2954aee807cc6644642b62bcb201b66b"
+}
