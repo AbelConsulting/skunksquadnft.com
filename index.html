@@ -99,6 +99,29 @@
                 <span class="beta-badge">REVOLUTIONARY</span>
             </div>
             
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <div class="countdown-label">Launch in:</div>
+                <div class="countdown-timer" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-unit">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-unit">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-unit">Min</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-unit">Sec</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="nav-actions">
                 <button class="btn btn-secondary" id="connect-wallet">Connect Wallet</button>
                 <button class="btn btn-primary" id="buy-now">Buy Now 💳</button>
@@ -723,6 +746,41 @@
     <script src="./src/js/main.js"></script>
     <script src="./src/js/payment.js"></script>
     <script src="./src/js/wallet.js"></script>
+    
+    <!-- Countdown Timer Script -->
+    <script>
+        // Countdown Timer for Launch Date: October 10, 2025 at 10:10 AM EST
+        function initCountdown() {
+            const launchDate = new Date('October 10, 2025 10:10:00 EST').getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = launchDate - now;
+                
+                if (distance < 0) {
+                    document.getElementById('countdown').innerHTML = '<div class="countdown-item"><span class="countdown-number">🚀</span><span class="countdown-unit">LIVE!</span></div>';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            // Update countdown immediately and then every second
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+        
+        // Initialize countdown when page loads
+        document.addEventListener('DOMContentLoaded', initCountdown);
+    </script>
     
     <!-- Web3 Integration -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
