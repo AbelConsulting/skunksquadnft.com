@@ -385,6 +385,61 @@ a:hover {
     flex-wrap: nowrap;
 }
 
+/* Countdown Timer Styles */
+.countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.countdown-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.countdown-timer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 32px;
+    position: relative;
+}
+
+.countdown-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    line-height: 1;
+}
+
+.countdown-unit {
+    font-size: 0.625rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.countdown-item:not(:last-child)::after {
+    content: ':';
+    position: absolute;
+    right: -8px;
+    top: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
 /* Secondary Navigation Row */
 .nav-secondary {
     background: rgba(0, 0, 0, 0.85);
@@ -956,6 +1011,56 @@ a:hover {
         min-height: 60px;
         width: 100%;
         box-sizing: border-box;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    
+    /* Stack nav elements vertically on mobile */
+    .nav-brand {
+        width: 100%;
+        justify-content: center;
+        max-width: none;
+    }
+    
+    /* Mobile countdown - horizontal, centered */
+    .countdown-container {
+        order: 2;
+        width: 100%;
+    }
+    
+    .countdown-label {
+        font-size: 0.65rem;
+        margin-bottom: 2px;
+    }
+    
+    .countdown-timer {
+        gap: 6px;
+        justify-content: center;
+    }
+    
+    .countdown-item {
+        min-width: 28px;
+    }
+    
+    .countdown-number {
+        font-size: 1rem;
+    }
+    
+    .countdown-unit {
+        font-size: 0.55rem;
+    }
+    
+    .countdown-item:not(:last-child)::after {
+        right: -4px;
+        top: 7px;
+    }
+    
+    /* Actions row */
+    .nav-actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: var(--space-md);
     }
     
     /* Hide secondary navigation on mobile */
@@ -964,7 +1069,11 @@ a:hover {
     }
     
     .hamburger {
-        display: flex;
+        display: none; /* Hide hamburger menu since we're using vertical stack */
+        position: absolute;
+        top: 50%;
+        right: var(--space-lg);
+        transform: translateY(-50%);
     }
     
     .nav-brand {
@@ -987,7 +1096,7 @@ a:hover {
     .hero {
         flex-direction: column;
         text-align: center;
-        padding-top: 120px; /* 36px + 60px + 24px */
+        padding-top: 140px; /* Increased for new mobile nav layout */
         min-height: auto;
     }
     
@@ -1120,14 +1229,50 @@ a:hover {
         background: rgba(0, 0, 0, 0.99);
         top: 32px;
     }
-    
+
     .nav-container {
         padding: var(--space-sm) var(--space-md);
         min-height: 56px;
-        gap: var(--space-sm);
+        gap: var(--space-xs);
+        flex-direction: column;
     }
     
-    /* Keep secondary nav hidden on mobile */
+    /* Very compact countdown for small phones */
+    .countdown-container {
+        order: 2;
+    }
+    
+    .countdown-label {
+        font-size: 0.55rem;
+    }
+    
+    .countdown-timer {
+        gap: 4px;
+    }
+    
+    .countdown-item {
+        min-width: 22px;
+    }
+    
+    .countdown-number {
+        font-size: 0.875rem;
+    }
+    
+    .countdown-unit {
+        font-size: 0.45rem;
+    }
+    
+    .countdown-item:not(:last-child)::after {
+        right: -3px;
+        top: 6px;
+        font-size: 0.75rem;
+    }
+    
+    .nav-actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }    /* Keep secondary nav hidden on mobile */
     .nav-secondary {
         display: none;
     }
@@ -1330,10 +1475,14 @@ a:hover {
     .nav-container {
         padding: 0.25rem var(--space-sm);
         min-height: 52px;
+        gap: 0.25rem;
+        flex-direction: column;
     }
     
     .nav-brand {
-        max-width: calc(100% - 80px);
+        max-width: none;
+        width: 100%;
+        justify-content: center;
     }
     
     .brand-text {
@@ -1344,6 +1493,44 @@ a:hover {
         display: none;
     }
     
+    /* Minimal countdown for tiny screens */
+    .countdown-container {
+        order: 2;
+    }
+    
+    .countdown-label {
+        font-size: 0.5rem;
+    }
+    
+    .countdown-timer {
+        gap: 3px;
+    }
+    
+    .countdown-item {
+        min-width: 18px;
+    }
+    
+    .countdown-number {
+        font-size: 0.75rem;
+    }
+    
+    .countdown-unit {
+        font-size: 0.4rem;
+    }
+    
+    .countdown-item:not(:last-child)::after {
+        right: -2px;
+        top: 5px;
+        font-size: 0.65rem;
+    }
+    
+    .nav-actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: var(--space-sm);
+    }
+    
     .nav-actions .btn {
         padding: 0.25rem 0.375rem;
         font-size: 0.65rem;
@@ -1351,6 +1538,10 @@ a:hover {
     
     .hero-title {
         font-size: 1.5rem;
+    }
+    
+    .hero {
+        padding-top: 90px; /* Compact padding for tiny screens */
     }
     
     .nft-card.featured {
