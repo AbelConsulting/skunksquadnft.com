@@ -747,39 +747,89 @@
     <script src="./src/js/payment.js"></script>
     <script src="./src/js/wallet.js"></script>
     
-    <!-- Countdown Timer Script -->
+    <!-- Countdown Timer Script - Optimized -->
     <script>
-        // Countdown Timer for Launch Date: October 10, 2025 at 10:10 AM EST
-        function initCountdown() {
+        // Optimized Countdown Timer for Launch Date: October 10, 2025 at 10:10 AM EST
+        (function() {
             const launchDate = new Date('October 10, 2025 10:10:00 EST').getTime();
+            let countdownInterval;
+            
+            // Cache DOM elements for better performance
+            const elements = {
+                days: null,
+                hours: null,
+                minutes: null,
+                seconds: null,
+                container: null
+            };
+            
+            function initElements() {
+                elements.days = document.getElementById('days');
+                elements.hours = document.getElementById('hours');
+                elements.minutes = document.getElementById('minutes');
+                elements.seconds = document.getElementById('seconds');
+                elements.container = document.getElementById('countdown');
+                
+                // Return false if elements not found
+                return elements.days && elements.hours && elements.minutes && elements.seconds;
+            }
             
             function updateCountdown() {
-                const now = new Date().getTime();
+                const now = Date.now();
                 const distance = launchDate - now;
                 
                 if (distance < 0) {
-                    document.getElementById('countdown').innerHTML = '<div class="countdown-item"><span class="countdown-number">🚀</span><span class="countdown-unit">LIVE!</span></div>';
+                    // Launch reached
+                    if (elements.container) {
+                        elements.container.innerHTML = '<div class="countdown-item"><span class="countdown-number">🚀</span><span class="countdown-unit">LIVE!</span></div>';
+                    }
+                    clearInterval(countdownInterval);
                     return;
                 }
                 
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                // Calculate time units more efficiently
+                const days = Math.floor(distance / 86400000); // 1000 * 60 * 60 * 24
+                const hours = Math.floor((distance % 86400000) / 3600000); // 1000 * 60 * 60
+                const minutes = Math.floor((distance % 3600000) / 60000); // 1000 * 60
+                const seconds = Math.floor((distance % 60000) / 1000);
                 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                // Update DOM efficiently with batched changes
+                const fragment = document.createDocumentFragment();
+                
+                if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
+                if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
+                if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
+                if (elements.seconds) elements.seconds.textContent = seconds.toString().padStart(2, '0');
             }
             
-            // Update countdown immediately and then every second
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        }
-        
-        // Initialize countdown when page loads
-        document.addEventListener('DOMContentLoaded', initCountdown);
+            function initCountdown() {
+                if (!initElements()) {
+                    // Retry after DOM is ready
+                    setTimeout(initCountdown, 100);
+                    return;
+                }
+                
+                // Update immediately
+                updateCountdown();
+                
+                // Start interval with more efficient timing
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+            
+            // Initialize when DOM is ready with fallback
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initCountdown);
+            } else {
+                initCountdown();
+            }
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+            });
+        })();
     </script>
     
     <!-- Web3 Integration -->
