@@ -1,0 +1,7 @@
+<!-- FIND AND DELETE THESE LINES (around line 50): -->
+<meta name="stripe-publishable-key" content="pk_test_51S9yVUCN6mu4fXCOTX6854WkaLfGsUFaxV7EndAJ68wZyQfVb19bmXn3Pyn1PUqj1yyKLqcNHaofu6EJlDkhwMdM00LHh3US66">
+
+<!-- AND DELETE THIS SCRIPT BLOCK: -->
+<script>
+    window.STRIPE_PUBLISHABLE_KEY = 'pk_test_51S9yVUCN6mu4fXCOTX6854WkaLfGsUFaxV7EndAJ68wZyQfVb19bmXn3Pyn1PUqj1yyKLqcNHaofu6EJlDkhwMdM00LHh3US66';
+</script>
