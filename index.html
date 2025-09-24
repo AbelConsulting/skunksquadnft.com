@@ -912,5 +912,64 @@
         // Add your analytics code here
         console.log('🦨 SkunkSquad NFT Website Loaded');
     </script>
+    <!-- Add this before the closing </body> tag -->
+<script>
+document.getElementById('buyNowBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Show payment options
+    const paymentHtml = `
+        <div class="modal fade" id="paymentModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">🦨 Buy SkunkSquad NFT</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-3">
+                            <button class="btn btn-primary btn-lg" onclick="buyWithCard()">
+                                💳 Credit Card Payment
+                            </button>
+                            <button class="btn btn-outline-primary btn-lg" onclick="buyWithWallet()">
+                                🔗 Connect Wallet (MetaMask)
+                            </button>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <small class="text-muted">Price: 0.05 ETH (~$120)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page if it doesn't exist
+    if (!document.getElementById('paymentModal')) {
+        document.body.insertAdjacentHTML('beforeend', paymentHtml);
+    }
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    modal.show();
+});
+
+// Credit card payment function
+function buyWithCard() {
+    alert('🚀 Credit Card Payment Coming Soon!\n\nYour revolutionary SkunkSquad NFT will be delivered instantly to your wallet.');
+    // TODO: Connect to Stripe payment
+}
+
+// Wallet connection function  
+function buyWithWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+        // MetaMask is installed
+        alert('🔗 Wallet Connection Coming Soon!\n\nConnect your MetaMask to mint directly.');
+        // TODO: Connect to smart contract
+    } else {
+        alert('🦊 Please install MetaMask first!\n\nVisit: https://metamask.io/');
+    }
+}
+</script>
 </body>
 </html>
