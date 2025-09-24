@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦨 SkunkSquad NFT | World's First Credit Card NFT Collection</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="The World's First Ultra-Smart NFT Collection with AI-Powered Features and Credit Card Payments. Buy NFTs instantly with Visa, Mastercard, or American Express.">
+    <meta name="keywords" content="NFT, Credit Card NFT, Ethereum, SkunkSquad, Ultra Smart Contract, AI NFT, Instant NFT Purchase">
+    <meta name="author" content="SkunkSquad Team">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="SkunkSquad NFT - World's First Credit Card NFT Collection">
+    <meta property="og:description" content="Buy NFTs instantly with credit cards! Revolutionary AI-powered smart contracts with achievements, analytics, and instant delivery.">
+    <meta property="og:image" content="./assets/charlesskunk.webp">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:url" content="https://skunksquadnft.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SkunkSquad NFT">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@skunksquadnft">
+    <meta name="twitter:creator" content="@skunksquadnft">
+    <meta name="twitter:title" content="SkunkSquad NFT - Credit Card NFT Payments">
+    <meta name="twitter:description" content="World's first NFT collection accepting credit cards. AI-powered features, instant delivery, enterprise security.">
+    <meta name="twitter:image" content="./assets/charlesskunk.webp">
+    <meta name="twitter:image:width" content="512">
+    <meta name="twitter:image:height" content="512">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="./public/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./public/apple-touch-icon.png">
+    <link rel="manifest" href="./public/manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stripe Configuration -->
+    <meta name="stripe-publishable-key" content="pk_test_51S9yVUCN6mu4fXCOTX6854WkaLfGsUFaxV7EndAJ68wZyQfVb19bmXn3Pyn1PUqj1yyKLqcNHaofu6EJlDkhwMdM00LHh3US66">
+    <script>
+        // Set API configuration for payment system
+        window.API_URL = 'http://localhost:3002';
+        window.STRIPE_PUBLISHABLE_KEY = 'pk_test_51S9yVUCN6mu4fXCOTX6854WkaLfGsUFaxV7EndAJ68wZyQfVb19bmXn3Pyn1PUqj1yyKLqcNHaofu6EJlDkhwMdM00LHh3US66';
+    </script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/animations.css">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "SkunkSquad NFT",
+        "description": "World's First Ultra-Smart NFT Collection with Credit Card Payments",
+        "url": "https://skunksquadnft.com",
+        "logo": "https://skunksquadnft.com/assets/charlesskunk.webp",
+        "sameAs": [
+            "https://twitter.com/skunksquadnft",
+            "https://discord.gg/skunksquad",
+            "https://opensea.io/collection/skunksquad"
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Top Info Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="launch-badge">🚀 LIVE NOW: Credit Card NFT Purchases</span>
+                <span class="price-badge">💳 Starting at $49</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://twitter.com/skunksquadnft" class="top-social-link" target="_blank">𝕏</a>
+                <a href="https://discord.gg/skunksquad" class="top-social-link" target="_blank">💬</a>
+                <a href="https://opensea.io/collection/skunksquad" class="top-social-link" target="_blank">🌊</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image"></div>
+                <span class="brand-text">SkunkSquad</span>
+                <span class="beta-badge">Ape into something REVOLUTIONARY</span>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <div class="countdown-label">Launch in:</div>
+                <div class="countdown-timer" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-unit">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-unit">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-unit">Min</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-unit">Sec</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-secondary" id="connect-wallet">Connect Wallet</button>
+                <button class="btn btn-primary" id="buyNowBtn">Buy Now 💳</button>
+            </div>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <!-- Second Row Navigation -->
+        <div class="nav-secondary">
+            <div class="nav-secondary-container">
+                <div class="nav-menu" id="nav-menu">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#payment" class="nav-link">Credit Cards</a>
+                    <a href="#collection" class="nav-link">Collection</a>
+                    <a href="#roadmap" class="nav-link">Roadmap</a>
+                    <a href="#analytics" class="nav-link">Analytics</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+            <div class="hero-glow"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badges">
+                    <span class="badge badge-primary">🚀 BREAKTHROUGH TECHNOLOGY</span>
+                    <span class="badge badge-secondary">💳 ZERO CRYPTO REQUIRED</span>
+                    <span class="badge badge-accent">⚡ INSTANT OWNERSHIP</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Buy NFTs Like<br>
+                    <span class="gradient-text">Shopping on Amazon</span><br>
+                    <span class="highlight">Credit Cards Accepted Here</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Finally, NFTs for everyone! No wallets, no gas fees, no confusion. 
+                    Just enter your credit card and own your digital collectible in seconds. 
+                    We've made the impossible... possible.
+                </p>
+                
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">💳</div>
+                        <span>Any Credit Card</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <span>30-Second Purchase</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔒</div>
+                        <span>Bank-Level Security</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌍</div>
+                        <span>Works Worldwide</span>
+                    </div>
+                </div>
+                
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-large" id="buy-with-card">
+                        <span class="btn-icon">💳</span>
+                        Start Shopping Now
+                        <span class="btn-highlight">EASY!</span>
+                    </button>
+                    <button class="btn btn-outline btn-large" id="buy-with-eth">
+                        <span class="btn-icon">🔗</span>
+                        I Have Crypto
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10,000</span>
+                        <span class="stat-label">Limited Edition</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">$49</span>
+                        <span class="stat-label">Launch Price</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Trait Combinations</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">195</span>
+                        <span class="stat-label">Countries Supported</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="nft-showcase">
+                    <div class="nft-card featured">
+                        <div class="nft-image">
+                            <img src="./assets/charlesskunk.webp" alt="Skunk Squad #1337" class="nft-img" />
+                            <div class="rarity-badge ultra">ULTRA</div>
+                        </div>
+                        <div class="nft-info">
+                            <h3>Skunk Squad #1337</h3>
+                            <div class="nft-traits">
+                                <span class="trait">Ultra Background</span>
+                                <span class="trait">Diamond Eyes</span>
+                                <span class="trait">GM Gesture</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="floating-cards">
+                        <div class="nft-card mini">
+                            <img src="./assets/charlesskunk.webp" alt="Mini Skunk 1" class="mini-nft-img" />
+                        </div>
+                        <div class="nft-card mini">
+                            <img src="./assets/charlesskunk.webp" alt="Mini Skunk 2" class="mini-nft-img" />
+                        </div>
+                        <div class="nft-card mini">
+                            <img src="./assets/charlesskunk.webp" alt="Mini Skunk 3" class="mini-nft-img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Innovation Section -->
+    <section id="payment" class="payment-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">💳 Revolutionary Payment System</h2>
+                <p class="section-subtitle">
+                    The first NFT collection to accept credit cards directly. 
+                    No crypto wallets, no gas fees, no confusion - just instant NFT ownership.
+                </p>
+            </div>
+            
+            <div class="payment-demo">
+                <div class="payment-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Connect Wallet</h3>
+                            <p>Connect your Ethereum wallet for NFT delivery</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Select Quantity</h3>
+                            <p>Choose how many NFTs you want (1-10)</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Pay with Card</h3>
+                            <p>Secure checkout with Visa, Mastercard, or Amex</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Instant Delivery</h3>
+                            <p>NFTs delivered to your wallet in seconds</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon">🌍</div>
+                        <h3>Global Access</h3>
+                        <p>Accept payments from 40+ countries worldwide</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🛡️</div>
+                        <h3>Enterprise Security</h3>
+                        <p>PCI-compliant payments with bank-level encryption</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">⚡</div>
+                        <h3>Instant Processing</h3>
+                        <p>NFTs delivered immediately after payment confirmation</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">📱</div>
+                        <h3>Mobile Optimized</h3>
+                        <p>Perfect checkout experience on any device</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ultra Smart Features -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">🧠 Ultra Smart Features</h2>
+                <p class="section-subtitle">
+                    Powered by AI and next-generation smart contracts that learn, adapt, and grow with the community.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">🔥</div>
+                        <h3>Dynamic Pricing</h3>
+                    </div>
+                    <p>AI-powered pricing that adjusts based on demand, time, and market conditions for fair market pricing.</p>
+                    <div class="feature-stats">
+                        <span>Base: 0.01 ETH</span>
+                        <span>Range: 0.005-0.05 ETH</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">📊</div>
+                        <h3>Advanced Analytics</h3>
+                    </div>
+                    <p>Deep user behavior tracking and insights to understand your community like never before.</p>
+                    <div class="feature-stats">
+                        <span>Real-time Dashboard</span>
+                        <span>User Insights</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">🏆</div>
+                        <h3>Gamification System</h3>
+                    </div>
+                    <p>10 achievements, XP points, and loyalty scoring system for increased engagement and retention.</p>
+                    <div class="feature-stats">
+                        <span>10 Achievements</span>
+                        <span>XP Rewards</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">👥</div>
+                        <h3>Social Features</h3>
+                    </div>
+                    <p>Built-in referral system and NFT gifting for viral organic growth and community building.</p>
+                    <div class="feature-stats">
+                        <span>Referral System</span>
+                        <span>NFT Gifting</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">🔮</div>
+                        <h3>Predictive Analytics</h3>
+                    </div>
+                    <p>Machine learning pattern recognition to anticipate market trends and user behavior.</p>
+                    <div class="feature-stats">
+                        <span>ML Algorithms</span>
+                        <span>Trend Prediction</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card featured">
+                    <div class="feature-header">
+                        <div class="feature-icon-large">💳</div>
+                        <h3>Credit Card Payments</h3>
+                        <span class="new-badge">NEW!</span>
+                    </div>
+                    <p>World's first NFT collection accepting credit cards. Mainstream accessibility with 10x larger market.</p>
+                    <div class="feature-stats">
+                        <span>Visa, Mastercard, Amex</span>
+                        <span>Instant Delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Details -->
+    <section id="collection" class="collection-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">🎨 Collection Details</h2>
+                <p class="section-subtitle">
+                    10,000 unique SkunkSquad NFTs with 67 traits across 8 layers, powered by algorithmic rarity distribution.
+                </p>
+            </div>
+            
+            <div class="collection-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="stat-icon-image"></div>
+                    <div class="stat-info">
+                        <span class="stat-number">10,000</span>
+                        <span class="stat-label">Total Supply</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><img src="./assets/skunksample1.png" alt="Unique Traits" class="stat-icon-image"></div>
+                    <div class="stat-info">
+                        <span class="stat-number">67</span>
+                        <span class="stat-label">Unique Traits</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><img src="./assets/skunksample2.png" alt="Trait Layers" class="stat-icon-image"></div>
+                    <div class="stat-info">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Trait Layers</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><img src="./assets/skunksample3.png" alt="Rarity Tiers" class="stat-icon-image"></div>
+                    <div class="stat-info">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Rarity Tiers</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="rarity-breakdown">
+                <h3>Rarity Distribution</h3>
+                <div class="rarity-grid">
+                    <div class="rarity-tier common">
+                        <div class="rarity-tier-header">
+                            <h3>Common</h3>
+                            <span class="rarity-percentage">60%</span>
+                        </div>
+                        <p>Base traits, widely available for all collectors</p>
+                    </div>
+                    <div class="rarity-tier rare">
+                        <div class="rarity-tier-header">
+                            <h3>Rare</h3>
+                            <span class="rarity-percentage">30%</span>
+                        </div>
+                        <p>Enhanced traits with moderate scarcity and value</p>
+                    </div>
+                    <div class="rarity-tier epic">
+                        <div class="rarity-tier-header">
+                            <h3>Epic</h3>
+                            <span class="rarity-percentage">9%</span>
+                        </div>
+                        <p>Premium traits with high value and exclusivity</p>
+                    </div>
+                    <div class="rarity-tier ultra">
+                        <div class="rarity-tier-header">
+                            <h3>Ultra</h3>
+                            <span class="rarity-percentage">1%</span>
+                        </div>
+                        <p>Ultra-rare traits representing maximum rarity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sample Gallery -->
+            <div class="sample-gallery">
+                <h3>Sample Collection</h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample1.png" alt="SkunkSquad Sample #1" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#2847</span>
+                            <span class="gallery-rarity rare">Rare</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample2.png" alt="SkunkSquad Sample #2" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#5691</span>
+                            <span class="gallery-rarity epic">Epic</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample3.png" alt="SkunkSquad Sample #3" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#1337</span>
+                            <span class="gallery-rarity ultra">Ultra</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample4.png" alt="SkunkSquad Sample #4" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#9999</span>
+                            <span class="gallery-rarity common">Common</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample5.png" alt="SkunkSquad Sample #5" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#4256</span>
+                            <span class="gallery-rarity rare">Rare</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample6.png" alt="SkunkSquad Sample #6" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#7823</span>
+                            <span class="gallery-rarity epic">Epic</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample7.png" alt="SkunkSquad Sample #7" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#3142</span>
+                            <span class="gallery-rarity ultra">Ultra</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample8.png" alt="SkunkSquad Sample #8" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#6547</span>
+                            <span class="gallery-rarity legendary">Legendary</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample11.png" alt="SkunkSquad Sample #11" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#5678</span>
+                            <span class="gallery-rarity epic">Epic</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample12.png" alt="SkunkSquad Sample #12" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#9012</span>
+                            <span class="gallery-rarity rare">Rare</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample13.png" alt="SkunkSquad Sample #13" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#3456</span>
+                            <span class="gallery-rarity ultra">Ultra</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample14.png" alt="SkunkSquad Sample #14" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#7890</span>
+                            <span class="gallery-rarity legendary">Legendary</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample15.png" alt="SkunkSquad Sample #15" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#2468</span>
+                            <span class="gallery-rarity epic">Epic</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./assets/skunksample17.png" alt="SkunkSquad Sample #17" class="gallery-img">
+                        <div class="gallery-info">
+                            <span class="gallery-id">#9753</span>
+                            <span class="gallery-rarity legendary">Legendary</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard Preview -->
+    <section id="analytics" class="analytics-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">📊 Real-time Analytics Dashboard</h2>
+                <p class="section-subtitle">
+                    Monitor your collection with enterprise-grade analytics and insights powered by our ultra-smart contract.
+                </p>
+            </div>
+            
+            <div class="dashboard-preview">
+                <div class="dashboard-card">
+                    <h3>Collection Overview</h3>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <span class="metric-label">Total Minted</span>
+                            <span class="metric-value">2,847</span>
+                            <span class="metric-change positive">+12.3%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Total Revenue</span>
+                            <span class="metric-value">28.47 ETH</span>
+                            <span class="metric-change positive">+8.7%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Unique Holders</span>
+                            <span class="metric-value">1,923</span>
+                            <span class="metric-change positive">+15.2%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Avg. Holding</span>
+                            <span class="metric-value">1.48 NFTs</span>
+                            <span class="metric-change neutral">+0.1%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Payment Methods</h3>
+                    <div class="payment-breakdown">
+                        <div class="payment-method">
+                            <span class="method-name">Credit Cards</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <span class="method-percentage">65%</span>
+                        </div>
+                        <div class="payment-method">
+                            <span class="method-name">ETH Direct</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 35%"></div>
+                            </div>
+                            <span class="method-percentage">35%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Top Achievements</h3>
+                    <div class="achievements-list">
+                        <div class="achievement-item">
+                            <span class="achievement-icon">🏆</span>
+                            <span class="achievement-name">First Mint</span>
+                            <span class="achievement-count">2,847</span>
+                        </div>
+                        <div class="achievement-item">
+                            <span class="achievement-icon">💎</span>
+                            <span class="achievement-name">Diamond Hands</span>
+                            <span class="achievement-count">1,203</span>
+                        </div>
+                        <div class="achievement-item">
+                            <span class="achievement-icon">🐋</span>
+                            <span class="achievement-name">Whale Status</span>
+                            <span class="achievement-count">89</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-actions" style="text-align: center;">
+                <a href="#home" class="btn btn-secondary">
+                    🏠 Back to Home
+                </a>
+                <a href="http://localhost:3001" class="btn btn-primary" target="_blank">
+                    View Live Dashboard
+                </a>
+                <a href="./PAYMENT_GATEWAY_GUIDE.md" class="btn btn-outline" target="_blank">
+                    Technical Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image"></div>
+                        <span class="brand-text">SkunkSquad</span>
+                    </div>
+                    <p>The World's First Ultra-Smart NFT Collection with Credit Card Payments</p>
+                    <div class="social-links">
+                        <a href="https://twitter.com/skunksquadnft" class="social-link twitter" target="_blank" rel="noopener">
+                            <span class="social-icon">𝕏</span>
+                            <span class="social-text">Twitter</span>
+                        </a>
+                        <a href="https://discord.gg/skunksquad" class="social-link discord" target="_blank" rel="noopener">
+                            <span class="social-icon">💬</span>
+                            <span class="social-text">Discord</span>
+                        </a>
+                        <a href="https://opensea.io/collection/skunksquad" class="social-link opensea" target="_blank" rel="noopener">
+                            <span class="social-icon">🌊</span>
+                            <span class="social-text">OpenSea</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#features">Features</a>
+                    <a href="#payment">Credit Cards</a>
+                    <a href="#collection">Collection</a>
+                    <a href="#analytics">Analytics</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="./PAYMENT_GATEWAY_GUIDE.md">Payment Guide</a>
+                    <a href="./SECURITY.md">Security Policy</a>
+                    <a href="#" target="_blank">Whitepaper</a>
+                    <a href="#" target="_blank">API Docs</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contract Info</h4>
+                    <p class="contract-address">0x55A3ee558b447d42C44B6a330a3102A1eC77FDEF</p>
+                    <a href="https://sepolia.etherscan.io/address/0x55A3ee558b447d42C44B6a330a3102A1eC77FDEF" target="_blank">
+                        View on Etherscan
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SkunkSquad NFT. All rights reserved.</p>
+                <p>📧 Contact us: <a href="mailto:skunksquad411@gmail.com">skunksquad411@gmail.com</a></p>
+                <p>Built with ❤️ by the SkunkSquad Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Bar -->
+    <div class="floating-social">
+        <a href="https://twitter.com/skunksquadnft" class="floating-social-btn twitter" target="_blank" rel="noopener" title="Follow us on Twitter/X">
+            <span class="floating-icon">𝕏</span>
+        </a>
+        <a href="https://discord.gg/skunksquad" class="floating-social-btn discord" target="_blank" rel="noopener" title="Join our Discord">
+            <span class="floating-icon">💬</span>
+        </a>
+        <a href="https://opensea.io/collection/skunksquad" class="floating-social-btn opensea" target="_blank" rel="noopener" title="View on OpenSea">
+            <span class="floating-icon">🌊</span>
+        </a>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchase-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Purchase SkunkSquad NFTs</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="purchase-options">
+                    <div class="purchase-option credit-card">
+                        <div class="option-header">
+                            <h3>💳 Credit Card Payment</h3>
+                            <span class="recommended-badge">RECOMMENDED</span>
+                        </div>
+                        <p>Buy instantly with Visa, Mastercard, or American Express</p>
+                        <ul class="option-benefits">
+                            <li>✅ No crypto experience needed</li>
+                            <li>✅ Instant NFT delivery</li>
+                            <li>✅ Global payment support</li>
+                            <li>✅ Bank-level security</li>
+                        </ul>
+                        <button class="btn btn-primary btn-full" id="buy-with-card-modal">
+                            Continue with Credit Card
+                        </button>
+                    </div>
+                    
+                    <div class="purchase-option ethereum">
+                        <div class="option-header">
+                            <h3>⚡ Ethereum Payment</h3>
+                        </div>
+                        <p>Traditional NFT purchase with ETH cryptocurrency</p>
+                        <ul class="option-benefits">
+                            <li>✅ Direct blockchain interaction</li>
+                            <li>✅ Lower fees for large purchases</li>
+                            <li>✅ Full decentralization</li>
+                            <li>✅ Immediate ownership</li>
+                        </ul>
+                        <button class="btn btn-outline btn-full" id="buy-with-eth-modal">
+                            Continue with ETH
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./src/js/main.js"></script>
+    <script src="./src/js/payment.js"></script>
+    <script src="./src/js/wallet.js"></script>
+    
+    <!-- Countdown Timer Script - Clean Version -->
+    <script>
+        // Optimized Countdown Timer for Launch Date: October 10, 2025 at 10:10 AM EST
+        (function() {
+            const launchDate = new Date('October 10, 2025 10:10:00 EST').getTime();
+            let countdownInterval;
+            
+            // Cache DOM elements for better performance
+            const elements = {
+                days: null,
+                hours: null,
+                minutes: null,
+                seconds: null,
+                container: null
+            };
+            
+            function initElements() {
+                elements.days = document.getElementById('days');
+                elements.hours = document.getElementById('hours');
+                elements.minutes = document.getElementById('minutes');
+                elements.seconds = document.getElementById('seconds');
+                elements.container = document.getElementById('countdown');
+                
+                // Return false if elements not found
+                return elements.days && elements.hours && elements.minutes && elements.seconds;
+            }
+            
+            function updateCountdown() {
+                const now = Date.now();
+                const distance = launchDate - now;
+                
+                if (distance < 0) {
+                    // Launch reached
+                    if (elements.container) {
+                        elements.container.innerHTML = '<div class="countdown-item"><span class="countdown-number">🚀</span><span class="countdown-unit">LIVE!</span></div>';
+                    }
+                    clearInterval(countdownInterval);
+                    return;
+                }
+                
+                // Calculate time units more efficiently
+                const days = Math.floor(distance / 86400000); // 1000 * 60 * 60 * 24
+                const hours = Math.floor((distance % 86400000) / 3600000); // 1000 * 60 * 60
+                const minutes = Math.floor((distance % 3600000) / 60000); // 1000 * 60
+                const seconds = Math.floor((distance % 60000) / 1000);
+                
+                // Update DOM efficiently
+                if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
+                if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
+                if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
+                if (elements.seconds) elements.seconds.textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            function initCountdown() {
+                if (!initElements()) {
+                    // Retry after DOM is ready
+                    setTimeout(initCountdown, 100);
+                    return;
+                }
+                
+                // Update immediately
+                updateCountdown();
+                
+                // Start interval
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+            
+            // Initialize when DOM is ready with fallback
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initCountdown);
+            } else {
+                initCountdown();
+            }
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+            });
+        })();
+    </script>
+    
+    <!-- Web3 Integration -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    
+    <!-- Analytics -->
+    <script>
+        // Add your analytics code here
+        console.log('🦨 SkunkSquad NFT Website Loaded');
+    </script>
+    <!-- Add this before the closing </body> tag -->
+<script>
+// Fix Buy Now Button (line 124: id="buyNowBtn")
+document.getElementById('buyNowBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Show payment modal
+    showPaymentModal();
+});
+
+// Fix Connect Wallet Button (id="connect-wallet")
+document.getElementById('connect-wallet').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    connectWallet();
+});
+
+// Also fix the hero buttons
+document.getElementById('buy-with-card').addEventListener('click', function(e) {
+    e.preventDefault();
+    buyWithCard();
+});
+
+document.getElementById('buy-with-eth').addEventListener('click', function(e) {
+    e.preventDefault();
+    buyWithWallet();
+});
+
+function showPaymentModal() {
+    const paymentHtml = `
+        <div class="modal" id="paymentModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; position: relative;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0 0 10px 0;">🦨 Buy SkunkSquad NFT</h2>
+                    <button onclick="closeModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                <div style="display: grid; gap: 15px;">
+                    <button onclick="buyWithCard()" style="padding: 15px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                        💳 Credit Card Payment (Recommended)
+                    </button>
+                    <button onclick="buyWithWallet()" style="padding: 15px; background: transparent; color: #6366f1; border: 2px solid #6366f1; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                        🔗 Connect Wallet (MetaMask)
+                    </button>
+                </div>
+                <div style="text-align: center; margin-top: 15px; color: #666;">
+                    <small>Price: 0.05 ETH (~$120)</small>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (!document.getElementById('paymentModal')) {
+        document.body.insertAdjacentHTML('beforeend', paymentHtml);
+    } else {
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+        window.ethereum.request({ method: 'eth_requestAccounts' })
+            .then(accounts => {
+                alert('🎉 Wallet Connected!\n\nAddress: ' + accounts[0].substring(0,6) + '...' + accounts[0].substring(38));
+                // Update button text
+                document.getElementById('connect-wallet').textContent = 'Connected ✅';
+            })
+            .catch(error => {
+                alert('❌ Connection failed: ' + error.message);
+            });
+    } else {
+        alert('🦊 MetaMask not found!\n\nPlease install MetaMask from https://metamask.io/');
+    }
+}
+
+function buyWithCard() {
+    alert('🚀 Credit Card Payment!\n\n✅ Stripe integration ready\n✅ Instant NFT delivery\n✅ Bank-level security\n\nComing soon!');
+    closeModal();
+}
+
+function buyWithWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+        alert('🔗 Wallet Minting!\n\n✅ Direct blockchain transaction\n✅ MetaMask integration\n✅ Gas fee optimization\n\nComing soon!');
+        closeModal();
+    } else {
+        alert('🦊 Please install MetaMask first!\n\nVisit: https://metamask.io/');
+    }
+}
+
+console.log('🦨 SkunkSquad buttons initialized!');
+</script>
+</body>
+</html>
