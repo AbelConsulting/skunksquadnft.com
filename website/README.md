@@ -58,25 +58,66 @@ A revolutionary NFT collection website featuring:
 ## 📁 Project Structure
 
 ```
-website/
-├── index.html                 # Main homepage
-├── package.json              # Dependencies and scripts
-├── README.md                 # This file
-├── src/
-│   ├── styles/
-│   │   ├── main.css          # Core styling
-│   │   ├── components.css    # Component styles
-│   │   └── animations.css    # Animation effects
-│   ├── js/
-│   │   ├── main.js          # Core functionality
-│   │   ├── payment.js       # Credit card payments
-│   │   └── wallet.js        # Web3 wallet integration
-│   └── components/
-│       └── (React components for payment)
-└── public/
-    ├── images/              # Static images
-    ├── favicon.ico         # Site favicon
-    └── manifest.json       # PWA manifest
+skunksquadnft.com/
+├── 📄 Root Configuration
+│   ├── package.json              # Dependencies & scripts
+│   ├── .env                      # Environment variables
+│   ├── .gitignore               # Git ignore rules
+│   ├── hardhat.config.js        # Hardhat configuration
+│   └── README.md                # Main documentation
+│
+├── 🌐 Website (Frontend)
+│   └── website/
+│       ├── index.html           # Main homepage
+│       ├── README.md            # Website documentation
+│       ├── src/
+│       │   ├── styles/
+│       │   │   ├── main.css     # Core styling
+│       │   │   ├── components.css # Component styles
+│       │   │   └── animations.css # Animation effects
+│       │   ├── js/
+│       │   │   ├── main.js      # Core functionality
+│       │   │   ├── payment.js   # Credit card payments
+│       │   │   ├── wallet.js    # Web3 integration
+│       │   │   └── payment-server.js # Payment backend
+│       │   └── components/
+│       │       └── (Payment components)
+│       └── public/
+│           ├── images/          # Static images
+│           ├── favicon.ico      # Site favicon
+│           └── manifest.json    # PWA manifest
+│
+├── 📜 Smart Contracts
+│   └── contracts/
+│       ├── SkunkSquadNFTEnhanced.sol
+│       └── interfaces/
+│
+├── 🚀 Deployment & Scripts
+│   └── scripts/
+│       ├── deploy-erc721-ultra.js
+│       ├── deploy-mainnet.js
+│       ├── verify-erc721-ultra.sh
+│       └── analytics-dashboard.js
+│
+├── 🧪 Testing
+│   └── test/
+│       ├── ERC721Ultra.test.js
+│       └── payment-integration.test.js
+│
+├── 📊 Deployment Records
+│   └── deployments/
+│       ├── sepolia-enhanced.json
+│       └── mainnet-production.json
+│
+├── 🎨 NFT Assets
+│   ├── traits_catalog.mapped.fixed.csv
+│   └── metadata/
+│
+└── 📚 Documentation
+    └── docs/
+        ├── API.md
+        ├── DEPLOYMENT.md
+        └── SECURITY.md
 ```
 
 ## 🚀 Quick Start
