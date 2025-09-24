@@ -68,16 +68,32 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.3",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.2",
     "erc721a": "^4.2.3",
     "express": "^4.21.2",
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
+    "ipfs-http-client": "^60.0.1",
     "merkletreejs": "^0.3.11",
+    "nft.storage": "^7.2.0",
+    "nodemon": "^3.0.2",
     "serve": "^14.2.1",
-    "stripe": "^14.21.0",
-    "concurrently": "^8.2.2",
-    "nodemon": "^3.0.2"
-  }
+    "stripe": "^14.21.0"
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbelConsulting/skunksquadnft.com.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AbelConsulting/skunksquadnft.com/issues"
+  },
+  "homepage": "https://github.com/AbelConsulting/skunksquadnft.com#readme"
 }
