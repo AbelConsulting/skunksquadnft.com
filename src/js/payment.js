@@ -407,19 +407,11 @@ class PaymentSystem {
     }
 
     getApiUrl() {
-        // Try to get from environment variable
-        if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) {
-            return process.env.REACT_APP_API_URL;
-        }
-        
-        // Try to get from window object
-        if (window.API_URL) {
-            return window.API_URL;
-        }
-        
-        // Default to localhost for development
-        return 'http://localhost:3002';
-    }
+  // Adjust for production domain vs local
+  return window.location.hostname === 'localhost'
+    ? 'http://localhost:3002/api'
+    : 'https://api.skunksquadnft.com/api'; // change if different subdomain
+}
 
     handlePaymentSuccess(paymentIntent, quantity, walletAddress) {
         // Hide payment form
