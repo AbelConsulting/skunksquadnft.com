@@ -89,6 +89,13 @@ The following ultra-rare traits are missing from your asset collection:
 3. Ensure adequate cooling if running extended generation
 4. Monitor disk space during generation
 
-## 🎉 You're Ready to Generate 10,000 NFTs!
+## � Recent Updates
+
+### New Traits Added:
+- **Flame Sword** (Left Hand) - Rare tier, weight 15
+  - File: `hand_left_rare_flamesword.png`
+  - Successfully integrated and tested ✅
+
+## �🎉 You're Ready to Generate 10,000 NFTs!
 
 Your system is well-equipped and all components are properly configured. The generation should run smoothly with your current setup.
