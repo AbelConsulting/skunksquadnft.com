@@ -1015,5 +1015,73 @@ function buyWithWallet() {
 
 console.log('🦨 SkunkSquad buttons initialized!');
 </script>
+<!-- website/public/sw.js - Enhanced version -->
+<script>
+const CACHE_NAME = 'skunksquad-v1.1.0';
+const STATIC_CACHE = 'static-v1';
+const DYNAMIC_CACHE = 'dynamic-v1';
+
+const STATIC_ASSETS = [
+    '/',
+    '/manifest.json',
+    '/src/js/app.js',
+    '/styles/critical.css'
+];
+
+// Install - cache critical resources
+self.addEventListener('install', event => {
+    event.waitUntil(
+        Promise.all([
+            caches.open(STATIC_CACHE).then(cache => cache.addAll(STATIC_ASSETS)),
+            self.skipWaiting()
+        ])
+    );
+});
+
+// Fetch - implement cache strategies
+self.addEventListener('fetch', event => {
+    const { request } = event;
+    
+    // Cache first for static assets
+    if (request.url.includes('/assets/') || request.url.includes('.css')) {
+        event.respondWith(cacheFirst(request));
+    }
+    // Network first for API calls
+    else if (request.url.includes('/api/')) {
+        event.respondWith(networkFirst(request));
+    }
+    // Stale while revalidate for pages
+    else {
+        event.respondWith(staleWhileRevalidate(request));
+    }
+});
+
+async function cacheFirst(request) {
+    const cached = await caches.match(request);
+    return cached || fetch(request);
+}
+
+async function networkFirst(request) {
+    try {
+        const response = await fetch(request);
+        const cache = await caches.open(DYNAMIC_CACHE);
+        cache.put(request, response.clone());
+        return response;
+    } catch (error) {
+        return caches.match(request);
+    }
+}
+
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+    const networkPromise = fetch(request).then(response => {
+        const cache = caches.open(DYNAMIC_CACHE);
+        cache.then(c => c.put(request, response.clone()));
+        return response;
+    });
+    
+    return cached || networkPromise;
+}
+</script>
 </body>
 </html>
