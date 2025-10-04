@@ -852,6 +852,63 @@
     gap: var(--space-sm);
 }
 
+/* Current Focus Styling */
+.current-focus {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(249, 115, 22, 0.1));
+    border: 2px solid rgba(245, 158, 11, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.current-focus::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+.focus-badge {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+}
+
+.focus-title {
+    color: #f59e0b;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.focus-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
 /* Responsive Design for Components */
 @media (max-width: 768px) {
     .payment-flow {
