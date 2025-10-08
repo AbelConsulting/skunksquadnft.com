@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦨 Members Portal | SkunkSquad Elite</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Exclusive SkunkSquad NFT Members Portal - Access your elite networking benefits, analytics, and member rewards.">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/animations.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="./public/favicon.ico">
+</head>
+<body class="members-body">
+    <!-- Members Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">ELITE MEMBER</span>
+                </div>
+                
+                <div class="member-status">
+                    <div class="member-info" id="memberInfo">
+                        <div class="member-avatar">
+                            <img src="./assets/charlesskunk.webp" alt="Member" id="memberAvatar">
+                        </div>
+                        <div class="member-details">
+                            <span class="member-name" id="memberName">Loading...</span>
+                            <span class="member-rank" id="memberRank">Elite Member</span>
+                        </div>
+                    </div>
+                    
+                    <div class="member-actions">
+                        <button class="btn btn-outline btn-sm" id="logoutBtn">Logout</button>
+                        <a href="./index.html" class="btn btn-secondary btn-sm">← Back to Site</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Authentication Guard (Hidden by default) -->
+    <div id="authGuard" class="auth-guard">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="auth-logo">
+                    <h1>🔒 Members Only Portal</h1>
+                    <p>Please verify your SkunkSquad NFT ownership to access the elite members area.</p>
+                </div>
+                
+                <div class="auth-methods">
+                    <button class="btn btn-primary btn-large" id="connectWalletAuth">
+                        <span class="btn-icon">🔗</span>
+                        Connect Wallet to Verify
+                    </button>
+                    
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <div class="auth-form">
+                        <input type="text" placeholder="Enter your NFT Token ID" id="tokenIdInput" class="form-input">
+                        <button class="btn btn-secondary" id="verifyTokenBtn">Verify Token</button>
+                    </div>
+                </div>
+                
+                <div class="auth-help">
+                    <p>Don't have a SkunkSquad NFT yet? <a href="./index.html#home">Join the Elite →</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Dashboard (Shown after authentication) -->
+    <main id="membersDashboard" class="members-dashboard" style="display: none;">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="container">
+                <div class="welcome-content">
+                    <h1 class="welcome-title">
+                        Welcome Back, <span id="welcomeName">Elite Member</span>! 🦨
+                    </h1>
+                    <p class="welcome-subtitle">
+                        Your exclusive SkunkSquad portal with advanced analytics, networking tools, and member rewards.
+                    </p>
+                </div>
+                
+                <div class="member-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="memberLevel">Level 5</div>
+                        <div class="stat-label">Member Level</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💎</div>
+                        <div class="stat-value" id="nftCount">3</div>
+                        <div class="stat-label">NFTs Owned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="rewardPoints">2,450</div>
+                        <div class="stat-label">Reward Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🌟</div>
+                        <div class="stat-value" id="memberSince">Oct 2025</div>
+                        <div class="stat-label">Member Since</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions-section">
+            <div class="container">
+                <h2 class="section-title">⚡ Quick Actions</h2>
+                <div class="quick-actions-grid">
+                    <button class="action-card" onclick="openNetworking()">
+                        <div class="action-icon">🤝</div>
+                        <h3>Elite Networking</h3>
+                        <p>Connect with fellow members</p>
+                    </button>
+                    
+                    <button class="action-card" onclick="openRewards()">
+                        <div class="action-icon">🎁</div>
+                        <h3>Claim Rewards</h3>
+                        <p>Exclusive member benefits</p>
+                    </button>
+                    
+                    <button class="action-card" onclick="openAnalytics()">
+                        <div class="action-icon">📊</div>
+                        <h3>Portfolio Analytics</h3>
+                        <p>Track your NFT performance</p>
+                    </button>
+                    
+                    <button class="action-card" onclick="openEvents()">
+                        <div class="action-icon">📅</div>
+                        <h3>Exclusive Events</h3>
+                        <p>VIP access & meetups</p>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Dashboard -->
+        <section class="analytics-dashboard">
+            <div class="container">
+                <h2 class="section-title">📊 Your Portfolio Analytics</h2>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Portfolio Value</h3>
+                        <div class="portfolio-chart">
+                            <canvas id="portfolioChart" width="300" height="200"></canvas>
+                        </div>
+                        <div class="portfolio-summary">
+                            <div class="portfolio-stat">
+                                <span class="stat-label">Current Value:</span>
+                                <span class="stat-value text-success">$1,247.50</span>
+                            </div>
+                            <div class="portfolio-stat">
+                                <span class="stat-label">24h Change:</span>
+                                <span class="stat-value text-success">+$89.23 (+7.7%)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Member Achievements</h3>
+                        <div class="achievements-list">
+                            <div class="achievement achieved">
+                                <span class="achievement-icon">🎯</span>
+                                <div class="achievement-info">
+                                    <h4>Early Adopter</h4>
+                                    <p>Joined in first 100 members</p>
+                                </div>
+                                <span class="achievement-status">✅</span>
+                            </div>
+                            
+                            <div class="achievement achieved">
+                                <span class="achievement-icon">💼</span>
+                                <div class="achievement-info">
+                                    <h4>Network Builder</h4>
+                                    <p>Connected with 10+ members</p>
+                                </div>
+                                <span class="achievement-status">✅</span>
+                            </div>
+                            
+                            <div class="achievement">
+                                <span class="achievement-icon">👑</span>
+                                <div class="achievement-info">
+                                    <h4>Elite Collector</h4>
+                                    <p>Own 5+ SkunkSquad NFTs</p>
+                                </div>
+                                <span class="achievement-status">🔒</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Elite Networking -->
+        <section class="networking-section">
+            <div class="container">
+                <h2 class="section-title">🤝 Elite Member Network</h2>
+                
+                <div class="networking-grid">
+                    <div class="network-card">
+                        <h3>Recent Connections</h3>
+                        <div class="connections-list">
+                            <div class="connection-item">
+                                <img src="./assets/skunksample1.png" alt="Member" class="connection-avatar">
+                                <div class="connection-info">
+                                    <h4>CryptoBuilder.eth</h4>
+                                    <p>Tech Entrepreneur • San Francisco</p>
+                                </div>
+                                <button class="btn btn-sm btn-outline">Message</button>
+                            </div>
+                            
+                            <div class="connection-item">
+                                <img src="./assets/skunksample2.png" alt="Member" class="connection-avatar">
+                                <div class="connection-info">
+                                    <h4>DeFiQueen.eth</h4>
+                                    <p>Investment Strategist • London</p>
+                                </div>
+                                <button class="btn btn-sm btn-outline">Message</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="network-card">
+                        <h3>Upcoming Events</h3>
+                        <div class="events-list">
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span class="date-day">15</span>
+                                    <span class="date-month">Oct</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>Elite Networking Dinner</h4>
+                                    <p>📍 NYC • Members Only</p>
+                                </div>
+                                <button class="btn btn-sm btn-primary">RSVP</button>
+                            </div>
+                            
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span class="date-day">22</span>
+                                    <span class="date-month">Oct</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>Virtual Investment Meetup</h4>
+                                    <p>🌐 Online • 7PM EST</p>
+                                </div>
+                                <button class="btn btn-sm btn-primary">Join</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="./src/js/members.js"></script>
+    <script src="./src/js/wallet.js"></script>
+    
+    <!-- Web3 Integration -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    
+    <script>
+        // Members portal initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            initMembersPortal();
+        });
+        
+        function initMembersPortal() {
+            // Check if user is already authenticated
+            const isAuthenticated = checkMemberAuthentication();
+            
+            if (isAuthenticated) {
+                showMembersDashboard();
+            } else {
+                showAuthGuard();
+            }
+        }
+        
+        function checkMemberAuthentication() {
+            // Check localStorage for previous authentication
+            const memberData = localStorage.getItem('skunksquad_member');
+            return memberData ? JSON.parse(memberData) : false;
+        }
+        
+        function showAuthGuard() {
+            document.getElementById('authGuard').style.display = 'flex';
+            document.getElementById('membersDashboard').style.display = 'none';
+        }
+        
+        function showMembersDashboard() {
+            document.getElementById('authGuard').style.display = 'none';
+            document.getElementById('membersDashboard').style.display = 'block';
+            loadMemberData();
+        }
+        
+        function loadMemberData() {
+            // Load member data and update UI
+            const memberData = checkMemberAuthentication();
+            if (memberData) {
+                document.getElementById('memberName').textContent = memberData.name || 'Elite Member';
+                document.getElementById('welcomeName').textContent = memberData.name || 'Elite Member';
+            }
+        }
+        
+        // Authentication handlers
+        document.getElementById('connectWalletAuth').addEventListener('click', async function() {
+            try {
+                // Connect wallet and verify NFT ownership
+                if (typeof window.ethereum !== 'undefined') {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const address = accounts[0];
+                    
+                    // Simulate NFT verification (replace with actual smart contract call)
+                    const hasNFT = await verifyNFTOwnership(address);
+                    
+                    if (hasNFT) {
+                        authenticateMember({
+                            address: address,
+                            name: address.slice(0, 6) + '...' + address.slice(-4),
+                            authenticated: true
+                        });
+                        showMembersDashboard();
+                    } else {
+                        alert('❌ No SkunkSquad NFT found in this wallet.\n\nPlease connect a wallet that owns a SkunkSquad NFT or purchase one at skunksquadnft.com');
+                    }
+                } else {
+                    alert('Please install MetaMask or another Web3 wallet to continue.');
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                alert('Authentication failed. Please try again.');
+            }
+        });
+        
+        document.getElementById('verifyTokenBtn').addEventListener('click', function() {
+            const tokenId = document.getElementById('tokenIdInput').value;
+            if (tokenId) {
+                // Simulate token verification
+                authenticateMember({
+                    tokenId: tokenId,
+                    name: `Member #${tokenId}`,
+                    authenticated: true
+                });
+                showMembersDashboard();
+            } else {
+                alert('Please enter a valid token ID.');
+            }
+        });
+        
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('skunksquad_member');
+            window.location.reload();
+        });
+        
+        function authenticateMember(memberData) {
+            localStorage.setItem('skunksquad_member', JSON.stringify(memberData));
+        }
+        
+        async function verifyNFTOwnership(address) {
+            // Placeholder for actual smart contract verification
+            // This would check if the address owns any SkunkSquad NFTs
+            return true; // Simulate success for demo
+        }
+        
+        // Quick action handlers
+        function openNetworking() {
+            alert('🤝 Elite Networking\n\nConnect with fellow SkunkSquad members worldwide. Share insights, collaborate on projects, and build lasting professional relationships.\n\n🚀 Coming soon!');
+        }
+        
+        function openRewards() {
+            alert('🎁 Member Rewards\n\n• Monthly airdrops\n• Exclusive merchandise\n• Event tickets\n• Partnership discounts\n\n🚀 Claim system launching soon!');
+        }
+        
+        function openAnalytics() {
+            alert('📊 Portfolio Analytics\n\nTrack your SkunkSquad NFT performance:\n• Real-time valuations\n• Rarity rankings\n• Market trends\n• Trading insights\n\n🚀 Advanced analytics coming soon!');
+        }
+        
+        function openEvents() {
+            alert('📅 Exclusive Events\n\n• VIP networking dinners\n• Private investment seminars\n• Tech conferences access\n• Global meetups\n\n🚀 Event calendar launching soon!');
+        }
+        
+        console.log('🦨 SkunkSquad Members Portal Loaded');
+    </script>
+</body>
+</html>
