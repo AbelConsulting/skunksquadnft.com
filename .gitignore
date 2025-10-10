@@ -44,6 +44,11 @@ temp/
 # NFT generation output (optional - you may want to keep some test outputs)
 output/
 
+# Arweave metadata and transaction IDs (DO NOT COMMIT)
+metadata_arweave/
+txid_mapping.csv
+arweave_export*.csv
+
 # Python
 __pycache__/
 *.py[cod]
