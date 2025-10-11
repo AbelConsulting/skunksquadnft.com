@@ -13,14 +13,12 @@ export default {
     },
   },
   networks: {
-    // Mainnet configuration
     mainnet: {
       url: "https://eth-mainnet.g.alchemy.com/v2/cR2JU1F2OOvp3DvHfBIEW",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       gasPrice: "auto",
       gas: "auto",
     },
-    // Sepolia testnet
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL || "https://eth-sepolia.g.alchemy.com/v2/MM2ndEQYXsoFzQ9q9QlpnMfAqrwKY6_SLu4LInCCK",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
