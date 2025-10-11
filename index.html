@@ -775,44 +775,36 @@
     <div id="purchase-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Purchase SkunkSquad NFTs</h2>
-                <button class="modal-close">&times;</button>
+                <h2>🦨 Mint SkunkSquad NFT</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="purchase-options">
-                    <div class="purchase-option credit-card">
-                        <div class="option-header">
-                            <h3>💳 Credit Card Payment</h3>
-                            <span class="recommended-badge">RECOMMENDED</span>
+                <div class="mint-details">
+                    <div class="mint-info">
+                        <div class="price-display">
+                            <span class="price-eth">0.02 ETH</span>
+                            <span class="price-usd">(~$48 USD)</span>
                         </div>
-                        <p>Buy instantly with Visa, Mastercard, or American Express</p>
-                        <ul class="option-benefits">
-                            <li>✅ No crypto experience needed</li>
-                            <li>✅ Instant NFT delivery</li>
-                            <li>✅ Global payment support</li>
-                            <li>✅ Bank-level security</li>
-                        </ul>
-                        <button class="btn btn-primary btn-full" id="buy-with-card-modal">
-                            Continue with Credit Card
-                        </button>
+                        <div class="supply-counter">
+                            <span class="minted-count">0</span>/10,000 Minted
+                        </div>
                     </div>
-                    
-                    <div class="purchase-option ethereum">
-                        <div class="option-header">
-                            <h3>⚡ Ethereum Payment</h3>
+                    <div class="quantity-selector">
+                        <label>Quantity:</label>
+                        <div class="quantity-controls">
+                            <button onclick="updateQuantity(-1)">-</button>
+                            <input type="number" id="mint-quantity" min="1" max="10" value="1">
+                            <button onclick="updateQuantity(1)">+</button>
                         </div>
-                        <p>Traditional NFT purchase with ETH cryptocurrency</p>
-                        <ul class="option-benefits">
-                            <li>✅ Direct blockchain interaction</li>
-                            <li>✅ Lower fees for large purchases</li>
-                            <li>✅ Full decentralization</li>
-                            <li>✅ Immediate ownership</li>
-                        </ul>
-                        <button class="btn btn-outline btn-full" id="buy-with-eth-modal">
-                            Continue with ETH
-                        </button>
+                        <div class="total-cost">
+                            Total: <span id="total-eth">0.02 ETH</span>
+                        </div>
                     </div>
                 </div>
+                <button class="btn btn-primary btn-mint" onclick="mintWithEth()">
+                    <span class="btn-icon">🦊</span>
+                    Connect Wallet & Mint
+                </button>
             </div>
         </div>
     </div>
@@ -1028,7 +1020,7 @@ function showPaymentModal() {
                 </div>
                 <div style="display: grid; gap: 15px;">
                     <button onclick="buyWithCard()" style="padding: 15px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-                        💳 Credit Card Payment (Recommended)
+                        💳 Credit Card Payment (Coming Soon)
                     </button>
                     <button onclick="buyWithWallet()" style="padding: 15px; background: transparent; color: #6366f1; border: 2px solid #6366f1; border-radius: 8px; font-size: 16px; cursor: pointer;">
                         🔗 Connect Wallet (MetaMask)
