@@ -11,14 +11,18 @@ module.exports = {
   },
   networks: {
     mainnet: {
-      url: "https://eth-mainnet.g.alchemy.com/v2/cR2JU1F2OOvp3DvHfBIEW",
+      url: process.env.MAINNET_RPC_URL || "https://cloudflare-eth.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      gasPrice: "auto",
-      gas: "auto",
+      chainId: 1,
+      gasPrice: 15000000000, // 15 gwei
+      gas: 6000000,
+      timeout: 120000,
     },
     sepolia: {
-      url: process.env.SEPOLIA_RPC_URL || "https://eth-sepolia.g.alchemy.com/v2/MM2ndEQYXsoFzQ9q9QlpnMfAqrwKY6_SLu4LInCCK",
+      url: process.env.SEPOLIA_RPC_URL || "https://eth-sepolia.public.blastapi.io",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      chainId: 11155111,
+      gasPrice: "auto",
     },
   },
   etherscan: {

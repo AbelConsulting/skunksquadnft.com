@@ -1,11 +1,11 @@
 {
   "contractName": "SkunkSquad NFT Ultra Smart",
   "contractSymbol": "SKULL",
-  "contractAddress": "0x7649366eeb2F996513C4A929d9A980779Cf2364C",
+  "contractAddress": "0xBC00f05B9918B6B529d7edd33d89b4fB7016F6aF",
   "deployerAddress": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
   "network": "sepolia",
-  "blockNumber": 9250957,
-  "timestamp": "2025-09-21T20:05:03.288Z",
+  "blockNumber": 9386149,
+  "timestamp": "2025-10-11T01:53:42.936Z",
   "features": {
     "dynamicPricing": true,
     "userAnalytics": true,
@@ -14,11 +14,11 @@
     "predictions": true
   },
   "configuration": {
-    "baseURI": "https://your-api.com/metadata/",
-    "contractURI": "https://your-api.com/contract-metadata",
-    "unrevealedURI": "https://your-api.com/unrevealed",
+    "baseURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/",
+    "contractURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
+    "unrevealedURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
     "royaltyRecipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
     "royaltyFee": 500,
-    "initialSmartPrice": "0.011"
+    "initialSmartPrice": "0.01"
   }
 }

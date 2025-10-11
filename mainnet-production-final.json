@@ -1,0 +1,39 @@
+{
+  "environment": "MAINNET PRODUCTION",
+  "network": "mainnet",
+  "contractName": "SkunkSquad NFT Enhanced",
+  "contractAddress": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "deployerAddress": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "deploymentDate": "2025-10-11",
+  "configuration": {
+    "baseURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/",
+    "contractURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
+    "unrevealedURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
+    "royaltyRecipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+    "royaltyFee": 250,
+    "revenueShareAddress": "0xeD97F754D65F5c479De75A57D2781489b4F43125",
+    "revenueSharePercentage": 5
+  },
+  "features": {
+    "arweaveStorage": true,
+    "permanentMetadata": true,
+    "royalties": true,
+    "revenueSharing": true,
+    "multiPhaseMintin": true,
+    "enhancedSecurity": true,
+    "creditCardPayments": true
+  },
+  "metadata": {
+    "totalNFTs": 10000,
+    "arweaveFolder": "0770a619-f2f1-4c59-9d1d-2fceb4a9294d",
+    "metadataCompletePercentage": 99.99,
+    "storageType": "Permanent Arweave"
+  },
+  "links": {
+    "etherscan": "https://etherscan.io/address/0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+    "opensea": "https://opensea.io/assets/ethereum/0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+    "website": "https://skunksquadnft.com"
+  },
+  "status": "LIVE ON MAINNET",
+  "launchReady": true
+}

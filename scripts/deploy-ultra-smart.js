@@ -11,11 +11,15 @@ async function main() {
     // Contract parameters
     const CONTRACT_NAME = "SkunkSquad NFT Ultra Smart";
     const CONTRACT_SYMBOL = "SKULL";
-    const BASE_URI = "https://your-api.com/metadata/";
-    const CONTRACT_URI = "https://your-api.com/contract-metadata";
-    const UNREVEALED_URI = "https://your-api.com/unrevealed";
+    const BASE_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/";
+    const CONTRACT_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json";
+    const UNREVEALED_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json";
     const ROYALTY_RECIPIENT = "0x16Be43d7571Edf69cec8D6221044638d161aA994";
-    const ROYALTY_FEE = 500; // 5%
+    const ROYALTY_FEE = 250; // 2.5%
+    
+    // Revenue sharing configuration (5% of primary sales)
+    const REVENUE_SHARE_ADDRESS = "0xeD97F754D65F5c479De75A57D2781489b4F43125";
+    const REVENUE_SHARE_PERCENTAGE = 5; // 5%
 
     console.log("📋 Contract Configuration:");
     console.log("   Name:", CONTRACT_NAME);
@@ -23,6 +27,12 @@ async function main() {
     console.log("   Base URI:", BASE_URI);
     console.log("   Royalty Recipient:", ROYALTY_RECIPIENT);
     console.log("   Royalty Fee:", ROYALTY_FEE / 100, "%\n");
+    
+    console.log("💰 Revenue Sharing Configuration:");
+    console.log("   Revenue Share Address:", REVENUE_SHARE_ADDRESS);
+    console.log("   Revenue Share Percentage:", REVENUE_SHARE_PERCENTAGE + "%");
+    console.log("   Deployer Gets:", (100 - REVENUE_SHARE_PERCENTAGE) + "%");
+    console.log("   Partner Gets:", REVENUE_SHARE_PERCENTAGE + "%\n");
 
     // Deploy the contract
     console.log("🔨 Deploying contract...");
@@ -103,7 +113,9 @@ async function main() {
             unrevealedURI: UNREVEALED_URI,
             royaltyRecipient: ROYALTY_RECIPIENT,
             royaltyFee: ROYALTY_FEE,
-            initialSmartPrice: ethers.utils.formatEther(smartPrice)
+            initialSmartPrice: ethers.utils.formatEther(smartPrice),
+            revenueShareAddress: REVENUE_SHARE_ADDRESS,
+            revenueSharePercentage: REVENUE_SHARE_PERCENTAGE
         }
     };
 
