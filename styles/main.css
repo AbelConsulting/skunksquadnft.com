@@ -1,6 +1,7 @@
 /* SkunkSquad NFT - Main Styles */
 
 :root {
+    /* Color System */
     --primary-color: #6366f1;
     --secondary-color: #8b5cf6;
     --accent-color: #06b6d4;
@@ -11,11 +12,48 @@
     --light-color: #f8fafc;
     --white: #ffffff;
     --light-gray: #9ca3af;
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    
+    /* Gradients */
     --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    
+    /* Typography */
     --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --font-primary: 'Inter', sans-serif;
+    
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 2rem;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+    
+    /* Z-Index Scale */
+    --z-background: -1;
+    --z-base: 1;
+    --z-elevated: 10;
+    --z-modal: 100;
+    --z-navigation: 1000;
+    --z-notification: 1001;
 }
+
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
 
 * {
     margin: 0;
@@ -24,7 +62,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     line-height: 1.6;
     color: var(--dark-color);
     background-color: var(--light-color);
@@ -33,19 +71,23 @@ body {
         radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.02) 0%, transparent 50%);
     background-attachment: fixed;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 var(--space-md);
 }
 
-/* Typography */
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
 }
 
 .gradient-text {
@@ -53,29 +95,43 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    display: inline-block;
 }
 
-/* Buttons */
+/* ==========================================================================
+   BUTTON COMPONENTS
+   ========================================================================== */
+
 .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
     font-weight: 600;
+    font-size: 1rem;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 1rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 .btn-primary {
     background: var(--gradient-primary);
-    color: white;
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
 }
@@ -86,21 +142,33 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color);
 }
 
-.btn-outline:hover {
+.btn-outline:hover:not(:disabled) {
     background: var(--primary-color);
-    color: white;
+    color: var(--white);
 }
 
 .btn-large {
-    padding: 1rem 2rem;
+    padding: var(--space-lg) var(--space-xl);
     font-size: 1.1rem;
 }
 
-/* Navigation */
+.btn-text {
+    display: inline;
+}
+
+.btn-price {
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+
 .top-bar {
     background: var(--dark-color);
-    color: white;
-    padding: 0.5rem 0;
+    color: var(--white);
+    padding: var(--space-sm) 0;
     font-size: 0.9rem;
 }
 
@@ -110,22 +178,22 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 var(--space-md);
 }
 
 .navbar {
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: var(--white);
+    box-shadow: var(--shadow-md);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: var(--z-navigation);
 }
 
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: var(--space-md);
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -133,13 +201,14 @@ h1, h2, h3, h4, h5, h6 {
 .nav-brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-md);
 }
 
 .logo-image {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .brand-text {
@@ -148,32 +217,14 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color);
 }
 
-.countdown-container {
+.nav-actions {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-md);
 }
 
-.countdown-timer {
-    display: flex;
-    gap: 1rem;
-}
-
-.countdown-item {
-    text-align: center;
-}
-
-.countdown-number {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.countdown-unit {
-    font-size: 0.8rem;
-    color: #666;
+.nav-actions .btn {
+    white-space: nowrap;
 }
 
 /* Hero Section */
@@ -1062,33 +1113,9 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
-/* Performance Optimizations */
-.hero-grid,
-.hero-glow {
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    perspective: 1000px;
-}
-
-/* Improve image loading */
-img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
-/* Preload critical background elements */
-.hero-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.01) 0%, rgba(139, 92, 246, 0.01) 100%);
-    z-index: -1;
-}
-
-/* Utility Classes */
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
 .hidden {
     display: none !important;
 }
