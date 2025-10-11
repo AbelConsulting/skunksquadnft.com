@@ -91,9 +91,9 @@
     "type": "git",
     "url": "git+https://github.com/AbelConsulting/skunksquadnft.com.git"
   },
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/AbelConsulting/skunksquadnft.com/issues"
   },
-  "homepage": "https://github.com/AbelConsulting/skunksquadnft.com#readme"
+  "homepage": "https://github.com/AbelConsulting/skunksquadnft.com#readme",
+  "type": "module"
 }
