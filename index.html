@@ -823,6 +823,71 @@
     <script src="./src/js/payment.js"></script>
     <script src="./src/js/wallet.js"></script>
     
+    <!-- Auto-update price from smart contract -->
+    <script>
+    async function updatePriceFromContract() {
+        try {
+            // Wait for wallet manager to be initialized
+            if (window.walletManager && window.walletManager.contract) {
+                console.log('🦨 Updating price from smart contract...');
+                
+                // Get current smart price
+                const price = await window.walletManager.contract.methods.getCurrentSmartPrice().call();
+                const priceInEth = parseFloat(window.walletManager.web3.utils.fromWei(price, 'ether'));
+                
+                // Update all price displays
+                const priceElements = document.querySelectorAll('.price-eth, .current-price');
+                priceElements.forEach(element => {
+                    element.textContent = `${priceInEth.toFixed(4)} ETH`;
+                });
+                
+                // Update USD estimate (rough calculation - in production would use price API)
+                const priceUSD = Math.round(priceInEth * 2400); // ~$2400 per ETH estimate
+                const usdElements = document.querySelectorAll('.price-usd');
+                usdElements.forEach(element => {
+                    element.textContent = `(~$${priceUSD})`;
+                });
+                
+                console.log('✅ Price updated:', { eth: priceInEth, usd: priceUSD });
+                
+                // Get total supply
+                const totalSupply = await window.walletManager.contract.methods.totalSupply().call();
+                const remaining = 10000 - parseInt(totalSupply);
+                
+                // Update supply displays
+                const supplyElements = document.querySelectorAll('.minted-count');
+                supplyElements.forEach(element => {
+                    element.textContent = totalSupply;
+                });
+                
+                const remainingElements = document.querySelectorAll('.remaining-count');
+                remainingElements.forEach(element => {
+                    element.textContent = remaining;
+                });
+                
+            } else {
+                console.log('🦨 Wallet manager not ready, retrying in 2s...');
+                setTimeout(updatePriceFromContract, 2000);
+            }
+        } catch (error) {
+            console.error('❌ Failed to update price from contract:', error);
+            // Fallback to default display
+            const priceElements = document.querySelectorAll('.price-eth');
+            priceElements.forEach(element => {
+                element.textContent = '0.05 ETH';
+            });
+        }
+    }
+    
+    // Update price when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(updatePriceFromContract, 3000); // Give wallet manager time to initialize
+        
+        // Update price every 30 seconds (dynamic pricing)
+        setInterval(updatePriceFromContract, 30000);
+    });
+    </script>
+    
     <!-- Countdown Timer Script - Clean Version -->
     <script>
         // Optimized Countdown Timer for Launch Date: October 10, 2025 at 6:10 PM EST
@@ -959,7 +1024,8 @@ function showPaymentModal() {
                     </button>
                 </div>
                 <div style="text-align: center; margin-top: 15px; color: #666;">
-                    <small>Price: 0.05 ETH (~$120)</small>
+                    <small>Price: <span class="price-eth">0.05 ETH</span> <span class="price-usd">(~$120)</span></small>
+                    <br><small style="color: #999; font-size: 0.8em;">Dynamic pricing • Updates in real-time</small>
                 </div>
             </div>
         </div>
@@ -1002,12 +1068,78 @@ function buyWithCard() {
 }
 
 // Update the buyWithWallet function  
-function buyWithWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-        alert('🔗 Wallet Minting!\n\n✅ Direct blockchain transaction\n✅ MetaMask integration\n✅ Gas fee optimization\n\nComing 10/10!');
+async function buyWithWallet() {
+    try {
+        if (typeof window.ethereum === 'undefined') {
+            alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
+            return;
+        }
+
         closeModal();
-    } else {
-        alert('🦊 Please install MetaMask first!\n\nVisit: https://metamask.io/');
+
+        // Check if wallet manager is available
+        if (!window.walletManager) {
+            alert('🔧 Wallet manager not initialized. Please refresh the page.');
+            return;
+        }
+
+        // Connect wallet if not connected
+        if (!window.walletManager.isConnected) {
+            const connected = await window.walletManager.connectWallet();
+            if (!connected) {
+                alert('❌ Failed to connect wallet. Please try again.');
+                return;
+            }
+        }
+
+        // Get quantity (default to 1)
+        let quantity = 1;
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput && quantityInput.value) {
+            quantity = parseInt(quantityInput.value) || 1;
+        }
+
+        // Show loading message
+        if (window.skunkSquadWebsite) {
+            window.skunkSquadWebsite.showNotification(
+                '🦨 Preparing to mint your SkunkSquad NFT...',
+                'info'
+            );
+        }
+
+        // Mint NFT
+        const result = await window.walletManager.mintNFT(quantity);
+        
+        if (result) {
+            console.log('✅ NFT minted successfully:', result.transactionHash);
+            
+            // Show success message with transaction link
+            const etherscanUrl = `https://etherscan.io/tx/${result.transactionHash}`;
+            
+            if (window.skunkSquadWebsite) {
+                window.skunkSquadWebsite.showNotification(
+                    `🎉 NFT minted successfully! <a href="${etherscanUrl}" target="_blank">View on Etherscan</a>`,
+                    'success'
+                );
+            }
+        }
+
+    } catch (error) {
+        console.error('❌ Wallet minting error:', error);
+        
+        let errorMessage = 'Failed to mint NFT. Please try again.';
+        
+        if (error.message.includes('User denied')) {
+            errorMessage = 'Transaction was cancelled by user.';
+        } else if (error.message.includes('insufficient funds')) {
+            errorMessage = 'Insufficient ETH balance for minting.';
+        }
+        
+        if (window.skunkSquadWebsite) {
+            window.skunkSquadWebsite.showNotification(errorMessage, 'error');
+        } else {
+            alert(errorMessage);
+        }
     }
 }
 

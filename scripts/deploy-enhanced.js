@@ -8,10 +8,10 @@ async function main() {
   // Get deployment parameters from environment or use defaults
   const CONTRACT_NAME = process.env.CONTRACT_NAME || "Skunk Squad";
   const CONTRACT_SYMBOL = process.env.CONTRACT_SYMBOL || "SKUNK";
-  // Use placeholder URIs for testnet - will be updated after artwork upload
-  const BASE_URI = process.env.BASE_URI || "https://api.skunksquadnft.com/metadata/";
-  const CONTRACT_URI = process.env.CONTRACT_URI || "https://api.skunksquadnft.com/contract.json";
-  const UNREVEALED_URI = process.env.UNREVEALED_URI || "https://api.skunksquadnft.com/unrevealed.json";
+  // Use Arweave permanent storage URIs for production
+  const BASE_URI = process.env.BASE_URI || "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/";
+  const CONTRACT_URI = process.env.CONTRACT_URI || "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json";
+  const UNREVEALED_URI = process.env.UNREVEALED_URI || "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json";
   
   // Get deployer account
   const [deployer] = await ethers.getSigners();

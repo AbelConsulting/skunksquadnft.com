@@ -10,7 +10,7 @@ class WalletManager {
         this.networkId = null;
         this.isConnected = false;
         this.contract = null;
-        this.contractAddress = '0x7649366eeb2F996513C4A929d9A980779Cf2364C'; // Sepolia testnet
+        this.contractAddress = '0x6BA18b88b64af8898bbb42262ED18EC13DC81315'; // Ethereum Mainnet
         this.init();
     }
 
@@ -162,18 +162,18 @@ class WalletManager {
         if (!this.web3) return;
 
         try {
-            // SkunkSquad NFT Contract ABI (simplified for demo)
+            // SkunkSquad NFT Ultra Smart Contract ABI
             const contractABI = [
                 {
                     "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
-                    "name": "mint",
+                    "name": "publicMint",
                     "outputs": [],
                     "stateMutability": "payable",
                     "type": "function"
                 },
                 {
                     "inputs": [],
-                    "name": "currentPrice",
+                    "name": "getCurrentSmartPrice",
                     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                     "stateMutability": "view",
                     "type": "function"
@@ -189,6 +189,43 @@ class WalletManager {
                     "inputs": [{"internalType": "address", "name": "owner", "type": "address"}],
                     "name": "balanceOf",
                     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "MAX_SUPPLY",
+                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
+                    "name": "currentPhase",
+                    "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [{"internalType": "address", "name": "recipient", "type": "address"}, {"internalType": "uint256", "name": "quantity", "type": "uint256"}, {"internalType": "string", "name": "message", "type": "string"}],
+                    "name": "giftNFT",
+                    "outputs": [],
+                    "stateMutability": "payable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                    "name": "userAnalytics",
+                    "outputs": [
+                        {"internalType": "uint256", "name": "totalMinted", "type": "uint256"},
+                        {"internalType": "uint256", "name": "totalSpent", "type": "uint256"},
+                        {"internalType": "uint256", "name": "firstMintTime", "type": "uint256"},
+                        {"internalType": "uint256", "name": "lastMintTime", "type": "uint256"},
+                        {"internalType": "uint256", "name": "averageTimeBeweenMints", "type": "uint256"},
+                        {"internalType": "uint256", "name": "xpPoints", "type": "uint256"},
+                        {"internalType": "uint256", "name": "referralCount", "type": "uint256"},
+                        {"internalType": "uint256", "name": "referralEarnings", "type": "uint256"}
+                    ],
                     "stateMutability": "view",
                     "type": "function"
                 }
@@ -209,14 +246,14 @@ class WalletManager {
         if (!this.contract) return;
 
         try {
-            // Get current price
-            const price = await this.contract.methods.currentPrice().call();
+            // Get current smart price (dynamic pricing)
+            const price = await this.contract.methods.getCurrentSmartPrice().call();
             const priceInEth = this.web3.utils.fromWei(price, 'ether');
             
             // Get total supply
             const totalSupply = await this.contract.methods.totalSupply().call();
             
-            console.log('🦨 Contract info updated:', { price: priceInEth, totalSupply });
+            console.log('🦨 Contract info updated:', { smartPrice: priceInEth, totalSupply });
             
             // Update UI elements
             this.updatePricingDisplay(priceInEth);
@@ -241,12 +278,12 @@ class WalletManager {
         try {
             console.log('🦨 Minting NFT...', { quantity, account: this.accounts[0] });
             
-            // Get current price
-            const price = await this.contract.methods.currentPrice().call();
+            // Get current smart price (dynamic pricing)
+            const price = await this.contract.methods.getCurrentSmartPrice().call();
             const totalCost = this.web3.utils.toBN(price).mul(this.web3.utils.toBN(quantity));
             
-            // Estimate gas
-            const gasEstimate = await this.contract.methods.mint(quantity).estimateGas({
+            // Estimate gas for publicMint function
+            const gasEstimate = await this.contract.methods.publicMint(quantity).estimateGas({
                 from: this.accounts[0],
                 value: totalCost
             });
@@ -254,8 +291,8 @@ class WalletManager {
             // Add 20% buffer to gas estimate
             const gasLimit = Math.floor(gasEstimate * 1.2);
             
-            // Send transaction
-            const transaction = await this.contract.methods.mint(quantity).send({
+            // Send transaction using publicMint
+            const transaction = await this.contract.methods.publicMint(quantity).send({
                 from: this.accounts[0],
                 value: totalCost,
                 gas: gasLimit

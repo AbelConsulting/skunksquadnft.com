@@ -24,9 +24,9 @@ async function main() {
     const constructorArgs = {
         name: "SkunkSquad NFT",
         symbol: "SKUNK",
-        baseURI: "https://arweave.net/YOUR_METADATA_BASE_TXID/",  // Update after Arweave upload
-        contractURI: "https://arweave.net/YOUR_CONTRACT_METADATA_TXID", // Update after Arweave upload
-        unrevealedURI: "https://arweave.net/YOUR_UNREVEALED_TXID", // Update after Arweave upload
+        baseURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/",
+        contractURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
+        unrevealedURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
         royaltyRecipient: deployer.address, // Should be a valid address
         royaltyFee: 250 // 2.5% in basis points
     };

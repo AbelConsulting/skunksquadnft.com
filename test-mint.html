@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkunkSquad NFT - Mint Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0f0f0f;
+            color: #fff;
+        }
+        .container {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+        .button {
+            background: #6366f1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.2s;
+        }
+        .button:hover {
+            background: #5855eb;
+            transform: translateY(-2px);
+        }
+        .button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #6366f1;
+        }
+        .success { border-left-color: #22c55e; }
+        .error { border-left-color: #ef4444; }
+        .info { border-left-color: #3b82f6; }
+        .contract-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-card {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .info-card h3 {
+            margin: 0 0 10px 0;
+            color: #6366f1;
+        }
+        .info-card p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .quantity-input {
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            width: 80px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦨 SkunkSquad NFT - Mainnet Mint Test</h1>
+        <p>Contract Address: <code>0x6BA18b88b64af8898bbb42262ED18EC13DC81315</code></p>
+        
+        <div class="contract-info">
+            <div class="info-card">
+                <h3>Current Price</h3>
+                <p id="current-price">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Total Supply</h3>
+                <p id="total-supply">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Remaining</h3>
+                <p id="remaining">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Network</h3>
+                <p id="network">Loading...</p>
+            </div>
+        </div>
+        
+        <div>
+            <button class="button" id="connect-wallet">Connect Wallet</button>
+            <label>
+                Quantity: 
+                <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="10">
+            </label>
+            <button class="button" id="mint-nft" disabled>Mint NFT</button>
+        </div>
+        
+        <div id="status" class="status">
+            <p>Connect your wallet to start minting SkunkSquad NFTs!</p>
+        </div>
+        
+        <div id="wallet-info" style="display: none;">
+            <h3>Wallet Information</h3>
+            <p><strong>Address:</strong> <span id="wallet-address"></span></p>
+            <p><strong>Balance:</strong> <span id="wallet-balance"></span> ETH</p>
+            <p><strong>NFTs Owned:</strong> <span id="nft-balance"></span></p>
+        </div>
+    </div>
+
+    <script src="./src/js/wallet.js"></script>
+    
+    <script>
+        let web3;
+        let contract;
+        let userAccount;
+        
+        const contractAddress = '0x6BA18b88b64af8898bbb42262ED18EC13DC81315';
+        const contractABI = [
+            {
+                "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
+                "name": "publicMint",
+                "outputs": [],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getCurrentSmartPrice",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalSupply",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "owner", "type": "address"}],
+                "name": "balanceOf",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MAX_SUPPLY",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.innerHTML = `<p>${message}</p>`;
+        }
+        
+        function updateContractInfo() {
+            if (!contract) return;
+            
+            Promise.all([
+                contract.methods.getCurrentSmartPrice().call(),
+                contract.methods.totalSupply().call()
+            ]).then(([price, supply]) => {
+                const priceInEth = web3.utils.fromWei(price, 'ether');
+                const remaining = 10000 - parseInt(supply);
+                
+                document.getElementById('current-price').textContent = `${parseFloat(priceInEth).toFixed(4)} ETH`;
+                document.getElementById('total-supply').textContent = supply;
+                document.getElementById('remaining').textContent = remaining;
+            }).catch(error => {
+                console.error('Error fetching contract info:', error);
+                updateStatus('Error fetching contract information', 'error');
+            });
+        }
+        
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    updateStatus('MetaMask not detected. Please install MetaMask.', 'error');
+                    return;
+                }
+                
+                updateStatus('Connecting to wallet...', 'info');
+                
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                
+                if (accounts.length === 0) {
+                    updateStatus('No accounts found. Please check your wallet.', 'error');
+                    return;
+                }
+                
+                userAccount = accounts[0];
+                web3 = new Web3(window.ethereum);
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+                
+                // Check network
+                const chainId = await web3.eth.getChainId();
+                const networkName = chainId === 1 ? 'Ethereum Mainnet' : `Network ${chainId}`;
+                document.getElementById('network').textContent = networkName;
+                
+                if (chainId !== 1) {
+                    updateStatus('Please switch to Ethereum Mainnet to mint NFTs.', 'error');
+                    return;
+                }
+                
+                // Update UI
+                document.getElementById('connect-wallet').textContent = 
+                    `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
+                document.getElementById('mint-nft').disabled = false;
+                
+                // Show wallet info
+                const balance = await web3.eth.getBalance(userAccount);
+                const balanceInEth = web3.utils.fromWei(balance, 'ether');
+                const nftBalance = await contract.methods.balanceOf(userAccount).call();
+                
+                document.getElementById('wallet-address').textContent = userAccount;
+                document.getElementById('wallet-balance').textContent = parseFloat(balanceInEth).toFixed(4);
+                document.getElementById('nft-balance').textContent = nftBalance;
+                document.getElementById('wallet-info').style.display = 'block';
+                
+                updateStatus('Wallet connected successfully!', 'success');
+                updateContractInfo();
+                
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                updateStatus(`Failed to connect wallet: ${error.message}`, 'error');
+            }
+        }
+        
+        async function mintNFT() {
+            try {
+                if (!contract || !userAccount) {
+                    updateStatus('Please connect your wallet first.', 'error');
+                    return;
+                }
+                
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                
+                updateStatus(`Preparing to mint ${quantity} NFT${quantity > 1 ? 's' : ''}...`, 'info');
+                
+                // Get current price
+                const price = await contract.methods.getCurrentSmartPrice().call();
+                const totalCost = web3.utils.toBN(price).mul(web3.utils.toBN(quantity));
+                
+                const priceInEth = web3.utils.fromWei(totalCost, 'ether');
+                updateStatus(`Minting ${quantity} NFT${quantity > 1 ? 's' : ''} for ${parseFloat(priceInEth).toFixed(4)} ETH...`, 'info');
+                
+                // Estimate gas
+                const gasEstimate = await contract.methods.publicMint(quantity).estimateGas({
+                    from: userAccount,
+                    value: totalCost
+                });
+                
+                const gasLimit = Math.floor(gasEstimate * 1.2);
+                
+                // Send transaction
+                const transaction = await contract.methods.publicMint(quantity).send({
+                    from: userAccount,
+                    value: totalCost,
+                    gas: gasLimit
+                });
+                
+                updateStatus(`🎉 Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}! 
+                    <br><a href="https://etherscan.io/tx/${transaction.transactionHash}" target="_blank">View on Etherscan</a>`, 'success');
+                
+                // Update contract info and wallet balance
+                updateContractInfo();
+                setTimeout(connectWallet, 2000); // Refresh wallet info
+                
+            } catch (error) {
+                console.error('Error minting NFT:', error);
+                
+                let errorMessage = 'Failed to mint NFT. Please try again.';
+                
+                if (error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient ETH balance for minting.';
+                } else if (error.message.includes('execution reverted')) {
+                    errorMessage = 'Transaction failed. Check if minting is still active.';
+                } else if (error.code === 4001) {
+                    errorMessage = 'Transaction was rejected by user.';
+                }
+                
+                updateStatus(errorMessage, 'error');
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+        document.getElementById('mint-nft').addEventListener('click', mintNFT);
+        
+        // Auto-connect if already connected
+        window.addEventListener('load', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    connectWallet();
+                }
+            }
+            
+            // Update contract info even without wallet connection
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+                updateContractInfo();
+            }
+        });
+        
+        // Auto-refresh contract info every 30 seconds
+        setInterval(() => {
+            if (contract) {
+                updateContractInfo();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
