@@ -1,6 +1,10 @@
-const { ethers } = require("hardhat");
-const fs = require('fs');
-const path = require('path');
+import { ethers } from "hardhat";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function main() {
     console.log("🦨 Starting SkunkSquad NFT Ultra-Smart Contract Deployment...\n");
@@ -111,7 +115,7 @@ async function main() {
         const symbol = await contract.symbol();
         const totalSupply = await contract.totalSupply();
         const maxSupply = await contract.MAX_SUPPLY();
-        const mintPrice = await contract.getCurrentPrice(); // FIXED: removed "Smart"
+        const mintPrice = await contract.getCurrentPrice();
         
         console.log("✅ Contract Verification:");
         console.log("├── Name:", name);
@@ -122,7 +126,7 @@ async function main() {
         console.log("└── Owner:", await contract.owner());
         console.log();
         
-        // Check Ultra-Smart features (FIXED: removed dynamic pricing)
+        // Check Ultra-Smart features
         console.log("🧠 Ultra-Smart Features Status:");
         console.log("├── Fixed Price:", ethers.formatEther(mintPrice), "ETH");
         console.log("└── XP Per Mint:", (await contract.XP_PER_MINT()).toString());
@@ -164,47 +168,6 @@ async function main() {
     console.log("💾 Deployment info saved to:", deploymentFile);
     console.log();
     
-    // Create withdrawal script for revenue sharing
-    const withdrawalScript = `
-const { ethers } = require("hardhat");
-
-async function withdrawRevenue() {
-    const contractAddress = "${contractAddress}";
-    const partnerAddress = "${REVENUE_SHARE_ADDRESS}";
-    const partnerPercentage = ${REVENUE_SHARE_PERCENTAGE};
-    
-    const [deployer] = await ethers.getSigners();
-    const contract = await ethers.getContractAt("SkunkSquadNFTUltraSmart", contractAddress);
-    const balance = await ethers.provider.getBalance(contractAddress);
-    
-    console.log("💰 Revenue Withdrawal Process");
-    console.log("├── Contract Balance:", ethers.formatEther(balance), "ETH");
-    
-    if (balance > 0) {
-        const partnerShare = (balance * BigInt(partnerPercentage)) / BigInt(100);
-        const deployerShare = balance - partnerShare;
-        
-        console.log("├── Partner Share (${REVENUE_SHARE_PERCENTAGE}%):", ethers.formatEther(partnerShare), "ETH");
-        console.log("└── Deployer Share (${100 - REVENUE_SHARE_PERCENTAGE}%):", ethers.formatEther(deployerShare), "ETH");
-        
-        // Withdraw funds (you'll need to add withdrawal function to contract)
-        console.log("\\n🔄 Processing withdrawals...");
-        console.log("Note: Add withdrawal function to contract or use manual transfers");
-        
-    } else {
-        console.log("└── No balance to withdraw");
-    }
-}
-
-withdrawRevenue().catch(console.error);
-`;
-    
-    const withdrawalFile = path.join(deploymentsDir, 'withdraw-revenue.js');
-    fs.writeFileSync(withdrawalFile, withdrawalScript);
-    
-    console.log("💼 Revenue withdrawal script saved to:", withdrawalFile);
-    console.log();
-    
     // Generate contract verification command
     console.log("🔐 Etherscan Verification Command:");
     console.log("npx hardhat verify --network", network.name, contractAddress);
@@ -220,7 +183,7 @@ withdrawRevenue().catch(console.error);
     console.log("💰 REVENUE SHARING SETUP:");
     console.log("├── Partner:", REVENUE_SHARE_ADDRESS, "(5%)");
     console.log("├── Deployer:", deployer.address, "(95% + 2.5% royalties)");
-    console.log("└── Withdrawal Script: deployments/withdraw-revenue.js");
+    console.log("└── Manual withdrawal required");
     console.log();
     
     console.log("🎉 DEPLOYMENT COMPLETE! Welcome to the Ultra-Smart NFT era! 🦨");
