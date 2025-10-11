@@ -170,12 +170,8 @@
                     Just enter your credit card or connect your web3 wallet and join the most exclusive digital community in seconds. 
                     We've made the impossible... possible.
                 </p>
-                
+
                 <div class="hero-features">
-                    <div class="feature-item">
-                        <div class="feature-icon">💳</div>
-                        <span>Any Credit Card</span>
-                    </div>
                     <div class="feature-item">
                         <div class="feature-icon">⚡</div>
                         <span>30-Second Membership</span>
@@ -747,8 +743,8 @@
                 
                 <div class="footer-section">
                     <h4>Contract Info</h4>
-                    <p class="contract-address">0x55A3ee558b447d42C44B6a330a3102A1eC77FDEF</p>
-                    <a href="https://sepolia.etherscan.io/address/0x55A3ee558b447d42C44B6a330a3102A1eC77FDEF" target="_blank">
+                    <p class="contract-address">0x6BA18b88b64af8898bbb42262ED18EC13DC81315</p>
+                    <a href="https://sepolia.etherscan.io/address/0x6BA18b88b64af8898bbb42262ED18EC13DC81315" target="_blank">
                         View on Etherscan
                     </a>
                 </div>
@@ -1142,4 +1138,7 @@ async function buyWithWallet() {
     } catch (error) {
         console.error('❌ Wallet minting error:', error);
         
-        let errorMessage = 'Failed to mint NFT. Please try again.';
+                let errorMessage = 'Failed to mint NFT. Please try again.';         
+                alert('❌ ' + errorMessage + '\n\n' + (error && error.message ? error.message : ''));
+            }
+        }
