@@ -12,7 +12,7 @@ async function main() {
     console.log("📋 Deployment Details:");
     console.log("├── Network:", network.name, `(Chain ID: ${network.chainId})`);
     console.log("├── Deployer:", deployer.address);
-    console.log("├── Balance:", ethers.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH");
+    console.log("├── Balance:", ethers.utils.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH");
     console.log("└── Timestamp:", new Date().toISOString());
     console.log();
     
