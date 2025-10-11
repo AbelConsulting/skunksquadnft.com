@@ -861,14 +861,16 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     max-width: 400px;
     margin: 0 auto;
+    z-index: var(--z-elevated);
 }
 
 .nft-card {
-    background: white;
-    border-radius: 1rem;
-    padding: 1rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: all 0.3s;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .nft-card.featured {
@@ -878,15 +880,23 @@ h1, h2, h3, h4, h5, h6 {
 
 .nft-image {
     position: relative;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
+    aspect-ratio: 1;
+    background: var(--light-color);
 }
 
 .nft-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.nft-img:hover {
+    transform: scale(1.05);
 }
 
 .rarity-badge {
@@ -940,6 +950,11 @@ h1, h2, h3, h4, h5, h6 {
     height: 80px;
     padding: 0.5rem;
     animation: float 6s ease-in-out infinite;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    aspect-ratio: 1;
 }
 
 .nft-card.mini:nth-child(1) {
@@ -962,7 +977,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .mini-nft-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 0.25rem;
 }
 
@@ -974,6 +990,66 @@ h1, h2, h3, h4, h5, h6 {
         transform: translateY(-20px) rotate(5deg); 
     }
 }
+
+/* ==========================================================================
+   IMAGE OPTIMIZATION & STRUCTURE
+   ========================================================================== */
+
+/* Global image defaults */
+img {
+    max-width: 100%;
+    height: auto;
+    border: 0;
+    vertical-align: middle;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Lazy loading placeholder */
+img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+img[loading="lazy"].loaded {
+    animation: none;
+    background: none;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Stat Icons */
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto var(--space-sm);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--light-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(99, 102, 241, 0.1);
+}
+
+.stat-icon-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ==========================================================================
+   SAMPLE GALLERY
+   ========================================================================== */
 
 /* Sample Gallery Styles */
 .sample-gallery {
@@ -989,17 +1065,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
 }
 
 .gallery-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 1rem;
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .gallery-item:hover {
@@ -1010,9 +1087,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .gallery-img {
     width: 100%;
-    height: auto;
-    border-radius: 0.5rem;
-    margin-bottom: 0.75rem;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    transition: transform 0.3s ease;
+    background: var(--light-color);
+}
+
+.gallery-img:hover {
+    transform: scale(1.02);
 }
 
 .gallery-info {
@@ -1114,6 +1198,55 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
+   IMAGE OPTIMIZATION
+   ========================================================================== */
+
+/* Global image defaults */
+img {
+    max-width: 100%;
+    height: auto;
+    border: 0;
+    vertical-align: middle;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Lazy loading placeholder */
+img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+img[loading="lazy"].loaded {
+    animation: none;
+    background: none;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Logo image specific styles */
+.logo-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.logo-image:hover {
+    border-color: var(--primary-color);
+}
+
+/* ==========================================================================
    UTILITY CLASSES
    ========================================================================== */
 .hidden {
@@ -1184,11 +1317,29 @@ h1, h2, h3, h4, h5, h6 {
         min-width: 44px;
     }
     
-    /* Reduce layout shifts */
+    /* Optimize images for mobile */
     img {
         width: 100%;
         height: auto;
         image-rendering: -webkit-optimize-contrast;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+    }
+    
+    .gallery-img {
+        height: 150px;
+    }
+    
+    .nft-showcase {
+        max-width: 320px;
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
     }
 }
 
