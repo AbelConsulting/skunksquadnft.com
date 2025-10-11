@@ -830,4 +830,101 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+console.log('🦨 Payment Manager Loading...');
+
+// Payment Manager for handling payments and pricing
+window.paymentManager = {
+    currentPrice: 0.02, // ETH
+    maxMintPerTx: 10,
+
+    init() {
+        console.log('🦨 Initializing Payment Manager...');
+        this.updatePriceDisplays();
+        this.startPriceUpdater();
+    },
+
+    async updatePriceDisplays() {
+        try {
+            // Get current price from contract or use fallback
+            let priceETH = this.currentPrice;
+            
+            if (window.walletManager && window.walletManager.contract) {
+                priceETH = await window.walletManager.getCurrentPrice();
+            }
+            
+            // Update all price displays
+            const priceElements = document.querySelectorAll('.price-eth, .current-price');
+            priceElements.forEach(element => {
+                element.textContent = `${parseFloat(priceETH).toFixed(3)} ETH`;
+            });
+            
+            // Update USD estimate (rough calculation)
+            const priceUSD = Math.round(parseFloat(priceETH) * 2400); // ~$2400 per ETH
+            const usdElements = document.querySelectorAll('.price-usd');
+            usdElements.forEach(element => {
+                element.textContent = `(~$${priceUSD})`;
+            });
+            
+            console.log('✅ Price displays updated:', { eth: priceETH, usd: priceUSD });
+            
+        } catch (error) {
+            console.error('❌ Failed to update price displays:', error);
+        }
+    },
+
+    async updateSupplyDisplays() {
+        try {
+            if (window.walletManager && window.walletManager.contract) {
+                const totalSupply = await window.walletManager.getTotalSupply();
+                const remaining = 10000 - totalSupply;
+                
+                // Update supply displays
+                const supplyElements = document.querySelectorAll('.minted-count');
+                supplyElements.forEach(element => {
+                    element.textContent = totalSupply.toLocaleString();
+                });
+                
+                const remainingElements = document.querySelectorAll('.remaining-count');
+                remainingElements.forEach(element => {
+                    element.textContent = remaining.toLocaleString();
+                });
+                
+                console.log('✅ Supply displays updated:', { minted: totalSupply, remaining });
+            }
+        } catch (error) {
+            console.error('❌ Failed to update supply displays:', error);
+        }
+    },
+
+    startPriceUpdater() {
+        // Update prices immediately
+        setTimeout(() => {
+            this.updatePriceDisplays();
+            this.updateSupplyDisplays();
+        }, 3000); // Wait for wallet manager to initialize
+        
+        // Update every 30 seconds
+        setInterval(() => {
+            this.updatePriceDisplays();
+            this.updateSupplyDisplays();
+        }, 30000);
+    },
+
+    calculateTotal(quantity) {
+        return (this.currentPrice * quantity).toFixed(3);
+    },
+
+    validateQuantity(quantity) {
+        const qty = parseInt(quantity);
+        return qty >= 1 && qty <= this.maxMintPerTx;
+    }
+};
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.paymentManager.init();
+});
+
+console.log('✅ Payment Manager Loaded');
+
 export default PaymentSystem;

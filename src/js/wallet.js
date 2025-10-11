@@ -612,3 +612,221 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 export default WalletManager;
+
+/**
+ * SkunkSquad NFT Website - Wallet Integration
+ * Handles Web3 wallet connections and blockchain interactions
+ */
+
+console.log('🦨 Wallet Manager Loading...');
+
+// Wallet Manager for Web3 Integration
+window.walletManager = {
+    web3: null,
+    contract: null,
+    account: null,
+    isConnected: false,
+    contractAddress: '0x6BA18b88b64af8898bbb42262ED18EC13DC81315',
+    contractABI: [
+        {
+            "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
+            "name": "mint",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getCurrentSmartPrice",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ],
+
+    async init() {
+        console.log('🦨 Initializing Wallet Manager...');
+        
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                this.web3 = new Web3(window.ethereum);
+                this.contract = new this.web3.eth.Contract(this.contractABI, this.contractAddress);
+                
+                // Check if already connected
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    this.account = accounts[0];
+                    this.isConnected = true;
+                    console.log('✅ Wallet already connected:', this.account);
+                }
+                
+                // Listen for account changes
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length > 0) {
+                        this.account = accounts[0];
+                        this.isConnected = true;
+                        console.log('🔄 Account changed:', this.account);
+                    } else {
+                        this.account = null;
+                        this.isConnected = false;
+                        console.log('🔌 Wallet disconnected');
+                    }
+                });
+                
+                // Listen for chain changes
+                window.ethereum.on('chainChanged', (chainId) => {
+                    console.log('🔄 Chain changed:', chainId);
+                    // Reload page on chain change for simplicity
+                    window.location.reload();
+                });
+                
+                console.log('✅ Wallet Manager initialized');
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize Wallet Manager:', error);
+            }
+        } else {
+            console.log('🦊 MetaMask not detected');
+        }
+    },
+
+    async connectWallet() {
+        if (typeof window.ethereum === 'undefined') {
+            alert('🦊 MetaMask Required!\n\nPlease install MetaMask to connect your wallet.\n\nVisit: https://metamask.io/');
+            return false;
+        }
+
+        try {
+            const accounts = await window.ethereum.request({ 
+                method: 'eth_requestAccounts' 
+            });
+            
+            if (accounts.length > 0) {
+                this.account = accounts[0];
+                this.isConnected = true;
+                
+                console.log('✅ Wallet connected:', this.account);
+                
+                if (window.skunkSquadWebsite) {
+                    window.skunkSquadWebsite.showNotification(
+                        `🎉 Wallet Connected!\n\nAddress: ${this.account.substring(0,6)}...${this.account.substring(38)}`,
+                        'success'
+                    );
+                }
+                
+                return true;
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to connect wallet:', error);
+            alert('❌ Connection failed: ' + error.message);
+            return false;
+        }
+        
+        return false;
+    },
+
+    async mintNFT(quantity = 1) {
+        if (!this.isConnected) {
+            const connected = await this.connectWallet();
+            if (!connected) return null;
+        }
+
+        try {
+            console.log(`🦨 Minting ${quantity} NFT(s)...`);
+            
+            // Get current price (0.02 ETH fixed)
+            const pricePerNFT = this.web3.utils.toWei('0.02', 'ether');
+            const totalPrice = this.web3.utils.toBN(pricePerNFT).mul(this.web3.utils.toBN(quantity));
+            
+            console.log('💰 Total price:', this.web3.utils.fromWei(totalPrice, 'ether'), 'ETH');
+            
+            // Estimate gas
+            const gasEstimate = await this.contract.methods.mint(quantity).estimateGas({
+                from: this.account,
+                value: totalPrice
+            });
+            
+            console.log('⛽ Estimated gas:', gasEstimate);
+            
+            // Send transaction
+            const result = await this.contract.methods.mint(quantity).send({
+                from: this.account,
+                value: totalPrice,
+                gas: Math.floor(gasEstimate * 1.2) // Add 20% buffer
+            });
+            
+            console.log('✅ Mint successful:', result.transactionHash);
+            
+            if (window.skunkSquadWebsite) {
+                const etherscanUrl = `https://sepolia.etherscan.io/tx/${result.transactionHash}`;
+                window.skunkSquadWebsite.showNotification(
+                    `🎉 NFT minted successfully! <a href="${etherscanUrl}" target="_blank" style="color: white; text-decoration: underline;">View on Etherscan</a>`,
+                    'success'
+                );
+            }
+            
+            return result;
+            
+        } catch (error) {
+            console.error('❌ Mint failed:', error);
+            
+            let errorMessage = 'Failed to mint NFT. Please try again.';
+            
+            if (error.message.includes('insufficient funds')) {
+                errorMessage = 'Insufficient ETH in your wallet.';
+            } else if (error.message.includes('user rejected')) {
+                errorMessage = 'Transaction cancelled by user.';
+            } else if (error.message.includes('exceeds maximum')) {
+                errorMessage = 'Exceeds maximum mint per transaction.';
+            }
+            
+            if (window.skunkSquadWebsite) {
+                window.skunkSquadWebsite.showNotification(
+                    `❌ ${errorMessage}`,
+                    'error'
+                );
+            }
+            
+            throw error;
+        }
+    },
+
+    async getCurrentPrice() {
+        try {
+            if (this.contract) {
+                const price = await this.contract.methods.getCurrentSmartPrice().call();
+                return this.web3.utils.fromWei(price, 'ether');
+            }
+        } catch (error) {
+            console.error('❌ Failed to get current price:', error);
+        }
+        return '0.02'; // Fallback price
+    },
+
+    async getTotalSupply() {
+        try {
+            if (this.contract) {
+                const supply = await this.contract.methods.totalSupply().call();
+                return parseInt(supply);
+            }
+        } catch (error) {
+            console.error('❌ Failed to get total supply:', error);
+        }
+        return 0;
+    }
+};
+
+// Initialize wallet manager when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.walletManager.init();
+});
+
+console.log('✅ Wallet Manager Loaded');
