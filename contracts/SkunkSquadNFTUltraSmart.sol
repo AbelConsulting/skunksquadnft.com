@@ -225,8 +225,6 @@ contract SkunkSquadNFTUltraSmart is SkunkSquadNFTEnhanced {
         
         // Social XP bonus for generosity
         socialXPBonus[msg.sender] += quantity * 25;
-        
-        emit Transfer(address(0), recipient, _nextTokenId());
     }
     
     // =============================================================
@@ -483,6 +481,10 @@ contract SkunkSquadNFTUltraSmart is SkunkSquadNFTEnhanced {
         uint256 minPrice,
         uint256 maxPrice
     ) external onlyOwner {
+        require(minPrice <= basePriceETH, "Min price too high");
+        require(basePriceETH <= maxPrice, "Max price too low");
+        require(minPrice > 0, "Price cannot be zero");
+        
         dynamicPricing.basePriceETH = basePriceETH;
         dynamicPricing.minPrice = minPrice;
         dynamicPricing.maxPrice = maxPrice;

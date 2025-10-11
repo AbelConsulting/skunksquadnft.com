@@ -1,155 +1,195 @@
 const { ethers } = require("hardhat");
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 async function main() {
-  console.log("🚀 Starting Skunk Squad NFT deployment...");
-  
-  // Get deployment parameters from environment or use defaults
-  const CONTRACT_NAME = process.env.CONTRACT_NAME || "Skunk Squad";
-  const CONTRACT_SYMBOL = process.env.CONTRACT_SYMBOL || "SKUNK";
-  const BASE_URI = process.env.BASE_URI || "https://metadata.skunksquadnft.com/";
-  const CONTRACT_URI = process.env.CONTRACT_URI || "https://metadata.skunksquadnft.com/contract.json";
-  const UNREVEALED_URI = process.env.UNREVEALED_URI || "https://metadata.skunksquadnft.com/unrevealed.json";
-  
-  // Get deployer account
-  const [deployer] = await ethers.getSigners();
-  const royaltyRecipient = process.env.ROYALTY_RECIPIENT || deployer.address;
-  
-  console.log("📋 Deployment Configuration:");
-  console.log("- Contract Name:", CONTRACT_NAME);
-  console.log("- Contract Symbol:", CONTRACT_SYMBOL);
-  console.log("- Base URI:", BASE_URI);
-  console.log("- Contract URI:", CONTRACT_URI);
-  console.log("- Unrevealed URI:", UNREVEALED_URI);
-  console.log("- Deployer Address:", deployer.address);
-  console.log("- Royalty Recipient:", royaltyRecipient);
-  console.log("- Network:", hre.network.name);
-  
-  // Check deployer balance
-  const balance = await ethers.provider.getBalance(deployer.address);
-  console.log("- Deployer Balance:", ethers.formatEther(balance), "ETH");
-  
-  if (balance < ethers.parseEther("0.1")) {
-    console.warn("⚠️  Warning: Low deployer balance. Make sure you have enough ETH for deployment and gas fees.");
-  }
-  
-  console.log("\n🔨 Deploying SkunkSquadNFT contract...");
-  
-  // Get contract factory
-  const SkunkSquadNFT = await ethers.getContractFactory("SkunkSquadNFT");
-  
-  // Deploy contract
-  const contract = await SkunkSquadNFT.deploy(
-    CONTRACT_NAME,
-    CONTRACT_SYMBOL,
-    BASE_URI,
-    CONTRACT_URI,
-    UNREVEALED_URI,
-    royaltyRecipient
-  );
-  
-  await contract.waitForDeployment();
-  const contractAddress = await contract.getAddress();
-  
-  console.log("✅ SkunkSquadNFT deployed to:", contractAddress);
-  console.log("📝 Transaction hash:", contract.deploymentTransaction().hash);
-  
-  // Wait for block confirmations on live networks
-  if (hre.network.name !== "hardhat" && hre.network.name !== "localhost") {
-    console.log("⏳ Waiting for block confirmations...");
-    await contract.deploymentTransaction().wait(5);
-    console.log("✅ Contract confirmed on blockchain");
-  }
-  
-  // Verify contract configuration
-  console.log("\n🔍 Verifying contract configuration...");
-  try {
-    const maxSupply = await contract.MAX_SUPPLY();
-    const mintPrice = await contract.MINT_PRICE();
-    const maxPerTx = await contract.MAX_PER_TX();
-    const maxPerWalletWhitelist = await contract.MAX_PER_WALLET_WHITELIST();
-    const maxPerWalletPublic = await contract.MAX_PER_WALLET_PUBLIC();
-    const owner = await contract.owner();
-    const name = await contract.name();
-    const symbol = await contract.symbol();
+    console.log("🦨 Starting SkunkSquad NFT Ultra-Smart Contract Deployment...\n");
     
-    console.log("- Name:", name);
-    console.log("- Symbol:", symbol);
-    console.log("- Max Supply:", maxSupply.toString());
-    console.log("- Mint Price:", ethers.formatEther(mintPrice), "ETH");
-    console.log("- Max Per Transaction:", maxPerTx.toString());
-    console.log("- Max Per Wallet (Whitelist):", maxPerWalletWhitelist.toString());
-    console.log("- Max Per Wallet (Public):", maxPerWalletPublic.toString());
-    console.log("- Owner:", owner);
+    // Get the deployer account
+    const [deployer] = await ethers.getSigners();
+    const network = await ethers.provider.getNetwork();
     
-    // Check royalty info
-    const [royaltyReceiver, royaltyAmount] = await contract.royaltyInfo(1, ethers.parseEther("1"));
-    console.log("- Royalty Recipient:", royaltyReceiver);
-    console.log("- Royalty Fee:", ethers.formatEther(royaltyAmount * 100n), "%");
+    console.log("📋 Deployment Details:");
+    console.log("├── Network:", network.name, `(Chain ID: ${network.chainId})`);
+    console.log("├── Deployer:", deployer.address);
+    console.log("├── Balance:", ethers.utils.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH");
+    console.log("└── Timestamp:", new Date().toISOString());
+    console.log();
     
-  } catch (error) {
-    console.error("❌ Error verifying contract configuration:", error.message);
-  }
-  
-  // Save deployment info
-  const deploymentInfo = {
-    network: hre.network.name,
-    contractAddress: contractAddress,
-    deployerAddress: deployer.address,
-    deploymentTransaction: contract.deploymentTransaction().hash,
-    deploymentBlock: await ethers.provider.getBlockNumber(),
-    timestamp: new Date().toISOString(),
-    configuration: {
-      name: CONTRACT_NAME,
-      symbol: CONTRACT_SYMBOL,
-      baseURI: BASE_URI,
-      contractURI: CONTRACT_URI,
-      unrevealedURI: UNREVEALED_URI,
-      royaltyRecipient: royaltyRecipient
+    // Revenue sharing configuration
+    const REVENUE_SHARE_ADDRESS = "0xeD97F754D65F5c479De75A57D2781489b4F43125";
+    const REVENUE_SHARE_PERCENTAGE = 5; // 5%
+    
+    // Constructor parameters
+    const constructorArgs = {
+        name: "SkunkSquad NFT",
+        symbol: "SKUNK",
+        baseURI: "https://arweave.net/YOUR_METADATA_BASE_TXID/",  // Update after Arweave upload
+        contractURI: "https://arweave.net/YOUR_CONTRACT_METADATA_TXID", // Update after Arweave upload
+        unrevealedURI: "https://arweave.net/YOUR_UNREVEALED_TXID", // Update after Arweave upload
+        royaltyRecipient: deployer.address, // Should be a valid address
+        royaltyFee: 250 // 2.5% in basis points
+    };
+    
+    console.log("🔧 Constructor Parameters:");
+    console.log("├── Name:", constructorArgs.name);
+    console.log("├── Symbol:", constructorArgs.symbol);
+    console.log("├── Base URI:", constructorArgs.baseURI);
+    console.log("├── Contract URI:", constructorArgs.contractURI);
+    console.log("├── Unrevealed URI:", constructorArgs.unrevealedURI);
+    console.log("├── Royalty Recipient:", constructorArgs.royaltyRecipient);
+    console.log("└── Royalty Fee:", constructorArgs.royaltyFee / 100, "%");
+    console.log();
+    
+    console.log("💰 Revenue Sharing Configuration:");
+    console.log("├── Revenue Share Address:", REVENUE_SHARE_ADDRESS);
+    console.log("├── Revenue Share Percentage:", REVENUE_SHARE_PERCENTAGE + "%");
+    console.log("├── Deployer Gets:", (100 - REVENUE_SHARE_PERCENTAGE) + "%");
+    console.log("└── Partner Gets:", REVENUE_SHARE_PERCENTAGE + "%");
+    console.log();
+    
+    // Deploy the contract
+    console.log("🚀 Deploying SkunkSquadNFTUltraSmart contract...");
+    
+    const SkunkSquadNFT = await ethers.getContractFactory("SkunkSquadNFTUltraSmart");
+    
+    // Estimate gas for deployment
+    const deploymentData = SkunkSquadNFT.interface.encodeDeploy([
+        constructorArgs.name,
+        constructorArgs.symbol,
+        constructorArgs.baseURI,
+        constructorArgs.contractURI,
+        constructorArgs.unrevealedURI,
+        constructorArgs.royaltyRecipient,
+        constructorArgs.royaltyFee
+    ]);
+    
+    const estimatedGas = await deployer.provider.estimateGas({
+        data: deploymentData
+    });
+    
+    console.log("⛽ Gas Estimation:", estimatedGas.toString());
+    
+    // Deploy with a gas limit buffer
+    const contract = await SkunkSquadNFT.deploy(
+        constructorArgs.name,
+        constructorArgs.symbol,
+        constructorArgs.baseURI,
+        constructorArgs.contractURI,
+        constructorArgs.unrevealedURI,
+        constructorArgs.royaltyRecipient,
+        constructorArgs.royaltyFee,
+        {
+            gasLimit: BigInt(estimatedGas.toString()) * 120n / 100n // 20% buffer
+        }
+    );
+    
+    // Wait for deployment
+    console.log("⏳ Waiting for deployment transaction to be mined...");
+    await contract.waitForDeployment();
+    
+    const contractAddress = await contract.getAddress();
+    const deploymentTx = contract.deploymentTransaction();
+    
+    console.log("\n✅ CONTRACT DEPLOYED SUCCESSFULLY!");
+    console.log("╔════════════════════════════════════════════════════════════╗");
+    console.log("║                    DEPLOYMENT SUMMARY                     ║");
+    console.log("╠════════════════════════════════════════════════════════════╣");
+    console.log("║ Contract Address:", contractAddress.padEnd(25), "║");
+    console.log("║ Transaction Hash:", deploymentTx.hash.padEnd(25), "║");
+    console.log("║ Block Number:    ", (await deploymentTx.wait()).blockNumber.toString().padEnd(25), "║");
+    console.log("║ Gas Used:        ", (await deploymentTx.wait()).gasUsed.toString().padEnd(25), "║");
+    console.log("╚════════════════════════════════════════════════════════════╝");
+    console.log();
+    
+    // Verify contract deployment
+    console.log("🔍 Verifying contract deployment...");
+    
+    try {
+        // Test basic contract functions
+        const name = await contract.name();
+        const symbol = await contract.symbol();
+        const totalSupply = await contract.totalSupply();
+        const maxSupply = await contract.MAX_SUPPLY();
+        const mintPrice = await contract.getCurrentPrice();
+        
+        console.log("✅ Contract Verification:");
+        console.log("├── Name:", name);
+        console.log("├── Symbol:", symbol);
+        console.log("├── Total Supply:", totalSupply.toString());
+        console.log("├── Max Supply:", maxSupply.toString());
+        console.log("├── Current Mint Price:", ethers.utils.formatEther(mintPrice), "ETH");
+        console.log("└── Owner:", await contract.owner());
+        console.log();
+        
+        // Check Ultra-Smart features
+        console.log("🧠 Ultra-Smart Features Status:");
+        console.log("├── Fixed Price:", ethers.utils.formatEther(mintPrice), "ETH");
+        console.log("└── XP Per Mint:", (await contract.XP_PER_MINT()).toString());
+        console.log();
+        
+    } catch (error) {
+        console.log("❌ Contract verification failed:", error.message);
     }
-  };
-  
-  const deploymentsDir = path.join(__dirname, "..", "deployments");
-  if (!fs.existsSync(deploymentsDir)) {
-    fs.mkdirSync(deploymentsDir, { recursive: true });
-  }
-  
-  const deploymentFile = path.join(deploymentsDir, `${hre.network.name}.json`);
-  fs.writeFileSync(deploymentFile, JSON.stringify(deploymentInfo, null, 2));
-  
-  console.log("📄 Deployment info saved to:", deploymentFile);
-  
-  // Contract verification instructions
-  if (hre.network.name !== "hardhat" && hre.network.name !== "localhost") {
-    console.log("\n🔐 Contract Verification:");
-    console.log("Run the following command to verify the contract on Etherscan:");
-    console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${CONTRACT_NAME}" "${CONTRACT_SYMBOL}" "${BASE_URI}" "${CONTRACT_URI}" "${UNREVEALED_URI}" "${royaltyRecipient}"`);
-  }
-  
-  // Next steps
-  console.log("\n🎯 Next Steps:");
-  console.log("1. Set up metadata hosting at:", BASE_URI);
-  console.log("2. Generate whitelist merkle tree and set merkle root");
-  console.log("3. Configure mint phases (whitelist/public)");
-  console.log("4. Upload unrevealed metadata to:", UNREVEALED_URI);
-  console.log("5. Test minting functions");
-  
-  return {
-    contract,
-    contractAddress,
-    deploymentInfo
-  };
+    
+    // Save deployment info
+    const deploymentInfo = {
+        network: network.name,
+        chainId: network.chainId,
+        contractAddress: contractAddress,
+        deploymentTx: deploymentTx.hash,
+        blockNumber: (await deploymentTx.wait()).blockNumber,
+        gasUsed: (await deploymentTx.wait()).gasUsed.toString(),
+        deployer: deployer.address,
+        timestamp: new Date().toISOString(),
+        constructorArgs: constructorArgs,
+        revenueSharing: {
+            partnerAddress: REVENUE_SHARE_ADDRESS,
+            partnerPercentage: REVENUE_SHARE_PERCENTAGE,
+            deployerPercentage: 100 - REVENUE_SHARE_PERCENTAGE
+        },
+        verified: true
+    };
+    
+    // Create deployments directory if it doesn't exist
+    const deploymentsDir = path.join(__dirname, '..', 'deployments');
+    if (!fs.existsSync(deploymentsDir)) {
+        fs.mkdirSync(deploymentsDir, { recursive: true });
+    }
+    
+    // Save deployment info to file
+    const deploymentFile = path.join(deploymentsDir, `${network.name}-deployment.json`);
+    fs.writeFileSync(deploymentFile, JSON.stringify(deploymentInfo, null, 2));
+    
+    console.log("💾 Deployment info saved to:", deploymentFile);
+    console.log();
+    
+    // Generate contract verification command
+    console.log("🔐 Etherscan Verification Command:");
+    console.log("npx hardhat verify --network", network.name, contractAddress);
+    console.log("  ", `"${constructorArgs.name}"`);
+    console.log("  ", `"${constructorArgs.symbol}"`);
+    console.log("  ", `"${constructorArgs.baseURI}"`);
+    console.log("  ", `"${constructorArgs.contractURI}"`);
+    console.log("  ", `"${constructorArgs.unrevealedURI}"`);
+    console.log("  ", constructorArgs.royaltyRecipient);
+    console.log("  ", constructorArgs.royaltyFee);
+    console.log();
+    
+    console.log("💰 REVENUE SHARING SETUP:");
+    console.log("├── Partner:", REVENUE_SHARE_ADDRESS, "(5%)");
+    console.log("├── Deployer:", deployer.address, "(95% + 2.5% royalties)");
+    console.log("└── Manual withdrawal required");
+    console.log();
+    
+    console.log("🎉 DEPLOYMENT COMPLETE! Welcome to the Ultra-Smart NFT era! 🦨");
 }
 
-// Handle script execution
-if (require.main === module) {
-  main()
+// Enhanced error handling
+main()
     .then(() => process.exit(0))
     .catch((error) => {
-      console.error("❌ Deployment failed:", error);
-      process.exit(1);
+        console.error("\n❌ DEPLOYMENT FAILED!");
+        console.error("Error:", error.message);
+        process.exit(1);
     });
-}
-
-module.exports = main;

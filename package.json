@@ -59,7 +59,7 @@
     "@types/node": "^18.16.3",
     "chai": "^4.3.7",
     "ethers": "^5.7.2",
-    "hardhat": "^2.14.0",
+    "hardhat": "^2.26.3",
     "hardhat-gas-reporter": "^1.0.9",
     "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
@@ -91,7 +91,6 @@
     "type": "git",
     "url": "git+https://github.com/AbelConsulting/skunksquadnft.com.git"
   },
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/AbelConsulting/skunksquadnft.com/issues"
   },
