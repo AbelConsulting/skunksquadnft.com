@@ -1,7 +1,7 @@
-import "@nomicfoundation/hardhat-toolbox";
-import "dotenv/config";
+require("@nomicfoundation/hardhat-toolbox");
+require("dotenv/config");
 
-export default {
+module.exports = {
   solidity: {
     version: "0.8.20",
     settings: {
@@ -15,7 +15,7 @@ export default {
   networks: {
     // Mainnet configuration
     mainnet: {
-      url: `https://eth-mainnet.g.alchemy.com/v2/cR2JU1F2OOvp3DvHfBIEW`,
+      url: "https://eth-mainnet.g.alchemy.com/v2/cR2JU1F2OOvp3DvHfBIEW",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       gasPrice: "auto",
       gas: "auto",
