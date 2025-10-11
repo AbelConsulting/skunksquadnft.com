@@ -823,7 +823,19 @@
     <script src="./src/js/payment.js"></script>
     <script src="./src/js/wallet.js"></script>
     
-    <!-- Auto-update price from smart contract -->
+    <!-- Update price displays throughout the file -->
+    <div class="price-display">
+        <span class="price-eth">0.02 ETH</span>
+        <span class="price-usd">(~$48 USD)</span>
+    </div>
+
+    <!-- Update modal price -->
+    <div style="text-align: center; margin-top: 15px; color: #666;">
+        <small>Price: <span class="price-eth">0.02 ETH</span> <span class="price-usd">(~$48)</span></small>
+        <br><small style="color: #999; font-size: 0.8em;">Fixed pricing • 0.02 ETH per NFT</small>
+    </div>
+
+    <!-- Update price updater script -->
     <script>
     async function updatePriceFromContract() {
         try {
@@ -833,7 +845,7 @@
                 
                 // Get current smart price
                 const price = await window.walletManager.contract.methods.getCurrentSmartPrice().call();
-                const priceInEth = parseFloat(window.walletManager.web3.utils.fromWei(price, 'ether'));
+                const priceInEth = 0.02; // Fixed price at 0.02 ETH
                 
                 // Update all price displays
                 const priceElements = document.querySelectorAll('.price-eth, .current-price');
@@ -1024,8 +1036,8 @@ function showPaymentModal() {
                     </button>
                 </div>
                 <div style="text-align: center; margin-top: 15px; color: #666;">
-                    <small>Price: <span class="price-eth">0.05 ETH</span> <span class="price-usd">(~$120)</span></small>
-                    <br><small style="color: #999; font-size: 0.8em;">Dynamic pricing • Updates in real-time</small>
+                    <small>Price: <span class="price-eth">0.02 ETH</span> <span class="price-usd">(~$48)</span></small>
+                    <br><small style="color: #999; font-size: 0.8em;">Fixed pricing • 0.02 ETH per NFT</small>
                 </div>
             </div>
         </div>
