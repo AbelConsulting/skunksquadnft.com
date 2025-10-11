@@ -9,8 +9,12 @@
     --error-color: #ef4444;
     --dark-color: #1f2937;
     --light-color: #f8fafc;
+    --white: #ffffff;
+    --light-gray: #9ca3af;
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
     --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 * {
@@ -253,6 +257,12 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color);
 }
 
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--light-gray);
+    font-weight: 500;
+}
+
 /* Hamburger Menu Styles */
 .hamburger {
     display: none;
@@ -319,6 +329,26 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--primary-color);
     color: white;
     transform: translateY(-2px);
+}
+
+/* Navigation Actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-actions .btn {
+    white-space: nowrap;
+}
+
+.btn-text {
+    display: inline;
+}
+
+.btn-price {
+    font-weight: 700;
+    color: var(--success-color);
 }
 
 /* Top Bar Mobile Optimization */
@@ -620,7 +650,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 480px) {
-@media (max-width: 480px) {
     /* Extra small mobile devices */
     .hero-title {
         font-size: 1.75rem;
@@ -834,7 +863,7 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 2rem;
-    color: var(--white);
+    color: var(--dark-color);
 }
 
 .gallery-grid {
@@ -873,7 +902,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .gallery-id {
     font-family: var(--font-mono);
-    color: var(--white);
+    color: var(--dark-color);
     font-weight: 600;
 }
 
@@ -955,12 +984,54 @@ h1, h2, h3, h4, h5, h6 {
 .focus-title {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--white);
+    color: var(--dark-color);
 }
 
 .focus-description {
     color: var(--light-gray);
     margin: 0;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* Mobile performance optimizations */
@@ -978,13 +1049,40 @@ h1, h2, h3, h4, h5, h6 {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
+    
+    /* Improve touch targets */
+    .btn, .nav-link, .hamburger {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Reduce layout shifts */
+    img {
+        width: 100%;
+        height: auto;
+        image-rendering: -webkit-optimize-contrast;
+    }
 }
 
-/* Reduce motion for better performance */
+/* Reduce motion for better performance and accessibility */
 @media (prefers-reduced-motion: reduce) {
-    * {
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .btn-outline {
+        border-width: 3px;
+    }
+    
+    .nav-link:hover {
+        border: 2px solid currentColor;
     }
 }
