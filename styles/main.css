@@ -28,6 +28,11 @@ body {
     line-height: 1.6;
     color: var(--dark-color);
     background-color: var(--light-color);
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.02) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .container {
@@ -179,7 +184,64 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
 }
 
+/* Hero Background Elements */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+}
+
+.hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: glow 8s ease-in-out infinite alternate;
+}
+
+@keyframes gridMove {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+@keyframes glow {
+    0% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 .hero-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
@@ -707,11 +769,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Desktop and tablet - show hero visual */
 @media (min-width: 769px) {
-    .hero {
+    .hero .container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 4rem;
         align-items: center;
+        position: relative;
+        z-index: 2;
     }
     
     .hero-content {
@@ -733,6 +797,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero Visual Styles */
 .hero-visual {
+    position: relative;
+    z-index: 2;
     display: none; /* Hide on mobile by default */
 }
 
@@ -992,6 +1058,32 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+/* Performance Optimizations */
+.hero-grid,
+.hero-glow {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Improve image loading */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Preload critical background elements */
+.hero-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.01) 0%, rgba(139, 92, 246, 0.01) 100%);
+    z-index: -1;
+}
+
 /* Utility Classes */
 .hidden {
     display: none !important;
@@ -1036,11 +1128,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Mobile performance optimizations */
 @media (max-width: 768px) {
-    /* Hide complex visual elements on mobile */
-    .hero-background,
-    .hero-grid,
+    /* Hide complex visual elements on mobile for performance */
+    .floating-cards,
     .hero-glow {
         display: none;
+    }
+    
+    /* Simplify hero grid on mobile */
+    .hero-grid {
+        background-size: 25px 25px;
+        opacity: 0.5;
     }
     
     /* Optimize text rendering */
