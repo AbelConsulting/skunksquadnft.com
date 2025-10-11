@@ -80,7 +80,7 @@ async function main() {
         constructorArgs.royaltyRecipient,
         constructorArgs.royaltyFee,
         {
-            gasLimit: estimatedGas * 120n / 100n // 20% buffer
+            gasLimit: BigInt(estimatedGas.toString()) * 120n / 100n // 20% buffer
         }
     );
     
@@ -118,13 +118,13 @@ async function main() {
         console.log("├── Symbol:", symbol);
         console.log("├── Total Supply:", totalSupply.toString());
         console.log("├── Max Supply:", maxSupply.toString());
-        console.log("├── Current Mint Price:", ethers.formatEther(mintPrice), "ETH");
+        console.log("├── Current Mint Price:", ethers.utils.formatEther(mintPrice), "ETH");
         console.log("└── Owner:", await contract.owner());
         console.log();
         
         // Check Ultra-Smart features
         console.log("🧠 Ultra-Smart Features Status:");
-        console.log("├── Fixed Price:", ethers.formatEther(mintPrice), "ETH");
+        console.log("├── Fixed Price:", ethers.utils.formatEther(mintPrice), "ETH");
         console.log("└── XP Per Mint:", (await contract.XP_PER_MINT()).toString());
         console.log();
         
