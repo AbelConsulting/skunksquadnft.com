@@ -118,7 +118,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .nav-container {
@@ -182,6 +182,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4rem 0;
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     overflow: hidden;
+    z-index: 1;
 }
 
 /* Hero Background Elements */
@@ -191,8 +192,9 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: -1;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .hero-grid {
@@ -206,6 +208,7 @@ h1, h2, h3, h4, h5, h6 {
         linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridMove 20s linear infinite;
+    z-index: 1;
 }
 
 .hero-glow {
@@ -217,6 +220,7 @@ h1, h2, h3, h4, h5, h6 {
     background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
     transform: translate(-50%, -50%);
     animation: glow 8s ease-in-out infinite alternate;
+    z-index: 2;
 }
 
 @keyframes gridMove {
@@ -241,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
@@ -331,7 +335,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     cursor: pointer;
     padding: 0.5rem;
-    z-index: 101;
+    z-index: 1001;
 }
 
 .hamburger span {
@@ -581,7 +585,7 @@ h1, h2, h3, h4, h5, h6 {
         height: 100vh;
         background: rgba(0, 0, 0, 0.95);
         backdrop-filter: blur(10px);
-        z-index: 100;
+        z-index: 999;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
     }
@@ -775,7 +779,7 @@ h1, h2, h3, h4, h5, h6 {
         gap: 4rem;
         align-items: center;
         position: relative;
-        z-index: 2;
+        z-index: 10;
     }
     
     .hero-content {
@@ -798,7 +802,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Hero Visual Styles */
 .hero-visual {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     display: none; /* Hide on mobile by default */
 }
 
