@@ -771,40 +771,31 @@
         </a>
     </div>
 
-    <!-- Purchase Modal -->
-    <div id="purchase-modal" class="modal">
+    <!-- Purchase Modal (Polished & Accessible) -->
+    <div class="modal" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🦨 Mint SkunkSquad NFT</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <h2 id="modalTitle">Mint SkunkSquad NFT</h2>
+                <button class="modal-close" aria-label="Close modal" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="mint-details">
-                    <div class="mint-info">
-                        <div class="price-display">
-                            <span class="price-eth">0.02 ETH</span>
-                            <span class="price-usd">(~$48 USD)</span>
-                        </div>
-                        <div class="supply-counter">
-                            <span class="minted-count">0</span>/10,000 Minted
-                        </div>
-                    </div>
-                    <div class="quantity-selector">
-                        <label>Quantity:</label>
+                <form onsubmit="mintWithEth(); return false;">
+                    <div class="mint-details">
+                        <label for="mint-quantity">Quantity:</label>
                         <div class="quantity-controls">
-                            <button onclick="updateQuantity(-1)">-</button>
-                            <input type="number" id="mint-quantity" min="1" max="10" value="1">
-                            <button onclick="updateQuantity(1)">+</button>
+                            <button type="button" onclick="updateQuantity(-1)" aria-label="Decrease quantity">-</button>
+                            <input type="number" id="mint-quantity" min="1" max="10" value="1" required>
+                            <button type="button" onclick="updateQuantity(1)" aria-label="Increase quantity">+</button>
                         </div>
-                        <div class="total-cost">
+                        <div class="total-cost" aria-live="polite">
                             Total: <span id="total-eth">0.02 ETH</span>
                         </div>
                     </div>
-                </div>
-                <button class="btn btn-primary btn-mint" onclick="mintWithEth()">
-                    <span class="btn-icon">🦊</span>
-                    Connect Wallet & Mint
-                </button>
+                    <button class="btn btn-primary btn-mint" type="submit">
+                        <span class="btn-icon" aria-hidden="true">🦊</span>
+                        Connect Wallet & Mint
+                    </button>
+                </form>
             </div>
         </div>
     </div>
