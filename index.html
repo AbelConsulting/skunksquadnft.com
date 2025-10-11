@@ -1142,3 +1142,63 @@ async function buyWithWallet() {
                 alert('❌ ' + errorMessage + '\n\n' + (error && error.message ? error.message : ''));
             }
         }
+
+        async function handleConnectAndBuy() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
+                return;
+            }
+
+            const button = document.getElementById('connectBuyBtn');
+            
+            try {
+                // First connect wallet
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                // Update button state
+                button.innerHTML = `
+                    <span class="btn-icon">🎯</span>
+                    <span class="btn-text">Mint NFT</span>
+                    <span class="btn-price">(0.02 ETH)</span>
+                `;
+                
+                // Show mint modal
+                showPaymentModal();
+                
+            } catch (error) {
+                console.error('Connection failed:', error);
+                button.innerHTML = `
+                    <span class="btn-icon">🦊</span>
+                    <span class="btn-text">Connect Wallet & Mint</span>
+                    <span class="btn-price">(0.02 ETH)</span>
+                `;
+                alert('❌ Connection failed: ' + error.message);
+            }
+        }
+    </script>
+
+    <!-- Add these styles to your CSS -->
+    <style>
+    .nav-actions .btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+    .btn-price {
+        opacity: 0.8;
+        font-size: 0.9em;
+        margin-left: 4px;
+    }
+
+    .btn-icon {
+        font-size: 1.2em;
+    }
+    </style>
+</body>
+</html>
