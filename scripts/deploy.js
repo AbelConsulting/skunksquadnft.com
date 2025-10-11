@@ -16,6 +16,10 @@ async function main() {
     console.log("└── Timestamp:", new Date().toISOString());
     console.log();
     
+    // Revenue sharing configuration
+    const REVENUE_SHARE_ADDRESS = "0xeD97F754D65F5c479De75A57D2781489b4F43125";
+    const REVENUE_SHARE_PERCENTAGE = 5; // 5%
+    
     // Constructor parameters
     const constructorArgs = {
         name: "SkunkSquad NFT",
@@ -23,8 +27,8 @@ async function main() {
         baseURI: "https://arweave.net/YOUR_METADATA_BASE_TXID/",  // Update after Arweave upload
         contractURI: "https://arweave.net/YOUR_CONTRACT_METADATA_TXID", // Update after Arweave upload
         unrevealedURI: "https://arweave.net/YOUR_UNREVEALED_TXID", // Update after Arweave upload
-        royaltyRecipient: deployer.address, // Change to your desired royalty recipient
-        royaltyFee: 250 // 2.5% in basis points (250/10000 = 0.025 = 2.5%)
+        royaltyRecipient: deployer.address, // 2.5% royalties
+        royaltyFee: 250 // 2.5% in basis points
     };
     
     console.log("🔧 Constructor Parameters:");
@@ -35,6 +39,13 @@ async function main() {
     console.log("├── Unrevealed URI:", constructorArgs.unrevealedURI);
     console.log("├── Royalty Recipient:", constructorArgs.royaltyRecipient);
     console.log("└── Royalty Fee:", constructorArgs.royaltyFee / 100, "%");
+    console.log();
+    
+    console.log("💰 Revenue Sharing Configuration:");
+    console.log("├── Revenue Share Address:", REVENUE_SHARE_ADDRESS);
+    console.log("├── Revenue Share Percentage:", REVENUE_SHARE_PERCENTAGE + "%");
+    console.log("├── Deployer Gets:", (100 - REVENUE_SHARE_PERCENTAGE) + "%");
+    console.log("└── Partner Gets:", REVENUE_SHARE_PERCENTAGE + "%");
     console.log();
     
     // Deploy the contract
@@ -100,7 +111,7 @@ async function main() {
         const symbol = await contract.symbol();
         const totalSupply = await contract.totalSupply();
         const maxSupply = await contract.MAX_SUPPLY();
-        const mintPrice = await contract.getCurrentSmartPrice();
+        const mintPrice = await contract.getCurrentPrice(); // FIXED: removed "Smart"
         
         console.log("✅ Contract Verification:");
         console.log("├── Name:", name);
@@ -111,13 +122,9 @@ async function main() {
         console.log("└── Owner:", await contract.owner());
         console.log();
         
-        // Check Ultra-Smart features
+        // Check Ultra-Smart features (FIXED: removed dynamic pricing)
         console.log("🧠 Ultra-Smart Features Status:");
-        const dynamicPricing = await contract.dynamicPricing();
-        console.log("├── Base Price:", ethers.formatEther(dynamicPricing.basePriceETH), "ETH");
-        console.log("├── Demand Multiplier:", dynamicPricing.demandMultiplier.toString() + "%");
-        console.log("├── Min Price:", ethers.formatEther(dynamicPricing.minPrice), "ETH");
-        console.log("├── Max Price:", ethers.formatEther(dynamicPricing.maxPrice), "ETH");
+        console.log("├── Fixed Price:", ethers.formatEther(mintPrice), "ETH");
         console.log("└── XP Per Mint:", (await contract.XP_PER_MINT()).toString());
         console.log();
         
@@ -136,6 +143,11 @@ async function main() {
         deployer: deployer.address,
         timestamp: new Date().toISOString(),
         constructorArgs: constructorArgs,
+        revenueSharing: {
+            partnerAddress: REVENUE_SHARE_ADDRESS,
+            partnerPercentage: REVENUE_SHARE_PERCENTAGE,
+            deployerPercentage: 100 - REVENUE_SHARE_PERCENTAGE
+        },
         verified: true
     };
     
@@ -152,6 +164,47 @@ async function main() {
     console.log("💾 Deployment info saved to:", deploymentFile);
     console.log();
     
+    // Create withdrawal script for revenue sharing
+    const withdrawalScript = `
+const { ethers } = require("hardhat");
+
+async function withdrawRevenue() {
+    const contractAddress = "${contractAddress}";
+    const partnerAddress = "${REVENUE_SHARE_ADDRESS}";
+    const partnerPercentage = ${REVENUE_SHARE_PERCENTAGE};
+    
+    const [deployer] = await ethers.getSigners();
+    const contract = await ethers.getContractAt("SkunkSquadNFTUltraSmart", contractAddress);
+    const balance = await ethers.provider.getBalance(contractAddress);
+    
+    console.log("💰 Revenue Withdrawal Process");
+    console.log("├── Contract Balance:", ethers.formatEther(balance), "ETH");
+    
+    if (balance > 0) {
+        const partnerShare = (balance * BigInt(partnerPercentage)) / BigInt(100);
+        const deployerShare = balance - partnerShare;
+        
+        console.log("├── Partner Share (${REVENUE_SHARE_PERCENTAGE}%):", ethers.formatEther(partnerShare), "ETH");
+        console.log("└── Deployer Share (${100 - REVENUE_SHARE_PERCENTAGE}%):", ethers.formatEther(deployerShare), "ETH");
+        
+        // Withdraw funds (you'll need to add withdrawal function to contract)
+        console.log("\\n🔄 Processing withdrawals...");
+        console.log("Note: Add withdrawal function to contract or use manual transfers");
+        
+    } else {
+        console.log("└── No balance to withdraw");
+    }
+}
+
+withdrawRevenue().catch(console.error);
+`;
+    
+    const withdrawalFile = path.join(deploymentsDir, 'withdraw-revenue.js');
+    fs.writeFileSync(withdrawalFile, withdrawalScript);
+    
+    console.log("💼 Revenue withdrawal script saved to:", withdrawalFile);
+    console.log();
+    
     // Generate contract verification command
     console.log("🔐 Etherscan Verification Command:");
     console.log("npx hardhat verify --network", network.name, contractAddress);
@@ -164,24 +217,10 @@ async function main() {
     console.log("  ", constructorArgs.royaltyFee);
     console.log();
     
-    // Generate update commands for website
-    console.log("🌐 Website Update Commands:");
-    console.log("1. Update contract address in wallet.js:");
-    console.log(`   const CONTRACT_ADDRESS = "${contractAddress}";`);
-    console.log();
-    console.log("2. Update Etherscan link in index.html:");
-    console.log(`   https://etherscan.io/address/${contractAddress}`);
-    console.log();
-    
-    // Next steps
-    console.log("📋 NEXT STEPS:");
-    console.log("1. 📤 Upload metadata and images to Arweave");
-    console.log("2. 🔄 Update constructor URIs with Arweave TXIDs");
-    console.log("3. 🔍 Verify contract on Etherscan");
-    console.log("4. 🌐 Update website with contract address");
-    console.log("5. 🎨 Configure OpenSea collection");
-    console.log("6. 📊 Set up analytics dashboard");
-    console.log("7. 🚀 Launch marketing campaign");
+    console.log("💰 REVENUE SHARING SETUP:");
+    console.log("├── Partner:", REVENUE_SHARE_ADDRESS, "(5%)");
+    console.log("├── Deployer:", deployer.address, "(95% + 2.5% royalties)");
+    console.log("└── Withdrawal Script: deployments/withdraw-revenue.js");
     console.log();
     
     console.log("🎉 DEPLOYMENT COMPLETE! Welcome to the Ultra-Smart NFT era! 🦨");
@@ -193,15 +232,5 @@ main()
     .catch((error) => {
         console.error("\n❌ DEPLOYMENT FAILED!");
         console.error("Error:", error.message);
-        
-        if (error.code === 'INSUFFICIENT_FUNDS') {
-            console.error("💰 Insufficient funds for deployment. Please add more ETH to:", error.account);
-        } else if (error.code === 'NETWORK_ERROR') {
-            console.error("🌐 Network connection error. Please check your RPC endpoint.");
-        } else if (error.code === 'CONTRACT_SIZE_EXCEEDED') {
-            console.error("📦 Contract size exceeds limit. Consider optimizing contract code.");
-        }
-        
-        console.error("\nStack trace:", error.stack);
         process.exit(1);
     });
