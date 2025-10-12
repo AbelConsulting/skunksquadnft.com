@@ -68,11 +68,18 @@
     box-sizing: border-box;
 }
 
+html {
+    background: var(--gradient-hero) !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: var(--font-primary);
     line-height: 1.6;
     color: #e2e8f0;
-    background: var(--gradient-hero);
+    background: var(--gradient-hero) !important;
     background-image: 
         radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
@@ -80,6 +87,20 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure no white backgrounds anywhere */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-hero);
+    z-index: -999;
 }
 
 .container {
@@ -175,9 +196,9 @@ h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 
 .top-bar {
-    background: var(--darker-color);
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-    color: var(--white);
+    background: var(--darker-color) !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
+    color: var(--white) !important;
     padding: var(--space-sm) 0;
     font-size: 0.9rem;
 }
@@ -189,12 +210,13 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--space-md);
+    background: transparent;
 }
 
 .navbar {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(15, 23, 42, 0.95) !important;
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
     box-shadow: var(--shadow-purple);
     position: sticky;
     top: 0;
@@ -208,12 +230,14 @@ h1, h2, h3, h4, h5, h6 {
     padding: var(--space-md);
     max-width: 1200px;
     margin: 0 auto;
+    background: transparent;
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
     gap: var(--space-md);
+    background: transparent;
 }
 
 .logo-image {
@@ -427,8 +451,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navigation Secondary Row */
 .nav-secondary {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+    border-top: 1px solid rgba(139, 92, 246, 0.2) !important;
     padding: 0;
     backdrop-filter: blur(20px);
 }
@@ -437,6 +461,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
+    background: transparent !important;
 }
 
 .nav-menu {
@@ -444,10 +469,11 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     gap: 2rem;
     padding: 1rem 0;
+    background: transparent !important;
 }
 
 .nav-link {
-    color: #e2e8f0;
+    color: #e2e8f0 !important;
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -1457,4 +1483,31 @@ p {
 
 .footer-section a:hover {
     color: #c4b5fd;
+}
+
+/* ==========================================================================
+   NAVIGATION OVERRIDE - FORCE DARK THEME
+   ========================================================================== */
+
+/* Force all navigation elements to be dark */
+nav.navbar {
+    background: rgba(15, 23, 42, 0.95) !important;
+}
+
+nav.navbar .nav-secondary {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+}
+
+nav.navbar .nav-secondary .nav-menu {
+    background: transparent !important;
+}
+
+nav.navbar .nav-secondary .nav-menu .nav-link {
+    color: #e2e8f0 !important;
+    background: transparent !important;
+}
+
+nav.navbar .nav-secondary .nav-menu .nav-link:hover {
+    background: rgba(139, 92, 246, 0.2) !important;
+    color: #c4b5fd !important;
 }
