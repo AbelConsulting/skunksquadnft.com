@@ -42,9 +42,9 @@
 /* Payment Section Styles */
 .payment-section {
     padding: var(--space-4xl) 0;
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(55, 65, 81, 0.4) 100%);
-    border-top: 1px solid var(--gray);
-    border-bottom: 1px solid var(--gray);
+    background: linear-gradient(135deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
     position: relative;
 }
 
@@ -55,7 +55,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%236366f1" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%238b5cf6" stroke-width="0.5" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
     z-index: var(--z-background);
 }
 
@@ -69,11 +69,12 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: var(--space-4xl);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.8);
     padding: var(--space-2xl);
     border-radius: var(--radius-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .flow-step {
@@ -160,7 +161,8 @@
 /* Features Section Styles */
 .features-section {
     padding: var(--space-4xl) 0;
-    background: var(--black);
+    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    position: relative;
 }
 
 .features-grid {
@@ -170,13 +172,14 @@
 }
 
 .feature-card {
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(55, 65, 81, 0.4) 100%);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.6) 100%);
     padding: var(--space-2xl);
     border-radius: var(--radius-xl);
-    border: 1px solid var(--gray);
+    border: 1px solid rgba(139, 92, 246, 0.2);
     transition: var(--transition-normal);
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 .feature-card::before {
@@ -186,25 +189,26 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
     opacity: 0;
     transition: var(--transition-normal);
     z-index: var(--z-background);
 }
 
 .feature-card:hover::before {
-    opacity: 0.05;
+    opacity: 1;
 }
 
 .feature-card:hover {
     transform: translateY(-10px);
-    box-shadow: var(--shadow-2xl);
-    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+    border-color: rgba(139, 92, 246, 0.6);
 }
 
 .feature-card.featured {
-    border: 2px solid var(--accent-color);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(17, 24, 39, 0.8) 100%);
+    border: 2px solid rgba(6, 182, 212, 0.6);
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
 }
 
 .feature-header {
@@ -260,7 +264,8 @@
 /* Collection Section Styles */
 .collection-section {
     padding: var(--space-4xl) 0;
-    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--black) 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    position: relative;
 }
 
 .collection-stats {
@@ -274,17 +279,18 @@
     display: flex;
     align-items: center;
     gap: var(--space-lg);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.8);
     padding: var(--space-xl);
     border-radius: var(--radius-xl);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
     transition: var(--transition-normal);
+    backdrop-filter: blur(10px);
 }
 
 .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.6);
 }
 
 .stat-icon {
@@ -392,7 +398,7 @@
 /* Analytics Section Styles */
 .analytics-section {
     padding: var(--space-4xl) 0;
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(0, 0, 0, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
     position: relative;
 }
 
@@ -403,7 +409,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="analytics-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%236366f1" opacity="0.1"/></pattern></defs><rect width="200" height="200" fill="url(%23analytics-grid)"/></svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="analytics-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%238b5cf6" opacity="0.2"/></pattern></defs><rect width="200" height="200" fill="url(%23analytics-grid)"/></svg>');
     z-index: var(--z-background);
 }
 
@@ -417,18 +423,19 @@
 }
 
 .dashboard-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.8);
     padding: var(--space-2xl);
     border-radius: var(--radius-xl);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .dashboard-card h3 {
     font-size: 1.5rem;
     margin-bottom: var(--space-xl);
-    color: var(--white);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
     padding-bottom: var(--space-md);
 }
 
