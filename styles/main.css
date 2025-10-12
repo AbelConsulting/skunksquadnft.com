@@ -427,9 +427,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navigation Secondary Row */
 .nav-secondary {
-    background: white;
-    border-top: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
     padding: 0;
+    backdrop-filter: blur(20px);
 }
 
 .nav-secondary-container {
@@ -446,7 +447,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link {
-    color: var(--dark-color);
+    color: #e2e8f0;
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -458,9 +459,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link:hover {
-    background: var(--primary-color);
-    color: white;
+    background: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
     transform: translateY(-2px);
+    border: 1px solid rgba(139, 92, 246, 0.4);
 }
 
 /* Navigation Actions */
