@@ -39,6 +39,32 @@
     --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* Section Header Styles */
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-4xl);
+    color: #e2e8f0;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: var(--space-lg);
+    background: linear-gradient(135deg, #f1f5f9, #c4b5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.section-subtitle {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
 /* Payment Section Styles */
 .payment-section {
     padding: var(--space-4xl) 0;

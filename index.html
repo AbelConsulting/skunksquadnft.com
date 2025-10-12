@@ -38,7 +38,7 @@
     <link rel="icon" type="image/x-icon" href="./public/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="./public/apple-touch-icon.png">
     <link rel="manifest" href="./public/manifest.json">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#8b5cf6">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -735,9 +735,9 @@
     </div>
 
     <!-- Update modal price -->
-    <div style="text-align: center; margin-top: 15px; color: #666;">
+    <div style="text-align: center; margin-top: 15px; color: #94a3b8;">
         <small>Price: <span class="price-eth">0.02 ETH</span> <span class="price-usd">(~$48)</span></small>
-        <br><small style="color: #999; font-size: 0.8em;">Fixed pricing • 0.02 ETH per NFT</small>
+        <br><small style="color: #64748b; font-size: 0.8em;">Fixed pricing • 0.02 ETH per NFT</small>
     </div>
 
     <!-- Update price updater script -->
@@ -1098,7 +1098,8 @@ async function buyWithWallet() {
     padding-top: 80px;
 }
 .modal-content {
-    background: white;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
     border-radius: 20px;
     padding: 2rem;
     width: 90%;
@@ -1106,6 +1107,8 @@ async function buyWithWallet() {
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     margin-top: 20px;
     animation: slideDown 0.3s ease-out;
+    backdrop-filter: blur(20px);
+    color: #e2e8f0;
 }
 @keyframes slideDown {
     from { transform: translateY(-20px); opacity: 0; }
@@ -1119,7 +1122,7 @@ async function buyWithWallet() {
     padding-bottom: 1rem;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
-.modal-header h2 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+.modal-header h2 { margin: 0; font-size: 1.5rem; font-weight: 700; color: #f1f5f9; }
 .modal-close {
     background: none;
     border: none;
@@ -1134,9 +1137,10 @@ async function buyWithWallet() {
     justify-content: center;
     transition: background 0.2s;
 }
-.modal-close:hover { background: rgba(0,0,0,0.05); }
+.modal-close:hover { background: rgba(139, 92, 246, 0.1); }
 .mint-details {
-    background: rgba(99,102,241,0.05);
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -1147,8 +1151,9 @@ async function buyWithWallet() {
     gap: 0.5rem;
 }
 .quantity-controls button {
-    background: white;
-    border: 1px solid rgba(99,102,241,0.5);
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    color: #e2e8f0;
     border-radius: 6px;
     width: 32px;
     height: 32px;
@@ -1158,15 +1163,17 @@ async function buyWithWallet() {
     cursor: pointer;
     transition: all 0.2s;
 }
-.quantity-controls button:hover { background: rgba(99,102,241,0.1); }
+.quantity-controls button:hover { background: rgba(139, 92, 246, 0.2); }
 #mint-quantity {
     width: 60px;
     text-align: center;
-    border: 1px solid rgba(99,102,241,0.5);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    background: rgba(15, 23, 42, 0.8);
+    color: #e2e8f0;
     border-radius: 6px;
     padding: 0.5rem;
 }
-.total-cost { margin-left: auto; font-weight: 600; }
+.total-cost { margin-left: auto; font-weight: 600; color: #f1f5f9; }
 .btn-mint {
     width: 100%;
     padding: 1rem;
