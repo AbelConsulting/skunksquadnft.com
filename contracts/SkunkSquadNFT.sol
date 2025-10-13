@@ -36,7 +36,7 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
     uint256 public constant MAX_PER_WALLET_PUBLIC = 20;
     
     /// @notice Price per token in wei (0.05 ETH)
-    uint256 public constant MINT_PRICE = 0.05 ether;
+    uint256 public constant MINT_PRICE = 0.02 ether;
     
     /// @notice Base URI for token metadata
     string private _baseTokenURI;

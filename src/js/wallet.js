@@ -173,59 +173,22 @@ class WalletManager {
                 },
                 {
                     "inputs": [],
-                    "name": "getCurrentSmartPrice",
+                    "name": "MINT_PRICE",
                     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                     "stateMutability": "view",
                     "type": "function"
                 },
                 {
                     "inputs": [],
-                    "name": "totalSupply",
-                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [{"internalType": "address", "name": "owner", "type": "address"}],
-                    "name": "balanceOf",
+                    "name": "totalMinted",
                     "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                     "stateMutability": "view",
                     "type": "function"
                 },
                 {
                     "inputs": [],
-                    "name": "MAX_SUPPLY",
-                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [],
-                    "name": "currentPhase",
-                    "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-                {
-                    "inputs": [{"internalType": "address", "name": "recipient", "type": "address"}, {"internalType": "uint256", "name": "quantity", "type": "uint256"}, {"internalType": "string", "name": "message", "type": "string"}],
-                    "name": "giftNFT",
-                    "outputs": [],
-                    "stateMutability": "payable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [{"internalType": "address", "name": "", "type": "address"}],
-                    "name": "userAnalytics",
-                    "outputs": [
-                        {"internalType": "uint256", "name": "totalMinted", "type": "uint256"},
-                        {"internalType": "uint256", "name": "totalSpent", "type": "uint256"},
-                        {"internalType": "uint256", "name": "firstMintTime", "type": "uint256"},
-                        {"internalType": "uint256", "name": "lastMintTime", "type": "uint256"},
-                        {"internalType": "uint256", "name": "averageTimeBeweenMints", "type": "uint256"},
-                        {"internalType": "uint256", "name": "xpPoints", "type": "uint256"},
-                        {"internalType": "uint256", "name": "referralCount", "type": "uint256"},
-                        {"internalType": "uint256", "name": "referralEarnings", "type": "uint256"}
-                    ],
+                    "name": "publicMintActive",
+                    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
                     "stateMutability": "view",
                     "type": "function"
                 }
@@ -630,22 +593,29 @@ window.walletManager = {
     contractABI: [
         {
             "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
-            "name": "mint",
+            "name": "publicMint",
             "outputs": [],
             "stateMutability": "payable",
             "type": "function"
         },
         {
             "inputs": [],
-            "name": "getCurrentSmartPrice",
+            "name": "MINT_PRICE",
             "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
             "stateMutability": "view",
             "type": "function"
         },
         {
             "inputs": [],
-            "name": "totalSupply",
+            "name": "totalMinted",
             "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "publicMintActive",
+            "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
             "stateMutability": "view",
             "type": "function"
         }
@@ -749,7 +719,7 @@ window.walletManager = {
             console.log('💰 Total price:', this.web3.utils.fromWei(totalPrice, 'ether'), 'ETH');
             
             // Estimate gas
-            const gasEstimate = await this.contract.methods.mint(quantity).estimateGas({
+            const gasEstimate = await this.contract.methods.publicMint(quantity).estimateGas({
                 from: this.account,
                 value: totalPrice
             });
@@ -757,7 +727,7 @@ window.walletManager = {
             console.log('⛽ Estimated gas:', gasEstimate);
             
             // Send transaction
-            const result = await this.contract.methods.mint(quantity).send({
+            const result = await this.contract.methods.publicMint(quantity).send({
                 from: this.account,
                 value: totalPrice,
                 gas: Math.floor(gasEstimate * 1.2) // Add 20% buffer
@@ -802,13 +772,13 @@ window.walletManager = {
     async getCurrentPrice() {
         try {
             if (this.contract) {
-                const price = await this.contract.methods.getCurrentSmartPrice().call();
+                const price = await this.contract.methods.MINT_PRICE().call();
                 return this.web3.utils.fromWei(price, 'ether');
             }
         } catch (error) {
             console.error('❌ Failed to get current price:', error);
         }
-        return '0.02'; // Fallback price
+        return '0.02'; // Fallback price matches contract
     },
 
     async getTotalSupply() {
