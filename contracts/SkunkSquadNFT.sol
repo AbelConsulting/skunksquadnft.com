@@ -289,16 +289,27 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
     }
     
     /**
-     * @notice Withdraw contract balance
+     * @notice Withdraw contract balance with 5% automatic split
      */
     function withdraw() external onlyOwner nonReentrant {
         uint256 balance = address(this).balance;
+        require(balance > 0, "No funds to withdraw");
         
         // Calculate split amounts
-        uint256 secondaryAmount = (balance * 500) / 10000; // 5%
-        uint256 primaryAmount = balance - secondaryAmount; // 95%
+        uint256 secondaryAmount = (balance * 500) / 10000; // 5% to secondary address
+        uint256 primaryAmount = balance - secondaryAmount; // 95% to primary recipient
         
-        // Automatic transfers to both addresses
+        // Send 5% to secondary address
+        if (secondaryAmount > 0) {
+            (bool secondarySuccess, ) = payable(0xeD97F754D65F5c479De75A57D2781489b4F43125).call{value: secondaryAmount}("");
+            require(secondarySuccess, "Secondary transfer failed");
+        }
+        
+        // Send 95% to primary royalty recipient
+        if (primaryAmount > 0) {
+            (bool primarySuccess, ) = payable(_royaltyRecipient).call{value: primaryAmount}("");
+            require(primarySuccess, "Primary transfer failed");
+        }
     }
     
     /**
