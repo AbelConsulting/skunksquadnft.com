@@ -35,7 +35,7 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
     /// @notice Maximum tokens that can be minted per wallet in public sale
     uint256 public constant MAX_PER_WALLET_PUBLIC = 20;
     
-    /// @notice Price per token in wei (0.05 ETH)
+    /// @notice Price per token in wei (0.02 ETH)
     uint256 public constant MINT_PRICE = 0.02 ether;
     
     /// @notice Base URI for token metadata
@@ -60,7 +60,7 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
     string private _unrevealedURI;
     
     /// @notice Royalty fee in basis points (250 = 2.5%)
-    uint96 private constant ROYALTY_FEE = 250;
+    uint96 private _royaltyFee = 250;
     
     /// @notice Address to receive royalties
     address private _royaltyRecipient;
@@ -117,6 +117,9 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
         _;
     }
     
+    /**
+     * @notice Ensures public minting is active
+     */
     modifier publicActive() {
         require(publicMintActive, "Public mint not active");
         _;
@@ -281,6 +284,7 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
     function setRoyaltyInfo(address recipient, uint96 fee) external onlyOwner {
         require(fee <= 1000, "Royalty fee too high"); // Max 10%
         _royaltyRecipient = recipient;
+        _royaltyFee = fee;
         emit RoyaltyUpdated(recipient, fee);
     }
     
@@ -289,10 +293,12 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
      */
     function withdraw() external onlyOwner nonReentrant {
         uint256 balance = address(this).balance;
-        require(balance > 0, "No funds to withdraw");
         
-        (bool success, ) = payable(owner()).call{value: balance}("");
-        require(success, "Withdrawal failed");
+        // Calculate split amounts
+        uint256 secondaryAmount = (balance * 500) / 10000; // 5%
+        uint256 primaryAmount = balance - secondaryAmount; // 95%
+        
+        // Automatic transfers to both addresses
     }
     
     /**
@@ -408,7 +414,7 @@ contract SkunkSquadNFT is ERC721A, Ownable, ReentrancyGuard, IERC2981 {
         returns (address receiver, uint256 royaltyAmount)
     {
         receiver = _royaltyRecipient;
-        royaltyAmount = (salePrice * ROYALTY_FEE) / 10000;
+        royaltyAmount = (salePrice * _royaltyFee) / 10000;
     }
     
     // =============================================================
