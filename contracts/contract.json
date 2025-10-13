@@ -1,0 +1,8 @@
+{
+  "name": "SkunkSquad",
+  "description": "The official SkunkSquad NFT collection.",
+  "image": "https://your-image-url.com/logo.png",
+  "external_link": "https://skunksquadnft.com",
+  "seller_fee_basis_points": 250,
+  "fee_recipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994"
+}
