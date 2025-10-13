@@ -5,6 +5,85 @@
 
 console.log('🦨 SkunkSquad Main JS Loading...');
 
+// Performance monitoring
+const performanceMonitor = {
+    init() {
+        // Monitor page load time
+        window.addEventListener('load', () => {
+            const loadTime = performance.now();
+            console.log(`🚀 Page loaded in ${loadTime.toFixed(2)}ms`);
+            
+            // Optimize images after load
+            this.optimizeImages();
+            
+            // Initialize lazy loading
+            this.initLazyLoading();
+        });
+        
+        // Monitor connection
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                console.log('📱 Slow connection detected, optimizing...');
+                this.enableLowDataMode();
+            }
+        }
+    },
+    
+    optimizeImages() {
+        // Add loading=lazy to images that don't have it
+        const images = document.querySelectorAll('img:not([loading])');
+        images.forEach(img => {
+            if (!img.hasAttribute('loading')) {
+                img.setAttribute('loading', 'lazy');
+            }
+        });
+    },
+    
+    initLazyLoading() {
+        // Intersection Observer for lazy loading
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                        }
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    },
+    
+    enableLowDataMode() {
+        // Disable animations for slow connections
+        document.body.classList.add('low-data-mode');
+        
+        // Add CSS for low data mode
+        const style = document.createElement('style');
+        style.textContent = `
+            .low-data-mode * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .low-data-mode .hero-background,
+            .low-data-mode .floating-cards,
+            .low-data-mode .hero-glow {
+                display: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+};
+
 // Main Website Manager
 window.skunkSquadWebsite = {
     init() {
@@ -171,13 +250,67 @@ window.skunkSquadWebsite = {
     initNavigation() {
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
+        const navSecondary = document.querySelector('.nav-secondary');
         
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
+        if (hamburger && navMenu && navSecondary) {
+            hamburger.addEventListener('click', (e) => {
+                e.stopPropagation();
                 navMenu.classList.toggle('active');
+                navSecondary.classList.toggle('active');
                 hamburger.classList.toggle('active');
+                
+                // Prevent body scroll when menu is open
+                if (navSecondary.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close menu when clicking on nav links
+            navMenu.addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-link')) {
+                    navMenu.classList.remove('active');
+                    navSecondary.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navSecondary.contains(e.target) && !hamburger.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    navSecondary.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navSecondary.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    navSecondary.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             });
         }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     },
 
     showNotification(message, type = 'info') {
@@ -243,6 +376,7 @@ window.mintWithEth = () => window.walletManager?.mintNFT();
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    performanceMonitor.init();
     window.skunkSquadWebsite.init();
     window.quantityManager.init();
 });

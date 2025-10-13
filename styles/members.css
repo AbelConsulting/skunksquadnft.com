@@ -1,14 +1,14 @@
 /* Members Portal Styles */
 
 .members-body {
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
     min-height: 100vh;
 }
 
 .members-header {
-    background: rgba(15, 15, 35, 0.95);
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
     padding: 1rem 0;
     position: sticky;
     top: 0;
@@ -22,7 +22,7 @@
 }
 
 .members-badge {
-    background: linear-gradient(135deg, #f59e0b, #f97316);
+    background: linear-gradient(135deg, #8b5cf6, #a855f7);
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -48,7 +48,7 @@
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #6366f1;
+    border: 2px solid #8b5cf6;
 }
 
 .member-avatar img {
@@ -69,7 +69,7 @@
 
 .member-rank {
     font-size: 0.75rem;
-    color: #f59e0b;
+    color: #8b5cf6;
 }
 
 .member-actions {
@@ -181,7 +181,7 @@
 }
 
 .auth-help a {
-    color: #6366f1;
+    color: #8b5cf6;
     text-decoration: none;
 }
 
