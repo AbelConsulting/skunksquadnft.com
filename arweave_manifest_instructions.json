@@ -1,0 +1,47 @@
+{
+  "title": "Arweave Manifest Usage Instructions",
+  "description": "How to use the Skunk Squad NFT Arweave manifest",
+  "steps": [
+    {
+      "step": 1,
+      "title": "Upload Metadata to Arweave",
+      "description": "Upload all metadata files in metadata_arweave/ folder to Arweave using ArDrive",
+      "files_to_upload": [
+        "metadata_arweave/1.json to 10000.json",
+        "metadata/contract.json",
+        "metadata/unrevealed.json",
+        "index.html (optional collection homepage)"
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Update Manifest with Transaction IDs",
+      "description": "Replace placeholder TXIDs in manifest with actual Arweave transaction IDs",
+      "action": "Use the exported CSV file to map file names to transaction IDs"
+    },
+    {
+      "step": 3,
+      "title": "Upload Manifest to Arweave",
+      "description": "Upload the completed manifest.json to Arweave",
+      "result": "You'll get a MANIFEST_TXID"
+    },
+    {
+      "step": 4,
+      "title": "Update Smart Contract",
+      "description": "Set the base URI in your smart contract",
+      "base_uri": "ar://MANIFEST_TXID/",
+      "example": "ar://abc123.../1 will resolve to metadata for NFT #1"
+    }
+  ],
+  "benefits": [
+    "Permanent, decentralized storage",
+    "Clean ar:// URLs for metadata",
+    "Single manifest transaction ID for entire collection",
+    "Cost-effective access to all metadata files"
+  ],
+  "smart_contract_integration": {
+    "baseURI": "ar://MANIFEST_TXID/",
+    "tokenURI_function": "Returns ar://MANIFEST_TXID/{tokenId}",
+    "contractURI": "ar://MANIFEST_TXID/contract.json"
+  }
+}
