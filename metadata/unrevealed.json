@@ -8,5 +8,10 @@
       "trait_type": "Status",
       "value": "Unrevealed"
     }
-  ]
+  ],
+  "contract_address": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "new_base_uri": "https://arweave.net/CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do/",
+  "scripts": {
+    "reveal": "const { ethers } = require('hardhat');\n\nasync function main() {\n    console.log('🎭 Revealing Collection...\\n');\n    \n    const CONTRACT_ADDRESS = '0x6BA18b88b64af8898bbb42262ED18EC13DC81315';\n    \n    const [deployer] = await ethers.getSigners();\n    const SkunkSquad = await ethers.getContractAt('SkunkSquadNFT', CONTRACT_ADDRESS);\n    \n    console.log('Revealing with account:', deployer.address);\n    \n    // The reveal() function might need the baseURI as an argument\n    const NEW_BASE_URI = 'https://arweave.net/CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do/';\n    \n    try {\n        console.log('\\n🎭 Calling reveal with base URI...');\n        const tx = await SkunkSquad.reveal(NEW_BASE_URI);\n        console.log('⏳ Transaction sent:', tx.hash);\n        console.log('   Waiting for confirmation...');\n        \n        await tx.wait();\n        console.log('✅ Collection revealed!');\n        console.log('   View TX:', `https://sepolia.etherscan.io/tx/${tx.hash}`);\n        \n        // Verify\n        console.log('\\n🔍 Verifying...');\n        const tokenURI = await SkunkSquad.tokenURI(1);\n        console.log('Token #1 URI:', tokenURI);\n        \n        const isCorrect = tokenURI.includes('CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do');\n        console.log('\\n✅ Result:', isCorrect ? 'SUCCESS! Tokens now use Arweave ✅' : 'Still incorrect ❌');\n        \n    } catch (e) {\n        console.log('❌ Failed:', e.reason || e.message);\n        console.log('\\n💡 The reveal function signature might be different.');\n        console.log('   Checking your SkunkSquadNFT.sol for the exact reveal() function...');\n    }\n    \n    process.exit(0);\n}\n\nmain().catch((error) => {\n    console.error('\\n❌ Failed:', error.message);\n    process.exit(1);\n});"
+  }
 }
