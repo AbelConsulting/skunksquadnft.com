@@ -5,31 +5,27 @@ module.exports = {
   solidity: {
     version: "0.8.20",
     settings: {
-      optimizer: { enabled: true, runs: 200 },
-      viaIR: true,
-    },
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
   },
   networks: {
     mainnet: {
-      url: process.env.MAINNET_RPC_URL || "https://cloudflare-eth.com",
+      url: process.env.MAINNET_RPC_URL,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 1,
-      gasPrice: 15000000000, // 15 gwei
-      gas: 6000000,
-      timeout: 120000,
+      timeout: 60000
     },
     sepolia: {
-      url: process.env.SEPOLIA_RPC_URL || "https://eth-sepolia.public.blastapi.io",
+      url: process.env.SEPOLIA_RPC_URL,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 11155111,
-      gasPrice: "auto",
-    },
+      timeout: 60000
+    }
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY || "YourEtherscanAPIKey",
-  },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
-  },
+    apiKey: process.env.ETHERSCAN_API_KEY
+  }
 };
