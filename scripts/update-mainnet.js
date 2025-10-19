@@ -15,16 +15,12 @@ async function main() {
     console.log("├── Contract:", CONTRACT_ADDRESS);
     console.log("└── Your Address:", deployer.address);
     
-    // Fix: Compare as strings or numbers
-    const chainId = Number(network.chainId);
-    if (chainId !== 1) {
+    if (network.chainId !== 1n) {
         console.log("\n❌ ERROR: Not connected to mainnet!");
-        console.log("   Chain ID:", chainId);
-        console.log("   This script should only run on mainnet (Chain ID: 1).");
+        console.log("   This script should only run on mainnet.");
         process.exit(1);
     }
     
-    console.log("\n✅ Connected to MAINNET");
     console.log("\n⏰ You have 10 seconds to cancel (Ctrl+C)...\n");
     await new Promise(resolve => setTimeout(resolve, 10000));
     
@@ -61,12 +57,10 @@ async function main() {
         console.log("Setting Contract URI to:", NEW_CONTRACT_URI);
         const tx1 = await SkunkSquad.setContractURI(NEW_CONTRACT_URI);
         console.log("⏳ TX:", tx1.hash);
-        console.log("   Waiting for confirmation...");
         await tx1.wait();
         console.log("✅ Contract URI updated!");
-        console.log("   View TX: https://etherscan.io/tx/" + tx1.hash);
     } catch (e) {
-        console.log("❌ Failed:", e.reason || e.message);
+        console.log("❌ Failed:", e.message);
     }
     
     // Step 3: Reveal with new base URI
@@ -78,12 +72,10 @@ async function main() {
         console.log("Revealing with Base URI:", NEW_BASE_URI);
         const tx2 = await SkunkSquad.reveal(NEW_BASE_URI);
         console.log("⏳ TX:", tx2.hash);
-        console.log("   Waiting for confirmation...");
         await tx2.wait();
         console.log("✅ Collection revealed!");
-        console.log("   View TX: https://etherscan.io/tx/" + tx2.hash);
     } catch (e) {
-        console.log("❌ Failed:", e.reason || e.message);
+        console.log("❌ Failed:", e.message);
     }
     
     // Step 4: Verify
@@ -98,29 +90,19 @@ async function main() {
             console.log("Token #1 URI:", tokenURI);
             
             const isCorrect = tokenURI.includes("CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do");
-            console.log("\n✅ Status:", isCorrect ? "SUCCESS! Live on Arweave ✅" : "Needs checking ❌");
+            console.log("\n✅ Status:", isCorrect ? "SUCCESS! Live on Arweave ✅" : "Incorrect ❌");
         }
         
         const contractURI = await SkunkSquad.contractURI();
         console.log("\nContract URI:", contractURI);
-        const contractURICorrect = contractURI === NEW_CONTRACT_URI;
-        console.log("Contract URI:", contractURICorrect ? "✅ CORRECT" : "❌ INCORRECT");
         
     } catch (e) {
         console.log("Error verifying:", e.message);
     }
     
     console.log("\n🎉 MAINNET UPDATE COMPLETE!");
-    console.log("\n📊 Summary:");
-    console.log("├── Contract URI: Updated to Arweave");
-    console.log("├── Base URI: Updated to Arweave");
-    console.log("└── Collection: Revealed");
-    
-    console.log("\n🔗 View on Etherscan:");
-    console.log(`   https://etherscan.io/address/${CONTRACT_ADDRESS}`);
-    
-    console.log("\n🔗 View on OpenSea:");
-    console.log(`   https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}/1`);
+    console.log("\nView on Etherscan:");
+    console.log(`https://etherscan.io/address/${CONTRACT_ADDRESS}`);
     
     process.exit(0);
 }
