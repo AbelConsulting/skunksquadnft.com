@@ -39,7 +39,7 @@ function fetchData(url) {
 async function main() {
     console.log("🔍 VERIFYING NEW MANIFEST TX\n");
     
-    const MANIFEST_TX = "f-pfg0ZRYyNnRScrIlnIffIuBO1-hweqBNgzDUzYwCc";
+    const MANIFEST_TX = "lkl2l0GbCe2IzVWvLy7a6mOLMQb1hIYp3ZcqB1aypek";
     
     console.log("Testing Manifest TX:", MANIFEST_TX);
     console.log("Source: ArDrive folder link\n");
