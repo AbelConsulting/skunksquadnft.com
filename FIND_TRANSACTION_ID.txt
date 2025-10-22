@@ -1,0 +1,69 @@
+🦨 SKUNK SQUAD NFT - FINDING YOUR ARWEAVE TRANSACTION ID
+================================================================
+
+You've provided ArDrive File metadata, but we need the ARWEAVE DATA TRANSACTION ID.
+
+📋 YOUR ARDRIVE FILE INFO:
+- File-Id: e93d706d-678e-4d3a-bb85-028ab83dee6c
+- Drive-Id: d558a9a5-3122-42ef-a215-ae9bddbef0ee
+- Parent-Folder-Id: 094705ec-b852-455e-89f4-60b639676f74
+
+🔍 HOW TO FIND THE CORRECT TRANSACTION ID:
+
+Option 1: ArDrive Web Interface (EASIEST)
+==========================================
+1. Go to: https://app.ardrive.io/
+2. Navigate to your drive: d558a9a5-3122-42ef-a215-ae9bddbef0ee
+3. Find your manifest file (likely named something like "folder_based_manifest_final.json")
+4. Click on the file to open its details
+5. Look for one of these fields:
+   - "Data Transaction ID" or "Data TX ID"
+   - "Arweave Transaction"
+   - A 43-character alphanumeric string (NOT the File-Id)
+6. Copy that transaction ID
+
+Option 2: Use ArDrive CLI
+==========================================
+If you have ArDrive CLI installed:
+
+ardrive file-info --file-id e93d706d-678e-4d3a-bb85-028ab83dee6c
+
+Look for the "dataTxId" field in the output.
+
+Option 3: Check Arweave Block Explorer
+==========================================
+1. Go to: https://viewblock.io/arweave
+2. Search for your File-Id: e93d706d-678e-4d3a-bb85-028ab83dee6c
+3. Look for associated transactions
+4. Find the one with Entity-Type: file and Content-Type: application/json
+
+📌 WHAT THE TRANSACTION ID SHOULD LOOK LIKE:
+============================================
+✅ CORRECT: 43 characters, alphanumeric with hyphens and underscores
+   Example: CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do
+
+❌ WRONG: UUID format (with dashes in specific positions)
+   Example: e93d706d-678e-4d3a-bb85-028ab83dee6c (this is File-Id)
+
+❌ WRONG: Longer than 43 characters or shorter than 43 characters
+   Example: fjHKZi8HUJVkhPD6ft6JKn0nmymkaG5sFsgjv-DIpiw3 (44 chars)
+
+🚀 ONCE YOU HAVE THE CORRECT TRANSACTION ID:
+=============================================
+
+1. Validate it:
+   python ardrive_helper.py YOUR_TRANSACTION_ID
+
+2. Update your contract:
+   npx hardhat run scripts/update-contract-uri.js --network sepolia YOUR_TRANSACTION_ID
+
+3. Verify the update:
+   npx hardhat run scripts/check-current-uri.js --network sepolia
+
+📞 STILL STUCK?
+===============
+Share a screenshot of your ArDrive file details page showing the transaction information,
+or export the file details and share the complete metadata.
+
+The transaction ID we're looking for was created when ArDrive uploaded your manifest
+file to Arweave. It's the permanent storage address for your metadata.
