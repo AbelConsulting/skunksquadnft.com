@@ -1,0 +1,95 @@
+🦨 SKUNK SQUAD NFT - FINAL BASE URI SOLUTION
+================================================================
+
+✅ GOOD NEWS: All 9,999 metadata files are uploaded to Arweave!
+📄 CREATED: nft_manifest_ready.json with all transaction IDs mapped
+
+FINAL STEPS TO GET YOUR BASE URI:
+==================================
+
+Step 1: Upload the Manifest to Arweave
+---------------------------------------
+Option A - Using ArDrive CLI (if installed):
+```
+ardrive upload-file --local-path "nft_manifest_ready.json" --parent-folder-id "094705ec-b852-455e-89f4-60b639676f74"
+```
+
+Option B - Using ArDrive Web Interface:
+1. Go to: https://app.ardrive.io/
+2. Navigate to your drive: d558a9a5-3122-42ef-a215-ae9bddbef0ee  
+3. Go into the "skunksquadnft" folder
+4. Click "Upload" → Select "nft_manifest_ready.json"
+5. Wait for upload to complete and confirm on Arweave
+
+Step 2: Get the Manifest Transaction ID
+----------------------------------------
+After upload completes:
+1. Click on "nft_manifest_ready.json" in ArDrive
+2. Look for "Data Transaction ID" (43-character string)
+3. Copy that transaction ID
+
+Step 3: Validate the Transaction ID
+------------------------------------
+```powershell
+python ardrive_helper.py YOUR_MANIFEST_TXID
+```
+
+It should show:
+✅ Transaction exists
+✅ Manifest detected  
+✅ Contains X paths
+
+Step 4: Test the Manifest
+--------------------------
+```powershell
+Invoke-WebRequest -Uri "https://arweave.net/YOUR_MANIFEST_TXID/1"
+```
+
+Should return JSON for NFT #1 with name, description, image, etc.
+
+Step 5: Update Your Contract
+-----------------------------
+```powershell
+npx hardhat run scripts/update-contract-uri.js --network sepolia YOUR_MANIFEST_TXID
+```
+
+This will set your base URI to: ar://YOUR_MANIFEST_TXID/
+
+WHAT YOUR BASE URI WILL DO:
+===========================
+When someone views NFT #1, the contract returns:
+→ ar://YOUR_MANIFEST_TXID/1
+
+Arweave resolves this to:
+→ https://arweave.net/2XMCXPnFopiCG1gztTN9Odej6DY57KpgXqNU8WVu-Qs
+
+Which shows the metadata for token #1!
+
+CURRENT STATUS:
+===============
+✅ 10,000 images uploaded to Arweave  
+✅ 9,999 metadata JSON files uploaded to Arweave
+❌ 1 metadata file missing (check which token ID)
+⏳ Manifest file created but not yet uploaded
+⏳ Contract has placeholder base URI
+
+ABOUT THE TRANSACTION ID YOU PROVIDED:
+======================================
+fjHKZi8HUJVkhPD6ft6JKn0nmymkaG5sFsgjv-DIpiw
+
+This transaction ID does NOT exist on Arweave. It may be:
+- An ArDrive File-Id (not the same as Arweave TXID)
+- A partial/incomplete transaction ID
+- From a failed upload
+
+You need to upload nft_manifest_ready.json and get a NEW transaction ID.
+
+TROUBLESHOOTING:
+================
+If you're missing metadata for one token:
+```powershell
+# Find which token is missing
+python -c "import json; m=json.load(open('nft_manifest_ready.json')); print('Missing:', set(range(1,10001)) - set(int(k) for k in m['paths'].keys()))"
+```
+
+Once you have the correct manifest TXID, your NFT collection will be fully functional!

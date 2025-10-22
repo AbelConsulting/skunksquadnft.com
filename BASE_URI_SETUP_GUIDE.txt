@@ -1,0 +1,107 @@
+🦨 SKUNK SQUAD NFT - BASE URI SETUP GUIDE
+================================================================
+
+CURRENT SITUATION ANALYSIS:
+==========================
+❌ Transaction ID "fjHKZi8HUJVkhPD6ft6JKn0nmymkaG5sFsgjv-DIpiw" NOT FOUND on Arweave
+❌ Your local manifest file has placeholder transaction IDs
+✅ You have 10,000 image files uploaded to Arweave (confirmed in txid_mapping.csv)
+❓ Status of metadata JSON files unclear
+
+WHAT YOU NEED FOR A WORKING NFT COLLECTION:
+==========================================
+
+For each NFT (1-10000), you need:
+1. ✅ IMAGE uploaded to Arweave → You HAVE these
+2. ❓ METADATA JSON uploaded to Arweave → Status UNKNOWN
+3. ❓ MANIFEST file uploaded to Arweave → NOT YET
+
+OPTION 1: SIMPLE APPROACH - Direct Metadata Folder
+==================================================
+Instead of using a manifest, point directly to a folder of metadata:
+
+1. Upload all your metadata JSON files (1.json, 2.json, ... 10000.json) to a single Arweave folder
+2. Get that folder's transaction ID
+3. Set base URI to: ar://FOLDER_TXID/
+4. Your contract will access: ar://FOLDER_TXID/1.json, ar://FOLDER_TXID/2.json, etc.
+
+To do this:
+- Use ArDrive to upload the metadata folder
+- Get the folder's Data Transaction ID from ArDrive
+- That becomes your base URI
+
+OPTION 2: MANIFEST APPROACH (More Complex)
+===========================================
+1. Upload all 10,000 metadata JSON files individually
+2. Collect all their transaction IDs
+3. Update folder_based_manifest_final.json with real TXIDs
+4. Upload the completed manifest to Arweave
+5. Use the manifest's transaction ID as your base URI
+
+RECOMMENDED NEXT STEPS:
+=======================
+
+Step 1: Check if metadata files exist in ArDrive
+------------------------------------------------
+Go to: https://app.ardrive.io/
+Navigate to drive: d558a9a5-3122-42ef-a215-ae9bddbef0ee
+Look for a "metadata" folder
+
+Step 2a: IF METADATA FOLDER EXISTS in ArDrive:
+----------------------------------------------
+1. Click on the metadata folder
+2. Look for its "Data Transaction ID" or folder transaction
+3. That ID becomes your base URI: ar://TXID/
+
+Step 2b: IF NO METADATA FOLDER:
+-------------------------------
+You need to upload metadata first!
+
+Check if metadata files exist locally:
+PowerShell> Get-ChildItem -Path "metadata" -Filter "*.json" | Measure-Object
+
+If they exist, upload them:
+1. Create a "metadata" folder in ArDrive under your skunksquadnft folder
+2. Upload all metadata JSON files (1.json through 10000.json)
+3. Get the folder's transaction ID
+4. Use that as your base URI
+
+Step 3: Update Your Contract
+-----------------------------
+Once you have a valid transaction ID:
+
+npx hardhat run scripts/update-contract-uri.js --network sepolia YOUR_VALID_TXID
+
+TESTING YOUR BASE URI:
+=====================
+Before updating the contract, test the URI:
+
+Test URL: https://arweave.net/YOUR_TXID/1
+or: https://arweave.net/YOUR_TXID/metadata/1
+
+It should return JSON like:
+{
+  "name": "Skunk Squad #1",
+  "description": "...",
+  "image": "ar://5G0kMdVLnocnhr_xk_xwBGGCdASv-OCIRItdvEFsJ90",
+  "attributes": [...]
+}
+
+CURRENT CONTRACT STATUS:
+========================
+Contract Address: 0xBC00f05B9918B6B529d7edd33d89b4fB7016F6aF
+Current Base URI: ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/ (PLACEHOLDER)
+Status: ⚠️ NEEDS UPDATE WITH REAL TRANSACTION ID
+
+IMMEDIATE ACTION REQUIRED:
+==========================
+1. Check ArDrive for metadata folder
+2. If no metadata folder, upload metadata files first  
+3. Get the valid Arweave transaction ID
+4. Validate it works: https://arweave.net/TXID/1
+5. Update contract with real transaction ID
+
+Need help? Share:
+- Screenshot of your ArDrive folder structure
+- List of what files you see in the skunksquadnft folder
+- Whether metadata files exist locally
