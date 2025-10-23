@@ -11,7 +11,7 @@ async function main() {
     // Contract parameters
     const CONTRACT_NAME = "SkunkSquad NFT Ultra Smart";
     const CONTRACT_SYMBOL = "SKULL";
-    const BASE_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/";
+    const BASE_URI = "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/";
     const CONTRACT_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json";
     const UNREVEALED_URI = "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json";
     const ROYALTY_RECIPIENT = "0x16Be43d7571Edf69cec8D6221044638d161aA994";

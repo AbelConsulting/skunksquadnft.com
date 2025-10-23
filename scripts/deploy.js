@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function main() {
-    console.log("🦨 Starting SkunkSquad NFT Ultra-Smart Contract Deployment...\n");
+    console.log("🦨 Starting SkunkSquad NFT Contract Deployment...\n");
     
     // Get the deployer account
     const [deployer] = await ethers.getSigners();
@@ -24,7 +24,7 @@ async function main() {
     const constructorArgs = {
         name: "SkunkSquad NFT",
         symbol: "SKUNK",
-        baseURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/",
+        baseURI: "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/",
         contractURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
         unrevealedURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
         royaltyRecipient: deployer.address, // Should be a valid address
