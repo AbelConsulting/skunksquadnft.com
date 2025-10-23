@@ -1,0 +1,25 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "contractAddress": "0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
+  "deploymentTx": "0x0be7050ab389861b7728f3afdcc1304f30f65fab0f1cfc6305b201cf276becb4",
+  "blockNumber": 9474849,
+  "gasUsed": "2063616",
+  "deployer": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "timestamp": "2025-10-23T18:57:21.158Z",
+  "constructorArgs": {
+    "name": "SkunkSquad NFT",
+    "symbol": "SKUNK",
+    "baseURI": "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/",
+    "contractURI": "ar://wpuACWSswfMtCiUp0Wv_cbpzdIm6kkbAHw_gZ_ZJ3Tc/contract.json",
+    "unrevealedURI": "ar://j57ibv2QPVURMDTsJp271LSUfRdZtx_632Wy31fLT6E/unrevealed.json",
+    "royaltyRecipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+    "royaltyFee": 250
+  },
+  "revenueSharing": {
+    "partnerAddress": "0xeD97F754D65F5c479De75A57D2781489b4F43125",
+    "partnerPercentage": 5,
+    "deployerPercentage": 95
+  },
+  "verified": true
+}

@@ -25,8 +25,8 @@ async function main() {
         name: "SkunkSquad NFT",
         symbol: "SKUNK",
         baseURI: "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/",
-        contractURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
-        unrevealedURI: "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
+        contractURI: "ar://wpuACWSswfMtCiUp0Wv_cbpzdIm6kkbAHw_gZ_ZJ3Tc/contract.json",
+        unrevealedURI: "ar://j57ibv2QPVURMDTsJp271LSUfRdZtx_632Wy31fLT6E/unrevealed.json",
         royaltyRecipient: deployer.address, // Should be a valid address
         royaltyFee: 250 // 2.5% in basis points
     };
@@ -49,28 +49,13 @@ async function main() {
     console.log();
     
     // Deploy the contract
-    console.log("🚀 Deploying SkunkSquadNFTUltraSmart contract...");
+    console.log("🚀 Deploying SkunkSquadNFT contract...");
     
-    const SkunkSquadNFT = await ethers.getContractFactory("SkunkSquadNFTUltraSmart");
+    const SkunkSquadNFT = await ethers.getContractFactory("SkunkSquadNFT");
     
-    // Estimate gas for deployment
-    const deploymentData = SkunkSquadNFT.interface.encodeDeploy([
-        constructorArgs.name,
-        constructorArgs.symbol,
-        constructorArgs.baseURI,
-        constructorArgs.contractURI,
-        constructorArgs.unrevealedURI,
-        constructorArgs.royaltyRecipient,
-        constructorArgs.royaltyFee
-    ]);
+    console.log("⏳ Deploying contract with constructor arguments...");
     
-    const estimatedGas = await deployer.provider.estimateGas({
-        data: deploymentData
-    });
-    
-    console.log("⛽ Gas Estimation:", estimatedGas.toString());
-    
-    // Deploy with a gas limit buffer
+    // Deploy with a safe gas limit
     const contract = await SkunkSquadNFT.deploy(
         constructorArgs.name,
         constructorArgs.symbol,
@@ -78,18 +63,15 @@ async function main() {
         constructorArgs.contractURI,
         constructorArgs.unrevealedURI,
         constructorArgs.royaltyRecipient,
-        constructorArgs.royaltyFee,
-        {
-            gasLimit: BigInt(estimatedGas.toString()) * 120n / 100n // 20% buffer
-        }
+        constructorArgs.royaltyFee
     );
     
     // Wait for deployment
     console.log("⏳ Waiting for deployment transaction to be mined...");
-    await contract.waitForDeployment();
+    await contract.deployed();
     
-    const contractAddress = await contract.getAddress();
-    const deploymentTx = contract.deploymentTransaction();
+    const contractAddress = contract.address;
+    const deploymentTx = contract.deployTransaction;
     
     console.log("\n✅ CONTRACT DEPLOYED SUCCESSFULLY!");
     console.log("╔════════════════════════════════════════════════════════════╗");
@@ -111,21 +93,17 @@ async function main() {
         const symbol = await contract.symbol();
         const totalSupply = await contract.totalSupply();
         const maxSupply = await contract.MAX_SUPPLY();
-        const mintPrice = await contract.getCurrentPrice();
+        const mintPrice = await contract.PRICE();
+        const revealed = await contract.revealed();
         
         console.log("✅ Contract Verification:");
         console.log("├── Name:", name);
         console.log("├── Symbol:", symbol);
         console.log("├── Total Supply:", totalSupply.toString());
         console.log("├── Max Supply:", maxSupply.toString());
-        console.log("├── Current Mint Price:", ethers.utils.formatEther(mintPrice), "ETH");
+        console.log("├── Mint Price:", ethers.utils.formatEther(mintPrice), "ETH");
+        console.log("├── Revealed:", revealed);
         console.log("└── Owner:", await contract.owner());
-        console.log();
-        
-        // Check Ultra-Smart features
-        console.log("🧠 Ultra-Smart Features Status:");
-        console.log("├── Fixed Price:", ethers.utils.formatEther(mintPrice), "ETH");
-        console.log("└── XP Per Mint:", (await contract.XP_PER_MINT()).toString());
         console.log();
         
     } catch (error) {
