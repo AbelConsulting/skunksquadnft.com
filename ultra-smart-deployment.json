@@ -14,7 +14,9 @@
     "predictions": true
   },
   "configuration": {
-    "baseURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/",
+    "baseURI": "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/",
+    "manifestTxId": "bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs",
+    "baseURIUpdated": "2025-10-22T00:00:00.000Z",
     "contractURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/contract.json",
     "unrevealedURI": "ar://0770a619-f2f1-4c59-9d1d-2fceb4a9294d/unrevealed.json",
     "royaltyRecipient": "0x16Be43d7571Edf69cec8D6221044638d161aA994",

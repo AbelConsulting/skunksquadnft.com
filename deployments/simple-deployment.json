@@ -1,0 +1,8 @@
+{
+  "network": "sepolia",
+  "contractAddress": "0x384062E20B046B738D5b4A158E0D9541437c7a9A",
+  "deployer": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
+  "deploymentTime": "2025-10-23T01:20:03.792Z",
+  "baseURI": "ar://zSIUpHcbgIPHN9zu38dyX-cm7-9yoXevvQTpyhMq_TA/",
+  "txHash": "0x1cf5aa4bdd95ea57aef025bf1ab5bd8e3b50c0799415d9bccb8f08bfebc3eb10"
+}
