@@ -963,6 +963,8 @@ function buyWithCard() {
 // Update the buyWithWallet function  
 async function buyWithWallet() {
     try {
+        console.log('🦨 buyWithWallet called');
+        
         if (typeof window.ethereum === 'undefined') {
             alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
             return;
@@ -978,6 +980,7 @@ async function buyWithWallet() {
 
         // Connect wallet if not connected
         if (!window.walletManager.isConnected) {
+            console.log('🦨 Connecting wallet...');
             const connected = await window.walletManager.connectWallet();
             if (!connected) {
                 alert('❌ Failed to connect wallet. Please try again.');
@@ -992,13 +995,7 @@ async function buyWithWallet() {
             quantity = parseInt(quantityInput.value) || 1;
         }
 
-        // Show loading message
-        if (window.skunkSquadWebsite) {
-            window.skunkSquadWebsite.showNotification(
-                '🦨 Preparing to mint your SkunkSquad NFT...',
-                'info'
-            );
-        }
+        console.log(`🦨 Minting ${quantity} NFT(s)...`);
 
         // Mint NFT
         const result = await window.walletManager.mintNFT(quantity);
@@ -1007,23 +1004,27 @@ async function buyWithWallet() {
             console.log('✅ NFT minted successfully:', result.transactionHash);
             
             // Show success message with transaction link
-            const etherscanUrl = `https://etherscan.io/tx/${result.transactionHash}`;
+            const etherscanUrl = `https://sepolia.etherscan.io/tx/${result.transactionHash}`;
             
-            if (window.skunkSquadWebsite) {
-                window.skunkSquadWebsite.showNotification(
-                    `🎉 NFT minted successfully! <a href="${etherscanUrl}" target="_blank">View on Etherscan</a>`,
-                    'success'
-                );
-            }
+            alert(`🎉 Successfully minted ${quantity} NFT(s)!\n\nView on Etherscan:\n${etherscanUrl}`);
         }
 
     } catch (error) {
         console.error('❌ Wallet minting error:', error);
         
-                let errorMessage = 'Failed to mint NFT. Please try again.';         
-                alert('❌ ' + errorMessage + '\n\n' + (error && error.message ? error.message : ''));
-            }
+        let errorMessage = 'Failed to mint NFT';
+        
+        if (error.message?.includes('user rejected')) {
+            errorMessage = 'Transaction cancelled by user';
+        } else if (error.message?.includes('insufficient funds')) {
+            errorMessage = 'Insufficient ETH balance';
+        } else if (error.message) {
+            errorMessage = error.message;
         }
+        
+        alert('❌ ' + errorMessage);
+    }
+}
 
         async function handleConnectAndBuy() {
             console.log('🦨 handleConnectAndBuy called');
@@ -1041,34 +1042,81 @@ async function buyWithWallet() {
             }
 
             const button = document.getElementById('connectBuyBtn');
+            const originalHTML = button.innerHTML;
             
             try {
                 button.disabled = true;
-                button.innerHTML = `
-                    <span class="btn-icon">⏳</span>
-                    <span class="btn-text">Connecting...</span>
-                `;
                 
                 // Use wallet manager if available
                 if (window.walletManager) {
                     console.log('🦨 Using WalletManager');
-                    const connected = await window.walletManager.connectWallet();
                     
-                    if (connected) {
+                    // Check if already connected
+                    if (!window.walletManager.isConnected) {
+                        // First time - connect wallet
                         button.innerHTML = `
-                            <span class="btn-icon">✅</span>
-                            <span class="btn-text">Mint NFT</span>
-                            <span class="btn-price">(0.01 ETH)</span>
+                            <span class="btn-icon">⏳</span>
+                            <span class="btn-text">Connecting...</span>
                         `;
                         
-                        // Show mint modal after short delay
-                        setTimeout(() => showPaymentModal(), 300);
+                        const connected = await window.walletManager.connectWallet();
+                        
+                        if (connected) {
+                            console.log('✅ Wallet connected, updating button');
+                            button.innerHTML = `
+                                <span class="btn-icon">⛏️</span>
+                                <span class="btn-text">Mint NFT Now</span>
+                                <span class="btn-price">(0.01 ETH)</span>
+                            `;
+                            button.disabled = false;
+                            
+                            // Show success notification
+                            alert('✅ Wallet Connected!\n\nClick the button again to mint your NFT.');
+                        } else {
+                            throw new Error('Failed to connect wallet');
+                        }
                     } else {
-                        throw new Error('Failed to connect wallet');
+                        // Already connected - go straight to minting
+                        console.log('✅ Already connected, proceeding to mint');
+                        button.innerHTML = `
+                            <span class="btn-icon">⏳</span>
+                            <span class="btn-text">Minting...</span>
+                        `;
+                        
+                        // Mint 1 NFT
+                        const result = await window.walletManager.mintNFT(1);
+                        
+                        if (result) {
+                            console.log('✅ Mint successful:', result.transactionHash);
+                            button.innerHTML = `
+                                <span class="btn-icon">🎉</span>
+                                <span class="btn-text">Minted!</span>
+                            `;
+                            
+                            const etherscanUrl = `https://sepolia.etherscan.io/tx/${result.transactionHash}`;
+                            alert(`🎉 NFT Minted Successfully!\n\nView on Etherscan:\n${etherscanUrl}`);
+                            
+                            // Reset button after delay
+                            setTimeout(() => {
+                                button.innerHTML = `
+                                    <span class="btn-icon">⛏️</span>
+                                    <span class="btn-text">Mint Another</span>
+                                    <span class="btn-price">(0.01 ETH)</span>
+                                `;
+                                button.disabled = false;
+                            }, 3000);
+                        } else {
+                            throw new Error('Mint transaction failed');
+                        }
                     }
                 } else {
                     // Fallback: direct connection
                     console.log('⚠️ WalletManager not available, using direct connection');
+                    button.innerHTML = `
+                        <span class="btn-icon">⏳</span>
+                        <span class="btn-text">Connecting...</span>
+                    `;
+                    
                     const accounts = await window.ethereum.request({ 
                         method: 'eth_requestAccounts' 
                     });
@@ -1077,24 +1125,30 @@ async function buyWithWallet() {
                     
                     button.innerHTML = `
                         <span class="btn-icon">✅</span>
-                        <span class="btn-text">Mint NFT</span>
-                        <span class="btn-price">(0.01 ETH)</span>
+                        <span class="btn-text">Connected - Refresh & Try Again</span>
                     `;
                     
-                    // Show mint modal
-                    setTimeout(() => showPaymentModal(), 300);
+                    alert('✅ Wallet connected!\n\nPlease click the button again to mint.');
+                    
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.innerHTML = originalHTML;
+                    }, 2000);
                 }
                 
             } catch (error) {
-                console.error('❌ Connection failed:', error);
-                button.innerHTML = `
-                    <span class="btn-icon">🦊</span>
-                    <span class="btn-text">Connect Wallet & Mint</span>
-                    <span class="btn-price">(0.01 ETH)</span>
-                `;
-                alert('❌ Connection failed: ' + error.message);
-            } finally {
+                console.error('❌ Error:', error);
+                button.innerHTML = originalHTML;
                 button.disabled = false;
+                
+                let errorMsg = error.message || 'Unknown error';
+                if (error.message?.includes('user rejected')) {
+                    errorMsg = 'Transaction cancelled by user';
+                } else if (error.message?.includes('insufficient funds')) {
+                    errorMsg = 'Insufficient ETH balance';
+                }
+                
+                alert('❌ Error: ' + errorMsg);
             }
         }
     </script>
