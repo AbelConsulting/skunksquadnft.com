@@ -1,0 +1,30 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/SkunkSquadNFT.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport \"@openzeppelin/contracts/token/ERC721/ERC721.sol\";\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\nimport \"@openzeppelin/contracts/utils/Counters.sol\";\nimport \"@openzeppelin/contracts/utils/Strings.sol\";\n\ncontract SkunkSquadNFT is ERC721, Ownable {\n    using Counters for Counters.Counter;\n    using Strings for uint256;\n    Counters.Counter private _tokenIdCounter;\n\n    uint256 public constant MAX_SUPPLY = 10_000;\n    uint256 public constant PRICE = 0.01 ether;\n    bool public revealed = false;\n    string private _unrevealedURI;\n    string private _baseTokenURI;\n    string private _contractURI;\n\n    // Royalty info (EIP-2981)\n    address public royaltyRecipient;\n    uint96 public royaltyFee; // in basis points (e.g., 250 = 2.5%, 500 = 5%)\n\n    constructor(\n        string memory name,\n        string memory symbol,\n        string memory baseURI,\n        string memory contractURI_,\n        string memory unrevealedURI,\n        address royaltyRecipient_,\n        uint96 royaltyFee_\n    ) ERC721(name, symbol) {\n        _baseTokenURI = baseURI;\n        _contractURI = contractURI_;\n        _unrevealedURI = unrevealedURI;\n        royaltyRecipient = royaltyRecipient_;\n        royaltyFee = royaltyFee_;\n    }\n\n    // Mint a single NFT (payable)\n    function mintNFT(uint256 quantity) external payable {\n        require(_tokenIdCounter.current() + quantity <= MAX_SUPPLY, \"Max supply reached\");\n        require(msg.value >= PRICE * quantity, \"Insufficient ETH sent\");\n\n        for (uint256 i = 0; i < quantity; i++) {\n            _tokenIdCounter.increment();\n            uint256 tokenId = _tokenIdCounter.current();\n            _safeMint(msg.sender, tokenId);\n        }\n    }\n\n    // Owner can withdraw contract balance\n    function withdraw() external onlyOwner {\n        payable(owner()).transfer(address(this).balance);\n    }\n\n    // Reveal the NFT metadata\n    function reveal() external onlyOwner {\n        revealed = true;\n    }\n\n    // Override tokenURI to handle hidden/revealed states\n    function tokenURI(uint256 tokenId) public view override returns (string memory) {\n        require(_exists(tokenId), \"Token does not exist\");\n\n        if (!revealed) {\n            return _unrevealedURI;\n        } else {\n            return bytes(_baseTokenURI).length > 0\n                ? string(abi.encodePacked(_baseTokenURI, tokenId.toString(), \".json\"))\n                : \"\";\n        }\n    }\n\n    // Set base URI (for revealed metadata)\n    function setBaseURI(string memory baseURI) external onlyOwner {\n        _baseTokenURI = baseURI;\n    }\n\n    // Set unrevealed metadata URI\n    function setUnrevealedURI(string memory uri) external onlyOwner {\n        _unrevealedURI = uri;\n    }\n\n    // Get contract-level metadata (OpenSea)\n    function contractURI() public view returns (string memory) {\n        return _contractURI;\n    }\n\n    // Set contract URI (OpenSea collection metadata)\n    function setContractURI(string memory uri) external onlyOwner {\n        _contractURI = uri;\n    }\n\n    // Update royalty information\n    function setRoyaltyInfo(address recipient, uint96 fee) external onlyOwner {\n        require(recipient != address(0), \"Invalid royalty recipient\");\n        require(fee <= 10000, \"Royalty fee too high\"); // Max 100%\n        royaltyRecipient = recipient;\n        royaltyFee = fee;\n    }\n\n    // EIP-2981: Royalty standard\n    function royaltyInfo(uint256 tokenId, uint256 salePrice)\n        external\n        view\n        returns (address receiver, uint256 royaltyAmount)\n    {\n        require(_exists(tokenId), \"Token does not exist\");\n        royaltyAmount = (salePrice * royaltyFee) / 10_000;\n        receiver = royaltyRecipient;\n    }\n\n    // Override to support EIP-2981\n    function supportsInterface(bytes4 interfaceId) \n        public \n        view \n        virtual \n        override \n        returns (bool) \n    {\n        return\n            interfaceId == 0x2a55205a || // ERC2981 interface ID\n            super.supportsInterface(interfaceId);\n    }\n\n    // Get current total minted\n    function totalSupply() public view returns (uint256) {\n        return _tokenIdCounter.current();\n    }\n\n    // Check if token exists (helper function)\n    function exists(uint256 tokenId) public view returns (bool) {\n        return _exists(tokenId);\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "devdoc",
+          "userdoc",
+          "metadata",
+          "abi"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    },
+    "libraries": {}
+  }
+}

@@ -1,4 +1,4 @@
-require("@nomicfoundation/hardhat-toolbox");
+require("@nomicfoundation/hardhat-verify");
 require("dotenv/config");
 
 module.exports = {
@@ -29,7 +29,8 @@ module.exports = {
     apiKey: {
       sepolia: process.env.ETHERSCAN_API_KEY,
       mainnet: process.env.ETHERSCAN_API_KEY
-    }
+    },
+    customChains: []
   },
   sourcify: {
     enabled: false
