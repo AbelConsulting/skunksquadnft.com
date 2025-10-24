@@ -1047,6 +1047,77 @@ async function handleConnectAndBuy() {
         color: #c7d2fe !important;
     }
 
+    /* Dark theme for gallery section */
+    .sample-gallery {
+        background: rgba(15, 23, 42, 0.5) !important;
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+    
+    .sample-gallery h3 {
+        color: #f1f5f9 !important;
+        margin-bottom: 1.5rem;
+    }
+    
+    .gallery-item {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+        border: 1px solid rgba(139, 92, 246, 0.3) !important;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4) !important;
+        border-color: rgba(139, 92, 246, 0.6) !important;
+    }
+    
+    .gallery-info {
+        background: rgba(15, 23, 42, 0.95) !important;
+        padding: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .gallery-id {
+        color: #94a3b8 !important;
+        font-weight: 600;
+    }
+    
+    .gallery-rarity {
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .gallery-rarity.common {
+        background: rgba(148, 163, 184, 0.2) !important;
+        color: #cbd5e1 !important;
+    }
+    
+    .gallery-rarity.rare {
+        background: rgba(59, 130, 246, 0.2) !important;
+        color: #93c5fd !important;
+    }
+    
+    .gallery-rarity.epic {
+        background: rgba(168, 85, 247, 0.2) !important;
+        color: #d8b4fe !important;
+    }
+    
+    .gallery-rarity.ultra {
+        background: rgba(236, 72, 153, 0.2) !important;
+        color: #f9a8d4 !important;
+    }
+    
+    .gallery-rarity.legendary {
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.3)) !important;
+        color: #fcd34d !important;
+    }
+
     .nav-actions .btn {
         display: flex;
         align-items: center;
