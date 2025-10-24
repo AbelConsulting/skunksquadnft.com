@@ -1026,37 +1026,75 @@ async function buyWithWallet() {
         }
 
         async function handleConnectAndBuy() {
+            console.log('🦨 handleConnectAndBuy called');
+            
             if (typeof window.ethereum === 'undefined') {
                 alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
+                window.open('https://metamask.io/download/', '_blank');
                 return;
+            }
+
+            // Wait for wallet manager to be ready
+            if (!window.walletManager) {
+                console.log('⏳ Waiting for wallet manager...');
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
 
             const button = document.getElementById('connectBuyBtn');
             
             try {
-                // First connect wallet
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts' 
-                });
-                
-                // Update button state
+                button.disabled = true;
                 button.innerHTML = `
-                    <span class="btn-icon">🎯</span>
-                    <span class="btn-text">Mint NFT</span>
-                    <span class="btn-price">(0.02 ETH)</span>
+                    <span class="btn-icon">⏳</span>
+                    <span class="btn-text">Connecting...</span>
                 `;
                 
-                // Show mint modal
-                showPaymentModal();
+                // Use wallet manager if available
+                if (window.walletManager) {
+                    console.log('🦨 Using WalletManager');
+                    const connected = await window.walletManager.connectWallet();
+                    
+                    if (connected) {
+                        button.innerHTML = `
+                            <span class="btn-icon">✅</span>
+                            <span class="btn-text">Mint NFT</span>
+                            <span class="btn-price">(0.01 ETH)</span>
+                        `;
+                        
+                        // Show mint modal after short delay
+                        setTimeout(() => showPaymentModal(), 300);
+                    } else {
+                        throw new Error('Failed to connect wallet');
+                    }
+                } else {
+                    // Fallback: direct connection
+                    console.log('⚠️ WalletManager not available, using direct connection');
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_requestAccounts' 
+                    });
+                    
+                    console.log('✅ Connected:', accounts[0]);
+                    
+                    button.innerHTML = `
+                        <span class="btn-icon">✅</span>
+                        <span class="btn-text">Mint NFT</span>
+                        <span class="btn-price">(0.01 ETH)</span>
+                    `;
+                    
+                    // Show mint modal
+                    setTimeout(() => showPaymentModal(), 300);
+                }
                 
             } catch (error) {
-                console.error('Connection failed:', error);
+                console.error('❌ Connection failed:', error);
                 button.innerHTML = `
                     <span class="btn-icon">🦊</span>
                     <span class="btn-text">Connect Wallet & Mint</span>
-                    <span class="btn-price">(0.02 ETH)</span>
+                    <span class="btn-price">(0.01 ETH)</span>
                 `;
                 alert('❌ Connection failed: ' + error.message);
+            } finally {
+                button.disabled = false;
             }
         }
     </script>

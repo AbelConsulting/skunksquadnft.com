@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🦨 Debug Wallet Integration</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #00ff00; }
+        .check { margin: 10px 0; padding: 10px; background: #2a2a2a; border-left: 4px solid #666; }
+        .check.pass { border-color: #00ff00; }
+        .check.fail { border-color: #ff0000; color: #ff6666; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🦨 SkunkSquad Wallet Integration Debug</h1>
+    
+    <div id="checks"></div>
+    
+    <div style="margin-top: 20px;">
+        <button onclick="runChecks()">🔄 Re-run Checks</button>
+        <button onclick="testConnect()">🦊 Test Connect</button>
+        <button onclick="testMint()">⛏️ Test Mint</button>
+    </div>
+    
+    <div id="output" style="margin-top: 20px; padding: 20px; background: #2a2a2a;"></div>
+
+    <!-- Load Web3 and wallet.js -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./src/js/wallet.js"></script>
+    
+    <script>
+        function log(msg, isError = false) {
+            const output = document.getElementById('output');
+            const time = new Date().toLocaleTimeString();
+            const color = isError ? '#ff6666' : '#00ff00';
+            output.innerHTML += `<div style="color: ${color}">[${time}] ${msg}</div>`;
+            output.scrollTop = output.scrollHeight;
+            console.log(msg);
+        }
+
+        function addCheck(label, passed, details = '') {
+            const div = document.createElement('div');
+            div.className = 'check ' + (passed ? 'pass' : 'fail');
+            div.innerHTML = `
+                <strong>${passed ? '✅' : '❌'} ${label}</strong>
+                ${details ? `<div style="font-size: 12px; margin-top: 5px;">${details}</div>` : ''}
+            `;
+            document.getElementById('checks').appendChild(div);
+        }
+
+        async function runChecks() {
+            document.getElementById('checks').innerHTML = '<h2>Running Diagnostics...</h2>';
+            log('🦨 Starting diagnostic checks...');
+
+            // Check 1: Web3 library
+            const web3Loaded = typeof Web3 !== 'undefined';
+            addCheck('Web3 Library Loaded', web3Loaded, 
+                web3Loaded ? 'Web3.js is available' : 'Web3.js failed to load from CDN');
+
+            // Check 2: MetaMask
+            const metamaskAvailable = typeof window.ethereum !== 'undefined';
+            addCheck('MetaMask Detected', metamaskAvailable,
+                metamaskAvailable ? 'window.ethereum is available' : 'MetaMask not installed or not detected');
+
+            // Check 3: Wallet Manager Class
+            const walletManagerClass = typeof WalletManager !== 'undefined';
+            addCheck('WalletManager Class Defined', walletManagerClass,
+                walletManagerClass ? 'Class is available in scope' : 'Class definition not found');
+
+            // Check 4: Wallet Manager Instance
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for initialization
+            const walletManagerInstance = window.walletManager instanceof WalletManager;
+            addCheck('WalletManager Instance Created', walletManagerInstance,
+                walletManagerInstance ? 'window.walletManager is initialized' : 'Instance not created');
+
+            if (window.walletManager) {
+                // Check 5: Web3 initialized
+                const web3Init = window.walletManager.web3 !== null;
+                addCheck('Web3 Instance in WalletManager', web3Init,
+                    web3Init ? 'WalletManager has web3 instance' : 'web3 not initialized');
+
+                // Check 6: Contract Address
+                const contractAddr = window.walletManager.contractAddress;
+                addCheck('Contract Address Set', !!contractAddr,
+                    contractAddr ? `Address: ${contractAddr}` : 'Contract address not set');
+
+                // Check 7: Contract Instance
+                const contractInit = window.walletManager.contract !== null;
+                addCheck('Contract Instance Created', contractInit,
+                    contractInit ? 'Contract object exists' : 'Contract not initialized');
+
+                if (contractInit) {
+                    // Check 8: Contract Methods
+                    try {
+                        const hasMintMethod = typeof window.walletManager.contract.methods.mintNFT === 'function';
+                        addCheck('mintNFT Method Available', hasMintMethod,
+                            hasMintMethod ? 'mintNFT() method found' : 'Method not found in ABI');
+
+                        const hasSupplyMethod = typeof window.walletManager.contract.methods.totalSupply === 'function';
+                        addCheck('totalSupply Method Available', hasSupplyMethod,
+                            hasSupplyMethod ? 'totalSupply() method found' : 'Method not found in ABI');
+                    } catch (error) {
+                        addCheck('Contract Methods', false, 'Error checking methods: ' + error.message);
+                    }
+                }
+            }
+
+            log('✅ Diagnostic checks complete!');
+        }
+
+        async function testConnect() {
+            try {
+                log('🦊 Testing wallet connection...');
+                
+                if (!window.walletManager) {
+                    log('❌ WalletManager not available!', true);
+                    return;
+                }
+
+                const connected = await window.walletManager.connectWallet();
+                
+                if (connected) {
+                    log('✅ Wallet connected successfully!');
+                    log(`   Address: ${window.walletManager.accounts[0]}`);
+                    log(`   Network ID: ${window.walletManager.networkId}`);
+                } else {
+                    log('❌ Connection failed', true);
+                }
+            } catch (error) {
+                log('❌ Error: ' + error.message, true);
+            }
+        }
+
+        async function testMint() {
+            try {
+                log('⛏️ Testing mint function...');
+                
+                if (!window.walletManager) {
+                    log('❌ WalletManager not available!', true);
+                    return;
+                }
+
+                if (!window.walletManager.isConnected) {
+                    log('⏳ Connecting wallet first...');
+                    await testConnect();
+                }
+
+                log('🎯 Initiating mint...');
+                const result = await window.walletManager.mintNFT(1);
+                
+                if (result) {
+                    log('✅ Mint successful!');
+                    log(`   TX Hash: ${result.transactionHash}`);
+                } else {
+                    log('❌ Mint failed', true);
+                }
+            } catch (error) {
+                log('❌ Error: ' + error.message, true);
+            }
+        }
+
+        // Auto-run checks on load
+        window.addEventListener('load', () => {
+            setTimeout(runChecks, 1000);
+        });
+    </script>
+</body>
+</html>

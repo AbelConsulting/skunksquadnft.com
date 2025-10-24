@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦨 Wallet Integration Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 { color: #8b5cf6; margin: 0 0 10px 0; }
+        .status { padding: 8px 16px; border-radius: 6px; margin: 10px 0; font-weight: 600; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-primary { background: #8b5cf6; color: white; }
+        .btn-primary:hover { background: #7c3aed; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        pre { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 12px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .label { color: #666; }
+        .value { font-weight: 600; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+</head>
+<body>
+    <div class="card">
+        <h1>🦨 SkunkSquad Wallet Test</h1>
+        <p>Simple test page to verify wallet integration</p>
+        
+        <div id="status" class="status info">Initializing...</div>
+        
+        <div class="info-row">
+            <span class="label">Contract:</span>
+            <span class="value" id="contract-addr">-</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Network:</span>
+            <span class="value" id="network">-</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Connected:</span>
+            <span class="value" id="connected">No</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Wallet:</span>
+            <span class="value" id="wallet">-</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Total Supply:</span>
+            <span class="value" id="supply">-</span>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn btn-primary" id="connect-btn" onclick="testConnect()">Connect Wallet</button>
+            <button class="btn btn-primary" id="mint-btn" onclick="testMint()" disabled>Mint 1 NFT (0.01 ETH)</button>
+            <button class="btn btn-primary" onclick="checkSupply()">Refresh Supply</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Console Output:</h3>
+        <pre id="console"></pre>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4';
+        let web3, contract, account;
+
+        function log(msg) {
+            const el = document.getElementById('console');
+            const time = new Date().toLocaleTimeString();
+            el.textContent += `[${time}] ${msg}\n`;
+            el.scrollTop = el.scrollHeight;
+            console.log(msg);
+        }
+
+        function setStatus(msg, type = 'info') {
+            const el = document.getElementById('status');
+            el.textContent = msg;
+            el.className = `status ${type}`;
+        }
+
+        async function init() {
+            document.getElementById('contract-addr').textContent = 
+                CONTRACT_ADDRESS.slice(0, 10) + '...' + CONTRACT_ADDRESS.slice(-8);
+
+            if (typeof window.ethereum === 'undefined') {
+                setStatus('❌ MetaMask not detected!', 'error');
+                log('MetaMask not installed');
+                return;
+            }
+
+            web3 = new Web3(window.ethereum);
+            
+            // Load ABI from the generated file
+            try {
+                const response = await fetch('abi_sepolia.json');
+                const abi = await response.json();
+                contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+                log(`✅ Contract initialized with ${abi.length} functions`);
+                setStatus('✅ Ready to connect', 'success');
+            } catch (error) {
+                log('❌ Error loading ABI: ' + error.message);
+                setStatus('❌ Failed to load contract ABI', 'error');
+            }
+
+            // Check if already connected
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length > 0) {
+                account = accounts[0];
+                updateConnectedState();
+            }
+        }
+
+        async function testConnect() {
+            try {
+                log('Requesting wallet connection...');
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                account = accounts[0];
+                
+                const chainId = await web3.eth.getChainId();
+                log(`Connected! Chain ID: ${chainId}`);
+                
+                if (chainId !== 11155111) {
+                    setStatus('⚠️ Please switch to Sepolia network', 'error');
+                    log('Wrong network! Attempting to switch...');
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0xaa36a7' }],
+                        });
+                        log('Switched to Sepolia');
+                    } catch (switchError) {
+                        log('Failed to switch network: ' + switchError.message);
+                    }
+                } else {
+                    updateConnectedState();
+                    await checkSupply();
+                }
+            } catch (error) {
+                log('Connection error: ' + error.message);
+                setStatus('❌ Connection failed', 'error');
+            }
+        }
+
+        function updateConnectedState() {
+            document.getElementById('connected').textContent = 'Yes ✅';
+            document.getElementById('wallet').textContent = 
+                account.slice(0, 6) + '...' + account.slice(-4);
+            document.getElementById('network').textContent = 'Sepolia Testnet ✅';
+            document.getElementById('mint-btn').disabled = false;
+            setStatus('✅ Wallet connected! Ready to mint', 'success');
+            log(`✅ Wallet connected: ${account.slice(0, 10)}...`);
+        }
+
+        async function checkSupply() {
+            if (!contract) {
+                log('Contract not initialized');
+                return;
+            }
+            try {
+                const supply = await contract.methods.totalSupply().call();
+                document.getElementById('supply').textContent = `${supply} / 10,000`;
+                log(`Total supply: ${supply}`);
+            } catch (error) {
+                log('Error getting supply: ' + error.message);
+            }
+        }
+
+        async function testMint() {
+            if (!contract || !account) {
+                alert('Please connect wallet first');
+                return;
+            }
+
+            const btn = document.getElementById('mint-btn');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Minting...';
+                setStatus('⏳ Minting in progress...', 'info');
+                
+                log('Preparing mint transaction...');
+                const price = web3.utils.toWei('0.01', 'ether');
+                log(`Price: 0.01 ETH (${price} wei)`);
+                
+                const gasEstimate = await contract.methods.mintNFT(1).estimateGas({
+                    from: account,
+                    value: price
+                });
+                log(`Estimated gas: ${gasEstimate}`);
+                
+                const tx = await contract.methods.mintNFT(1).send({
+                    from: account,
+                    value: price,
+                    gas: Math.floor(gasEstimate * 1.2)
+                });
+                
+                log(`✅ MINT SUCCESS! TX: ${tx.transactionHash}`);
+                setStatus('🎉 NFT minted successfully!', 'success');
+                
+                const etherscanUrl = `https://sepolia.etherscan.io/tx/${tx.transactionHash}`;
+                log(`View on Etherscan: ${etherscanUrl}`);
+                
+                setTimeout(() => checkSupply(), 2000);
+                
+            } catch (error) {
+                log('❌ Mint failed: ' + error.message);
+                setStatus('❌ Mint failed: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            log('🦨 SkunkSquad Wallet Test Page Loaded');
+            init();
+        });
+    </script>
+</body>
+</html>
