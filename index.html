@@ -710,7 +710,7 @@
                             <button type="button" onclick="updateQuantity(1)" aria-label="Increase quantity">+</button>
                         </div>
                         <div class="total-cost" aria-live="polite">
-                            Total: <span id="total-eth">0.02 ETH</span>
+                            Total: <span id="total-eth">0.01 ETH</span>
                         </div>
                     </div>
                     <button class="btn btn-primary btn-mint" type="submit">
@@ -729,14 +729,14 @@
     
     <!-- Update price displays throughout the file -->
     <div class="price-display">
-        <span class="price-eth">0.02 ETH</span>
-        <span class="price-usd">(~$48 USD)</span>
+        <span class="price-eth">0.01 ETH</span>
+        <span class="price-usd">(~$24 USD)</span>
     </div>
 
     <!-- Update modal price -->
     <div style="text-align: center; margin-top: 15px; color: #94a3b8;">
-        <small>Price: <span class="price-eth">0.02 ETH</span> <span class="price-usd">(~$48)</span></small>
-        <br><small style="color: #64748b; font-size: 0.8em;">Fixed pricing • 0.02 ETH per NFT</small>
+        <small>Price: <span class="price-eth">0.01 ETH</span> <span class="price-usd">(~$24)</span></small>
+        <br><small style="color: #64748b; font-size: 0.8em;">Fixed pricing • 0.01 ETH per NFT</small>
     </div>
 
     <!-- Update price updater script -->
@@ -749,7 +749,7 @@
                 
                 // Get current smart price
                 const price = await window.walletManager.contract.methods.getCurrentSmartPrice().call();
-                const priceInEth = 0.02; // Fixed price at 0.02 ETH
+                const priceInEth = 0.01; // Fixed price at 0.01 ETH
                 
                 // Update all price displays
                 const priceElements = document.querySelectorAll('.price-eth, .current-price');
