@@ -1,0 +1,20 @@
+{
+  "network": "Sepolia Testnet",
+  "chainId": 11155111,
+  "contractAddress": "0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
+  "explorerUrl": "https://sepolia.etherscan.io/address/0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
+  "price": "0.01 ETH",
+  "maxSupply": 10000,
+  "functions": {
+    "mint": "mintNFT(quantity)",
+    "totalSupply": "totalSupply()",
+    "price": "PRICE()",
+    "revealed": "revealed()",
+    "withdraw": "withdraw() [owner only]"
+  },
+  "updatedFiles": [
+    "src/js/wallet.js",
+    "website/src/js/wallet.js"
+  ],
+  "timestamp": "2025-10-24T05:48:13.788Z"
+}
