@@ -949,6 +949,9 @@ async function buyWithWallet() {
     window.mintHandler?.mintFromModal();
 }
         
+// Encapsulate mint flow in an async IIFE to allow await and proper try/catch
+(async function() {
+    try {
         if (typeof window.ethereum === 'undefined') {
             alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
             return;
@@ -992,7 +995,6 @@ async function buyWithWallet() {
             
             alert(`🎉 Successfully minted ${quantity} NFT(s)!\n\nView on Etherscan:\n${etherscanUrl}`);
         }
-
     } catch (error) {
         console.error('❌ Wallet minting error:', error);
         
@@ -1008,7 +1010,7 @@ async function buyWithWallet() {
         
         alert('❌ ' + errorMessage);
     }
-}
+})();
 
 async function handleConnectAndBuy() {
     window.mintHandler?.handleMint(1);
