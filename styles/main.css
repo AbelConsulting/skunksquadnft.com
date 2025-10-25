@@ -228,7 +228,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     align-items: center;
     padding: var(--space-md);
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     background: transparent;
 }
@@ -467,21 +467,23 @@ h1, h2, h3, h4, h5, h6 {
 .nav-menu {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem;
     padding: 1rem 0;
     background: transparent !important;
+    flex-wrap: wrap;
 }
 
 .nav-link {
     color: #e2e8f0 !important;
     text-decoration: none;
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.875rem;
     border-radius: 0.5rem;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
