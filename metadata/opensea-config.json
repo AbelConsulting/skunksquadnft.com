@@ -1,11 +1,11 @@
 {
-  "contract_address": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "contract_address": "0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
   "network": "sepolia",
   "collection_slug": "skunk-squad-nft",
   "urls": {
     "testnet": "https://testnets.opensea.io/collection/skunk-squad-nft",
     "mainnet": "https://opensea.io/collection/skunk-squad-nft",
-    "contract": "https://testnets.opensea.io/assets/sepolia/0x6ba18b88b64af8898bbb42262ed18ec13dc81315"
+    "contract": "https://testnets.opensea.io/assets/sepolia/0xf14F75aEDBbDE252616410649f4dd7C1963191c4"
   },
   "metadata_endpoints": {
     "contract_uri": "https://api.skunksquadnft.com/contract.json",

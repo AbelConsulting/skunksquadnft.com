@@ -2,7 +2,7 @@
   "environment": "MAINNET PRODUCTION",
   "network": "mainnet",
   "contractName": "SkunkSquad NFT Enhanced",
-  "contractAddress": "0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+  "contractAddress": "0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
   "deployerAddress": "0x16Be43d7571Edf69cec8D6221044638d161aA994",
   "deploymentDate": "2025-10-11",
   "configuration": {
@@ -30,8 +30,8 @@
     "storageType": "Permanent Arweave"
   },
   "links": {
-    "etherscan": "https://etherscan.io/address/0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
-    "opensea": "https://opensea.io/assets/ethereum/0x6BA18b88b64af8898bbb42262ED18EC13DC81315",
+    "etherscan": "https://etherscan.io/address/0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
+    "opensea": "https://opensea.io/assets/ethereum/0xf14F75aEDBbDE252616410649f4dd7C1963191c4",
     "website": "https://skunksquadnft.com"
   },
   "status": "LIVE ON MAINNET",

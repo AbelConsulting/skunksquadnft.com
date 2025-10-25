@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 async function main() {
     console.log("🔍 SEPOLIA - Attempting Actual Mint\n");
     
-    const CONTRACT_ADDRESS = "0x6BA18b88b64af8898bbb42262ED18EC13DC81315";
+    const CONTRACT_ADDRESS = "0xf14F75aEDBbDE252616410649f4dd7C1963191c4";
     
     const [deployer] = await ethers.getSigners();
     const SkunkSquad = await ethers.getContractAt("SkunkSquadNFT", CONTRACT_ADDRESS);
