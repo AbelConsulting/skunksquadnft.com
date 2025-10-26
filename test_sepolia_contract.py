@@ -10,7 +10,7 @@ from web3 import Web3
 from pathlib import Path
 
 # Contract details from deployment
-CONTRACT_ADDRESS = "0x6BA18b88b64af8898bbb42262ED18EC13DC81315"
+CONTRACT_ADDRESS = "0xf14F75aEDBbDE252616410649f4dd7C1963191c4"
 SEPOLIA_RPC = "https://sepolia.infura.io/v3/"  # Add your Infura key or use public RPC
 ETHERSCAN_API = "https://api-sepolia.etherscan.io/api"
 

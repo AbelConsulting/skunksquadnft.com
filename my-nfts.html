@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My NFTs - Skunk Squad Collection</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    
+    <style>
+        .viewer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .nft-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nft-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+            border-color: rgba(139, 92, 246, 0.6);
+        }
+        
+        .nft-image-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: rgba(15, 23, 42, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nft-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .nft-image.loaded {
+            display: block;
+        }
+        
+        .nft-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #8b5cf6;
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .nft-info {
+            padding: 1.5rem;
+        }
+        
+        .nft-number {
+            font-size: 0.875rem;
+            color: #8b5cf6;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nft-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nft-description {
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .nft-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .attribute-badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .nft-links {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .nft-link {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 0.5rem;
+            color: #c4b5fd;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .nft-link:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border-radius: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Info Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="launch-badge">🦨 MY NFTS</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="./index.html" class="top-social-link">🏠 Home</a>
+                <a href="./about.html" class="top-social-link">About</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image"></div>
+                <span class="brand-text">SkunkSquad</span>
+                <span class="beta-badge">MY NFTs</span>
+            </div>
+            
+            <div class="nav-actions">
+                <a href="./index.html" class="btn btn-secondary">← Back to Home</a>
+                <button id="connectBtn" class="btn btn-primary" onclick="connectWallet()">
+                    <span id="walletStatus">Connect Wallet</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="viewer-container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; color: #f1f5f9; margin-bottom: 1rem;">
+                My Skunk Squad NFTs
+            </h1>
+            <p style="color: #94a3b8; font-size: 1.1rem;">
+                View your minted NFTs from the collection
+            </p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div id="statsBar" class="stats-bar" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-value" id="totalMinted">0</div>
+                <div class="stat-label">Total Minted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="yourBalance">0</div>
+                <div class="stat-label">Your NFTs</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="collectionSize">10,000</div>
+                <div class="stat-label">Collection Size</div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <div>Loading NFTs...</div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-message" style="display: none;">
+            <strong>Error loading NFTs</strong>
+            <div id="errorMessage"></div>
+        </div>
+
+        <!-- NFT Grid -->
+        <div id="nftGrid" class="nft-grid" style="display: none;"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image"></div>
+                        <span class="brand-text">SkunkSquad</span>
+                    </div>
+                    <p>Handcrafted NFTs. Permanent storage on Arweave.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contract Info</h4>
+                    <p class="contract-address">0xf14F75aEDBbDE252616410649f4dd7C1963191c4</p>
+                    <a href="https://sepolia.etherscan.io/address/0xf14F75aEDBbDE252616410649f4dd7C1963191c4" target="_blank">
+                        View on Etherscan
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SkunkSquad NFT. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        const CONTRACT_ADDRESS = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4';
+        const SEPOLIA_RPC = 'https://eth-sepolia.public.blastapi.io';
+        
+        const CONTRACT_ABI = [
+            "function tokenURI(uint256 tokenId) view returns (string)",
+            "function ownerOf(uint256 tokenId) view returns (address)",
+            "function totalSupply() view returns (uint256)",
+            "function balanceOf(address owner) view returns (uint256)"
+        ];
+
+        let provider;
+        let contract;
+        let userAddress;
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAddress = accounts[0];
+                    document.getElementById('walletStatus').textContent = 
+                        userAddress.substring(0, 6) + '...' + userAddress.substring(38);
+                    loadNFTs();
+                } catch (error) {
+                    showError('Failed to connect wallet: ' + error.message);
+                }
+            } else {
+                showError('MetaMask not installed. Please install MetaMask to view your NFTs.');
+            }
+        }
+
+        async function loadNFTs() {
+            try {
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('errorState').style.display = 'none';
+                document.getElementById('nftGrid').style.display = 'none';
+
+                // Setup provider and contract
+                provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC);
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+
+                // Get collection stats
+                const totalSupply = await contract.totalSupply();
+                document.getElementById('totalMinted').textContent = totalSupply.toString();
+                document.getElementById('statsBar').style.display = 'flex';
+
+                // Get user's NFTs if wallet connected
+                let userBalance = 0;
+                const nfts = [];
+
+                if (userAddress) {
+                    userBalance = await contract.balanceOf(userAddress);
+                    document.getElementById('yourBalance').textContent = userBalance.toString();
+                }
+
+                // Load all minted NFTs
+                for (let tokenId = 1; tokenId <= totalSupply; tokenId++) {
+                    const owner = await contract.ownerOf(tokenId);
+                    const tokenURI = await contract.tokenURI(tokenId);
+                    
+                    nfts.push({
+                        tokenId,
+                        owner,
+                        tokenURI,
+                        isOwned: userAddress && owner.toLowerCase() === userAddress.toLowerCase()
+                    });
+                }
+
+                displayNFTs(nfts);
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('nftGrid').style.display = 'grid';
+
+            } catch (error) {
+                showError('Failed to load NFTs: ' + error.message);
+                document.getElementById('loadingState').style.display = 'none';
+            }
+        }
+
+        async function displayNFTs(nfts) {
+            const grid = document.getElementById('nftGrid');
+            grid.innerHTML = '';
+
+            for (const nft of nfts) {
+                const card = await createNFTCard(nft);
+                grid.appendChild(card);
+            }
+        }
+
+        async function createNFTCard(nft) {
+            const card = document.createElement('div');
+            card.className = 'nft-card';
+            
+            // Fetch metadata
+            let metadata = {
+                name: `Skunk Squad #${nft.tokenId}`,
+                description: 'Loading...',
+                image: '',
+                attributes: []
+            };
+
+            try {
+                const metadataURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
+                const response = await fetch(metadataURL);
+                if (response.ok) {
+                    metadata = await response.json();
+                }
+            } catch (e) {
+                console.log('Could not fetch metadata for token', nft.tokenId);
+            }
+
+            const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : '';
+            const etherscanURL = `https://sepolia.etherscan.io/token/${CONTRACT_ADDRESS}?a=${nft.tokenId}`;
+            const arweaveURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
+
+            card.innerHTML = `
+                <div class="nft-image-container">
+                    <div class="nft-loading">⏳</div>
+                    ${imageURL ? `<img src="${imageURL}" alt="${metadata.name}" class="nft-image" onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">` : '<div style="padding: 2rem; text-align: center; color: #94a3b8;">No Image</div>'}
+                </div>
+                <div class="nft-info">
+                    <div class="nft-number">${nft.isOwned ? '✨ YOU OWN THIS' : ''} #${nft.tokenId}</div>
+                    <div class="nft-name">${metadata.name || `Skunk Squad #${nft.tokenId}`}</div>
+                    <div class="nft-description">${metadata.description || 'No description available'}</div>
+                    ${metadata.attributes && metadata.attributes.length > 0 ? `
+                        <div class="nft-attributes">
+                            ${metadata.attributes.map(attr => `
+                                <span class="attribute-badge">${attr.trait_type}: ${attr.value}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="nft-links">
+                        <a href="${etherscanURL}" target="_blank" class="nft-link">Etherscan</a>
+                        <a href="${arweaveURL}" target="_blank" class="nft-link">Metadata</a>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showError(message) {
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', () => {
+            loadNFTs();
+        });
+    </script>
+</body>
+</html>
