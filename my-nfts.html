@@ -401,24 +401,30 @@
                 const response = await fetch(metadataURL);
                 
                 if (response.ok) {
-                    const contentType = response.headers.get('content-type');
+                    const data = await response.json();
                     
-                    // Check if it's a manifest file (contains token mappings)
-                    if (contentType && contentType.includes('application/json')) {
-                        const data = await response.json();
-                        
-                        // If it's a manifest with token mappings, fetch the actual metadata
-                        if (data[nft.tokenId] && data[nft.tokenId].id) {
-                            const actualMetadataURL = `https://arweave.net/${data[nft.tokenId].id}`;
+                    // Check if it's an Arweave path manifest
+                    if (data.manifest === 'arweave/paths' && data.paths) {
+                        const tokenKey = nft.tokenId.toString();
+                        if (data.paths[tokenKey] && data.paths[tokenKey].id) {
+                            const actualMetadataURL = `https://arweave.net/${data.paths[tokenKey].id}`;
                             const metadataResponse = await fetch(actualMetadataURL);
                             if (metadataResponse.ok) {
                                 metadata = await metadataResponse.json();
                             }
-                        } 
-                        // Otherwise it's direct metadata
-                        else if (data.name || data.description || data.image) {
-                            metadata = data;
                         }
+                    }
+                    // Check if it's a simple manifest with token mappings
+                    else if (data[nft.tokenId] && data[nft.tokenId].id) {
+                        const actualMetadataURL = `https://arweave.net/${data[nft.tokenId].id}`;
+                        const metadataResponse = await fetch(actualMetadataURL);
+                        if (metadataResponse.ok) {
+                            metadata = await metadataResponse.json();
+                        }
+                    } 
+                    // Otherwise it's direct metadata
+                    else if (data.name || data.description || data.image) {
+                        metadata = data;
                     }
                 }
             } catch (e) {
