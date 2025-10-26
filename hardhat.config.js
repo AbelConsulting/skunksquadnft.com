@@ -26,10 +26,7 @@ module.exports = {
     }
   },
   etherscan: {
-    apiKey: {
-      sepolia: process.env.ETHERSCAN_API_KEY,
-      mainnet: process.env.ETHERSCAN_API_KEY
-    },
+    apiKey: process.env.ETHERSCAN_API_KEY, // Single API key for v2
     customChains: []
   },
   sourcify: {

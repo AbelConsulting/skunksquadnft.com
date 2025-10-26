@@ -1,6 +1,6 @@
 /**
  * Mint NFTs from SkunkSquad Contract
- * Owner minting function
+ * Public minting function
  */
 
 const { ethers } = require('ethers');
@@ -12,7 +12,6 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 // Contract ABI - just the functions we need
 const CONTRACT_ABI = [
-    "function ownerMint(address to, uint256 quantity) external",
     "function mintNFT(uint256 quantity) external payable",
     "function totalSupply() view returns (uint256)",
     "function balanceOf(address owner) view returns (uint256)",
@@ -53,14 +52,28 @@ async function main() {
         console.log('⚠️  Could not read contract state:', e.message);
     }
     
-    // Mint NFTs
-    const quantity = 2;
-    console.log('\n⏳ Minting', quantity, 'NFTs...');
+    // Get quantity from command line argument, default to 1
+    const args = process.argv.slice(2);
+    const quantity = args.length > 0 ? parseInt(args[0]) : 1;
+    
+    if (isNaN(quantity) || quantity < 1) {
+        console.error('❌ Error: Invalid quantity. Please provide a positive number.');
+        console.log('Usage: node scripts/mint-nfts.js [quantity]');
+        console.log('Example: node scripts/mint-nfts.js 3');
+        process.exit(1);
+    }
+    
+    console.log('\n⏳ Minting', quantity, 'NFT' + (quantity > 1 ? 's' : '') + '...');
     
     try {
-        // Try owner mint first (free for owner)
-        console.log('Attempting owner mint (free)...');
-        const tx = await contract.ownerMint(wallet.address, quantity, {
+        // Public mint with payment
+        const price = await contract.PRICE();
+        const totalCost = price.mul(quantity);
+        
+        console.log('💰 Cost:', ethers.utils.formatEther(totalCost), 'ETH');
+        
+        const tx = await contract.mintNFT(quantity, {
+            value: totalCost,
             gasLimit: 500000
         });
         
@@ -83,52 +96,18 @@ async function main() {
         console.log(`   https://sepolia.etherscan.io/tx/${tx.hash}`);
         
     } catch (error) {
-        console.log('\n❌ Owner mint failed, trying public mint...');
+        console.error('\n❌ Minting failed!');
+        console.error('Error:', error.message);
         
-        try {
-            // Try public mint with payment
-            const price = await contract.PRICE();
-            const totalCost = price.mul(quantity);
-            
-            console.log('💰 Cost:', ethers.utils.formatEther(totalCost), 'ETH');
-            
-            const tx = await contract.mintNFT(quantity, {
-                value: totalCost,
-                gasLimit: 500000
-            });
-            
-            console.log('✅ Transaction sent:', tx.hash);
-            console.log('⏳ Waiting for confirmation...');
-            
-            const receipt = await tx.wait();
-            console.log('✅ Transaction confirmed in block:', receipt.blockNumber);
-            console.log('⛽ Gas used:', receipt.gasUsed.toString());
-            
-            // Get updated balances
-            const newTotalSupply = await contract.totalSupply();
-            const newYourBalance = await contract.balanceOf(wallet.address);
-            
-            console.log('\n🎉 MINTING SUCCESSFUL!');
-            console.log('=' .repeat(60));
-            console.log('📊 New Total Supply:', newTotalSupply.toString());
-            console.log('🎨 Your NFT Balance:', newYourBalance.toString());
-            console.log('🔗 View on Etherscan:');
-            console.log(`   https://sepolia.etherscan.io/tx/${tx.hash}`);
-            
-        } catch (publicError) {
-            console.error('\n❌ Minting failed!');
-            console.error('Error:', publicError.message);
-            
-            if (publicError.reason) {
-                console.error('Reason:', publicError.reason);
-            }
-            
-            if (publicError.error && publicError.error.message) {
-                console.error('Details:', publicError.error.message);
-            }
-            
-            process.exit(1);
+        if (error.reason) {
+            console.error('Reason:', error.reason);
         }
+        
+        if (error.error && error.error.message) {
+            console.error('Details:', error.error.message);
+        }
+        
+        process.exit(1);
     }
 }
 
