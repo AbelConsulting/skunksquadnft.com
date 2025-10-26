@@ -413,7 +413,7 @@
             card.innerHTML = `
                 <div class="nft-image-container">
                     <div class="nft-loading">⏳</div>
-                    ${imageURL ? `<img src="${imageURL}" alt="${metadata.name}" class="nft-image" onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'">` : '<div style="padding: 2rem; text-align: center; color: #94a3b8;">No Image</div>'}
+                    ${imageURL ? `<img src="${imageURL}" alt="${metadata.name}" class="nft-image" onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'" onerror="this.previousElementSibling.textContent='❌'; this.previousElementSibling.style.display='block'; this.style.display='none'">` : '<div style="padding: 2rem; text-align: center; color: #94a3b8;">No Image</div>'}
                 </div>
                 <div class="nft-info">
                     <div class="nft-number">${nft.isOwned ? '✨ YOU OWN THIS' : ''} #${nft.tokenId}</div>
