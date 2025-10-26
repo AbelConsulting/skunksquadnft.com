@@ -399,11 +399,30 @@
             try {
                 const metadataURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
                 const response = await fetch(metadataURL);
+                
                 if (response.ok) {
-                    metadata = await response.json();
+                    const contentType = response.headers.get('content-type');
+                    
+                    // Check if it's a manifest file (contains token mappings)
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await response.json();
+                        
+                        // If it's a manifest with token mappings, fetch the actual metadata
+                        if (data[nft.tokenId] && data[nft.tokenId].id) {
+                            const actualMetadataURL = `https://arweave.net/${data[nft.tokenId].id}`;
+                            const metadataResponse = await fetch(actualMetadataURL);
+                            if (metadataResponse.ok) {
+                                metadata = await metadataResponse.json();
+                            }
+                        } 
+                        // Otherwise it's direct metadata
+                        else if (data.name || data.description || data.image) {
+                            metadata = data;
+                        }
+                    }
                 }
             } catch (e) {
-                console.log('Could not fetch metadata for token', nft.tokenId);
+                console.log('Could not fetch metadata for token', nft.tokenId, e);
             }
 
             const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : '';
