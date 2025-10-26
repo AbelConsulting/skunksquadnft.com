@@ -310,6 +310,7 @@
         let provider;
         let contract;
         let userAddress;
+        let manifestCache = {}; // Cache manifests to avoid duplicate fetches
 
         async function connectWallet() {
             if (typeof window.ethereum !== 'undefined') {
@@ -378,10 +379,42 @@
             const grid = document.getElementById('nftGrid');
             grid.innerHTML = '';
 
-            for (const nft of nfts) {
-                const card = await createNFTCard(nft);
-                grid.appendChild(card);
-            }
+            console.log('Displaying', nfts.length, 'NFTs');
+            
+            // Pre-fetch manifests (deduplicate by base URL)
+            const manifestUrls = new Set();
+            nfts.forEach(nft => {
+                // Extract base manifest URL (everything before the token-specific part)
+                const url = nft.tokenURI.replace('ar://', 'https://arweave.net/');
+                const baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+                manifestUrls.add(baseUrl);
+            });
+            
+            // Fetch all unique manifests in parallel
+            await Promise.all(
+                Array.from(manifestUrls).map(async (baseUrl) => {
+                    try {
+                        // Try fetching a sample path to get the manifest
+                        const sampleUrl = baseUrl + '1.json';
+                        const response = await fetch(sampleUrl);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.manifest === 'arweave/paths' && data.paths) {
+                                manifestCache[baseUrl] = data.paths;
+                                console.log('Cached manifest for', baseUrl);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error pre-fetching manifest:', baseUrl, e);
+                    }
+                })
+            );
+            
+            // Now create all cards in parallel
+            const cardPromises = nfts.map(nft => createNFTCard(nft));
+            const cards = await Promise.all(cardPromises);
+            
+            cards.forEach(card => grid.appendChild(card));
         }
 
         async function createNFTCard(nft) {
@@ -398,37 +431,53 @@
 
             try {
                 const metadataURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
-                const response = await fetch(metadataURL);
+                const baseUrl = metadataURL.substring(0, metadataURL.lastIndexOf('/') + 1);
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    // Check if it's an Arweave path manifest
-                    if (data.manifest === 'arweave/paths' && data.paths) {
-                        const tokenKey = nft.tokenId.toString();
-                        if (data.paths[tokenKey] && data.paths[tokenKey].id) {
-                            const actualMetadataURL = `https://arweave.net/${data.paths[tokenKey].id}`;
-                            const metadataResponse = await fetch(actualMetadataURL);
-                            if (metadataResponse.ok) {
-                                metadata = await metadataResponse.json();
-                            }
-                        }
-                    }
-                    // Check if it's a simple manifest with token mappings
-                    else if (data[nft.tokenId] && data[nft.tokenId].id) {
-                        const actualMetadataURL = `https://arweave.net/${data[nft.tokenId].id}`;
+                // Check if we have cached manifest
+                if (manifestCache[baseUrl]) {
+                    const tokenKey = nft.tokenId.toString();
+                    if (manifestCache[baseUrl][tokenKey] && manifestCache[baseUrl][tokenKey].id) {
+                        const actualMetadataURL = `https://arweave.net/${manifestCache[baseUrl][tokenKey].id}`;
                         const metadataResponse = await fetch(actualMetadataURL);
                         if (metadataResponse.ok) {
                             metadata = await metadataResponse.json();
                         }
-                    } 
-                    // Otherwise it's direct metadata
-                    else if (data.name || data.description || data.image) {
-                        metadata = data;
+                    }
+                } else {
+                    // Fallback: fetch directly
+                    const response = await fetch(metadataURL);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Check if it's an Arweave path manifest
+                        if (data.manifest === 'arweave/paths' && data.paths) {
+                            const tokenKey = nft.tokenId.toString();
+                            
+                            if (data.paths[tokenKey] && data.paths[tokenKey].id) {
+                                const actualMetadataURL = `https://arweave.net/${data.paths[tokenKey].id}`;
+                                const metadataResponse = await fetch(actualMetadataURL);
+                                if (metadataResponse.ok) {
+                                    metadata = await metadataResponse.json();
+                                }
+                            }
+                        }
+                        // Check if it's a simple manifest with token mappings
+                        else if (data[nft.tokenId] && data[nft.tokenId].id) {
+                            const actualMetadataURL = `https://arweave.net/${data[nft.tokenId].id}`;
+                            const metadataResponse = await fetch(actualMetadataURL);
+                            if (metadataResponse.ok) {
+                                metadata = await metadataResponse.json();
+                            }
+                        } 
+                        // Otherwise it's direct metadata
+                        else if (data.name || data.description || data.image) {
+                            metadata = data;
+                        }
                     }
                 }
             } catch (e) {
-                console.log('Could not fetch metadata for token', nft.tokenId, e);
+                console.error('Error fetching metadata for token', nft.tokenId, e);
             }
 
             const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : '';
