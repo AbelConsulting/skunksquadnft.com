@@ -281,10 +281,10 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Contract Info</h4>
-                    <p class="contract-address">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</p>
-                    <a href="https://etherscan.io/address/0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF" target="_blank">
-                        View on Etherscan
+                    <h4>Contract Info (Sepolia Testnet)</h4>
+                    <p class="contract-address">0x6BA18b88b64af8898bbb42262ED18EC13DC81315</p>
+                    <a href="https://sepolia.etherscan.io/address/0x6BA18b88b64af8898bbb42262ED18EC13DC81315" target="_blank">
+                        View on Sepolia Etherscan
                     </a>
                 </div>
             </div>
@@ -297,8 +297,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
-        const MAINNET_RPC = 'https://eth.llamarpc.com'; // Fast, reliable public RPC
+        const CONTRACT_ADDRESS = '0x6BA18b88b64af8898bbb42262ED18EC13DC81315';
+        const MAINNET_RPC = 'https://eth-sepolia.public.blastapi.io'; // Sepolia testnet
         
         const CONTRACT_ABI = [
             "function tokenURI(uint256 tokenId) view returns (string)",
@@ -488,7 +488,7 @@
             }
 
             const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : '';
-            const etherscanURL = `https://etherscan.io/token/${CONTRACT_ADDRESS}?a=${nft.tokenId}`;
+            const etherscanURL = `https://sepolia.etherscan.io/token/${CONTRACT_ADDRESS}?a=${nft.tokenId}`;
             const arweaveURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
 
             card.innerHTML = `
