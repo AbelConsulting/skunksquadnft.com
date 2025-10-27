@@ -1194,8 +1194,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-export default WalletManager;
-
 // Initialize wallet manager when page loads
 console.log('🦨 Initializing WalletManager...');
 
