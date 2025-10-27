@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦨 Live Mint Test - SkunkSquad NFT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .test-section h2 {
+            color: #495057;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .test-result {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .test-result.pass {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .test-result.fail {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .test-result.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        button {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(86, 171, 47, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .console-line {
+            margin: 0.25rem 0;
+            line-height: 1.4;
+        }
+        
+        .console-line.success { color: #4ec9b0; }
+        .console-line.error { color: #f48771; }
+        .console-line.warning { color: #dcdcaa; }
+        .console-line.info { color: #9cdcfe; }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .quantity-selector input {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .info-value {
+            color: #6c757d;
+            word-break: break-all;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦨 SkunkSquad Live Mint Test</h1>
+        
+        <div class="status" id="mainStatus">
+            Ready to test minting functionality
+        </div>
+        
+        <!-- Test 1: Environment Check -->
+        <div class="test-section">
+            <h2>🔍 Step 1: Environment Check</h2>
+            <button class="btn-primary" onclick="runEnvironmentCheck()">Run Environment Check</button>
+            <div id="envResults"></div>
+        </div>
+        
+        <!-- Test 2: Wallet Connection -->
+        <div class="test-section">
+            <h2>👛 Step 2: Wallet Connection</h2>
+            <button class="btn-primary" onclick="connectWallet()">Connect MetaMask</button>
+            <div id="walletResults"></div>
+        </div>
+        
+        <!-- Test 3: Contract Verification -->
+        <div class="test-section">
+            <h2>📜 Step 3: Contract Verification</h2>
+            <button class="btn-primary" onclick="verifyContract()">Verify Contract</button>
+            <div id="contractResults"></div>
+        </div>
+        
+        <!-- Test 4: Live Mint -->
+        <div class="test-section">
+            <h2>⛏️ Step 4: Live Mint Test</h2>
+            <div class="quantity-selector">
+                <label for="mintQuantity" style="font-weight: 600;">Quantity:</label>
+                <input type="number" id="mintQuantity" min="1" max="10" value="1">
+                <span id="totalCost" style="font-weight: 600; color: #667eea;">0.01 ETH</span>
+            </div>
+            <button class="btn-success" onclick="executeMint()" id="mintBtn" disabled>
+                🚀 Execute Live Mint (REAL TRANSACTION)
+            </button>
+            <div id="mintResults"></div>
+        </div>
+        
+        <!-- Console -->
+        <div class="test-section">
+            <h2>📟 Debug Console</h2>
+            <div class="console" id="console"></div>
+        </div>
+    </div>
+
+    <!-- Load Web3 and Contract ABI -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="./src/js/config.js"></script>
+    
+    <script>
+        let web3;
+        let contract;
+        let userAccount;
+        
+        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+        const MINT_PRICE = '0.01';
+        
+        const CONTRACT_ABI = [
+            {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+            {"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"address","name":"owner","type":"address"}],"name":"ERC721IncorrectOwner","type":"error"},
+            {"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ERC721InsufficientApproval","type":"error"},
+            {"inputs":[{"internalType":"address","name":"approver","type":"address"}],"name":"ERC721InvalidApprover","type":"error"},
+            {"inputs":[{"internalType":"address","name":"operator","type":"address"}],"name":"ERC721InvalidOperator","type":"error"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"ERC721InvalidOwner","type":"error"},
+            {"inputs":[{"internalType":"address","name":"receiver","type":"address"}],"name":"ERC721InvalidReceiver","type":"error"},
+            {"inputs":[{"internalType":"address","name":"sender","type":"address"}],"name":"ERC721InvalidSender","type":"error"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ERC721NonexistentToken","type":"error"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},
+            {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},
+            {"inputs":[],"name":"MAX_SUPPLY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"MINT_PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"contractURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"quantity","type":"uint256"}],"name":"mintNFT","outputs":[],"stateMutability":"payable","type":"function"},
+            {"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}
+        ];
+        
+        // Console logging
+        function log(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            
+            // Also log to browser console
+            window.console[type === 'error' ? 'error' : 'log'](message);
+        }
+        
+        // Update quantity cost
+        document.getElementById('mintQuantity').addEventListener('input', function() {
+            const quantity = parseInt(this.value) || 1;
+            const total = (quantity * parseFloat(MINT_PRICE)).toFixed(4);
+            document.getElementById('totalCost').textContent = `${total} ETH`;
+        });
+        
+        // Step 1: Environment Check
+        async function runEnvironmentCheck() {
+            const results = document.getElementById('envResults');
+            results.innerHTML = '';
+            log('Running environment check...', 'info');
+            
+            let allPassed = true;
+            
+            // Check MetaMask
+            if (typeof window.ethereum !== 'undefined') {
+                results.innerHTML += '<div class="test-result pass">✅ MetaMask detected</div>';
+                log('✅ MetaMask detected', 'success');
+            } else {
+                results.innerHTML += '<div class="test-result fail">❌ MetaMask not found - Please install MetaMask</div>';
+                log('❌ MetaMask not found', 'error');
+                allPassed = false;
+            }
+            
+            // Check Web3
+            if (typeof Web3 !== 'undefined') {
+                results.innerHTML += '<div class="test-result pass">✅ Web3 library loaded</div>';
+                log('✅ Web3 library loaded', 'success');
+            } else {
+                results.innerHTML += '<div class="test-result fail">❌ Web3 library not loaded</div>';
+                log('❌ Web3 library not loaded', 'error');
+                allPassed = false;
+            }
+            
+            // Check Config
+            if (typeof SkunkSquadConfig !== 'undefined') {
+                results.innerHTML += '<div class="test-result pass">✅ SkunkSquad config loaded</div>';
+                results.innerHTML += `<div class="test-result info">ℹ️ Contract: ${CONTRACT_ADDRESS}</div>`;
+                results.innerHTML += `<div class="test-result info">ℹ️ Mint Price: ${MINT_PRICE} ETH</div>`;
+                log('✅ Config loaded', 'success');
+            } else {
+                results.innerHTML += '<div class="test-result fail">❌ SkunkSquad config not loaded</div>';
+                log('❌ Config not loaded', 'error');
+                allPassed = false;
+            }
+            
+            if (allPassed) {
+                document.getElementById('mainStatus').className = 'status success';
+                document.getElementById('mainStatus').textContent = '✅ Environment check passed! Ready to connect wallet.';
+            } else {
+                document.getElementById('mainStatus').className = 'status error';
+                document.getElementById('mainStatus').textContent = '❌ Environment check failed. Please fix errors above.';
+            }
+        }
+        
+        // Step 2: Connect Wallet
+        async function connectWallet() {
+            const results = document.getElementById('walletResults');
+            results.innerHTML = '';
+            log('Connecting wallet...', 'info');
+            
+            try {
+                // Request accounts
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAccount = accounts[0];
+                
+                results.innerHTML += `<div class="test-result pass">✅ Wallet connected: ${userAccount}</div>`;
+                log(`✅ Connected: ${userAccount}`, 'success');
+                
+                // Initialize Web3
+                web3 = new Web3(window.ethereum);
+                
+                // Check network
+                const chainId = await web3.eth.getChainId();
+                if (chainId === 1) {
+                    results.innerHTML += '<div class="test-result pass">✅ Connected to Ethereum Mainnet</div>';
+                    log('✅ Network: Mainnet', 'success');
+                } else {
+                    results.innerHTML += `<div class="test-result fail">❌ Wrong network (Chain ID: ${chainId}). Please switch to Ethereum Mainnet.</div>`;
+                    log(`❌ Wrong network: ${chainId}`, 'error');
+                    return;
+                }
+                
+                // Check balance
+                const balance = await web3.eth.getBalance(userAccount);
+                const ethBalance = web3.utils.fromWei(balance, 'ether');
+                results.innerHTML += `<div class="test-result info">ℹ️ Balance: ${parseFloat(ethBalance).toFixed(4)} ETH</div>`;
+                log(`Balance: ${ethBalance} ETH`, 'info');
+                
+                if (parseFloat(ethBalance) < 0.015) {
+                    results.innerHTML += '<div class="test-result fail">⚠️ Low balance! You need at least 0.01 ETH + gas fees (~0.005 ETH)</div>';
+                    log('⚠️ Low balance warning', 'warning');
+                }
+                
+                document.getElementById('mainStatus').className = 'status success';
+                document.getElementById('mainStatus').textContent = '✅ Wallet connected! Ready to verify contract.';
+                
+            } catch (error) {
+                results.innerHTML += `<div class="test-result fail">❌ Connection failed: ${error.message}</div>`;
+                log(`❌ Connection failed: ${error.message}`, 'error');
+                document.getElementById('mainStatus').className = 'status error';
+                document.getElementById('mainStatus').textContent = '❌ Wallet connection failed.';
+            }
+        }
+        
+        // Step 3: Verify Contract
+        async function verifyContract() {
+            const results = document.getElementById('contractResults');
+            results.innerHTML = '';
+            
+            if (!web3) {
+                results.innerHTML += '<div class="test-result fail">❌ Please connect wallet first</div>';
+                return;
+            }
+            
+            log('Verifying contract...', 'info');
+            
+            try {
+                // Initialize contract
+                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+                
+                results.innerHTML += '<div class="test-result pass">✅ Contract initialized</div>';
+                log('✅ Contract initialized', 'success');
+                
+                // Check total supply
+                const totalSupply = await contract.methods.totalSupply().call();
+                results.innerHTML += `<div class="test-result info">ℹ️ Total Supply: ${totalSupply} / 10,000</div>`;
+                log(`Total Supply: ${totalSupply}`, 'info');
+                
+                // Check max supply
+                const maxSupply = await contract.methods.MAX_SUPPLY().call();
+                results.innerHTML += `<div class="test-result info">ℹ️ Max Supply: ${maxSupply}</div>`;
+                log(`Max Supply: ${maxSupply}`, 'info');
+                
+                // Check mint price
+                const mintPrice = await contract.methods.MINT_PRICE().call();
+                const mintPriceEth = web3.utils.fromWei(mintPrice, 'ether');
+                results.innerHTML += `<div class="test-result info">ℹ️ Mint Price: ${mintPriceEth} ETH</div>`;
+                log(`Mint Price: ${mintPriceEth} ETH`, 'info');
+                
+                if (mintPriceEth !== MINT_PRICE) {
+                    results.innerHTML += `<div class="test-result fail">⚠️ Warning: Contract price (${mintPriceEth} ETH) differs from expected (${MINT_PRICE} ETH)</div>`;
+                    log(`⚠️ Price mismatch!`, 'warning');
+                }
+                
+                // Check contract URI (metadata)
+                const contractURI = await contract.methods.contractURI().call();
+                results.innerHTML += `<div class="test-result info">ℹ️ Contract URI: ${contractURI.substring(0, 50)}...</div>`;
+                log(`Contract URI: ${contractURI}`, 'info');
+                
+                // Enable mint button
+                document.getElementById('mintBtn').disabled = false;
+                
+                document.getElementById('mainStatus').className = 'status success';
+                document.getElementById('mainStatus').textContent = '✅ Contract verified! Ready to mint!';
+                
+            } catch (error) {
+                results.innerHTML += `<div class="test-result fail">❌ Verification failed: ${error.message}</div>`;
+                log(`❌ Verification failed: ${error.message}`, 'error');
+                document.getElementById('mainStatus').className = 'status error';
+                document.getElementById('mainStatus').textContent = '❌ Contract verification failed.';
+            }
+        }
+        
+        // Step 4: Execute Mint
+        async function executeMint() {
+            const results = document.getElementById('mintResults');
+            results.innerHTML = '';
+            
+            if (!contract || !userAccount) {
+                results.innerHTML += '<div class="test-result fail">❌ Please complete previous steps first</div>';
+                return;
+            }
+            
+            const quantity = parseInt(document.getElementById('mintQuantity').value) || 1;
+            const totalCost = web3.utils.toWei((quantity * parseFloat(MINT_PRICE)).toString(), 'ether');
+            
+            log(`🚀 Starting mint: ${quantity} NFT(s) for ${web3.utils.fromWei(totalCost, 'ether')} ETH`, 'info');
+            
+            results.innerHTML += '<div class="test-result info">⏳ Preparing transaction...</div>';
+            
+            try {
+                // Estimate gas
+                log('Estimating gas...', 'info');
+                const gasEstimate = await contract.methods.mintNFT(quantity).estimateGas({
+                    from: userAccount,
+                    value: totalCost
+                });
+                
+                results.innerHTML += `<div class="test-result info">⛽ Estimated gas: ${gasEstimate}</div>`;
+                log(`⛽ Gas estimate: ${gasEstimate}`, 'info');
+                
+                // Send transaction
+                results.innerHTML += '<div class="test-result warning">⏳ Waiting for MetaMask confirmation...</div>';
+                log('Waiting for user confirmation...', 'warning');
+                
+                const tx = await contract.methods.mintNFT(quantity).send({
+                    from: userAccount,
+                    value: totalCost,
+                    gas: Math.floor(gasEstimate * 1.2) // 20% buffer
+                });
+                
+                results.innerHTML += `<div class="test-result pass">🎉 MINT SUCCESSFUL!</div>`;
+                results.innerHTML += `<div class="test-result pass">Transaction Hash: <a href="https://etherscan.io/tx/${tx.transactionHash}" target="_blank">${tx.transactionHash}</a></div>`;
+                results.innerHTML += `<div class="test-result info">ℹ️ Gas Used: ${tx.gasUsed}</div>`;
+                
+                log(`🎉 SUCCESS! TX: ${tx.transactionHash}`, 'success');
+                
+                document.getElementById('mainStatus').className = 'status success';
+                document.getElementById('mainStatus').innerHTML = `🎉 MINT SUCCESSFUL! <a href="https://etherscan.io/tx/${tx.transactionHash}" target="_blank">View on Etherscan</a>`;
+                
+                // Check new balance
+                setTimeout(async () => {
+                    const balance = await contract.methods.balanceOf(userAccount).call();
+                    results.innerHTML += `<div class="test-result pass">✅ Your NFT Balance: ${balance}</div>`;
+                    log(`Your NFT balance: ${balance}`, 'success');
+                }, 3000);
+                
+            } catch (error) {
+                results.innerHTML += `<div class="test-result fail">❌ Mint failed: ${error.message}</div>`;
+                log(`❌ Mint failed: ${error.message}`, 'error');
+                
+                document.getElementById('mainStatus').className = 'status error';
+                document.getElementById('mainStatus').textContent = '❌ Mint failed. Check console for details.';
+                
+                if (error.message.includes('insufficient funds')) {
+                    results.innerHTML += '<div class="test-result fail">💰 You don\'t have enough ETH for the transaction + gas fees</div>';
+                    log('💰 Insufficient funds', 'error');
+                } else if (error.message.includes('user rejected')) {
+                    results.innerHTML += '<div class="test-result fail">⛔ You rejected the transaction in MetaMask</div>';
+                    log('⛔ Transaction rejected', 'warning');
+                }
+            }
+        }
+        
+        // Auto-run environment check on load
+        window.addEventListener('load', function() {
+            log('🦨 SkunkSquad Live Mint Test Ready', 'success');
+            log('Click "Run Environment Check" to begin', 'info');
+        });
+    </script>
+</body>
+</html>

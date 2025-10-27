@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 { color: #666; font-size: 18px; margin-top: 0; }
+        .status { 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .good { background: #d4edda; color: #155724; }
+        .bad { background: #f8d7da; color: #721c24; }
+        .warn { background: #fff3cd; color: #856404; }
+        button {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover { background: #7c3aed; }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 MetaMask Diagnostic Tool</h1>
+    
+    <div class="box">
+        <h2>Step 1: Check MetaMask Installation</h2>
+        <button onclick="checkMetaMask()">Check MetaMask</button>
+        <div id="metamaskCheck"></div>
+    </div>
+
+    <div class="box">
+        <h2>Step 2: Test Connection (Manual)</h2>
+        <button onclick="manualConnect()">Try Manual Connect</button>
+        <div id="connectResult"></div>
+    </div>
+
+    <div class="box">
+        <h2>Step 3: Open MetaMask Directly</h2>
+        <button onclick="openMetaMask()">Open MetaMask Extension</button>
+        <div class="info">
+            This will try to open MetaMask. If nothing happens:
+            <br>1. Click the puzzle icon (🧩) in browser toolbar
+            <br>2. Find MetaMask
+            <br>3. Click the pin icon to keep it visible
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Diagnostic Info</h2>
+        <div id="diagnostics"></div>
+    </div>
+
+    <script>
+        function log(elementId, message, type = 'info') {
+            const el = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            el.appendChild(div);
+        }
+
+        function checkMetaMask() {
+            const el = document.getElementById('metamaskCheck');
+            el.innerHTML = '';
+            
+            log('metamaskCheck', '🔍 Checking for MetaMask...', 'warn');
+            
+            setTimeout(() => {
+                if (typeof window.ethereum !== 'undefined') {
+                    log('metamaskCheck', '✅ MetaMask is installed!', 'good');
+                    log('metamaskCheck', `Provider: ${window.ethereum.isMetaMask ? 'MetaMask' : 'Other'}`, 'good');
+                    
+                    // Check if connected
+                    window.ethereum.request({ method: 'eth_accounts' })
+                        .then(accounts => {
+                            if (accounts.length > 0) {
+                                log('metamaskCheck', `✅ Already connected: ${accounts[0]}`, 'good');
+                            } else {
+                                log('metamaskCheck', '⚠️ MetaMask found but not connected yet', 'warn');
+                            }
+                        })
+                        .catch(err => {
+                            log('metamaskCheck', `Error checking accounts: ${err.message}`, 'bad');
+                        });
+                } else {
+                    log('metamaskCheck', '❌ MetaMask NOT detected!', 'bad');
+                    log('metamaskCheck', 'Please install from metamask.io', 'bad');
+                }
+            }, 500);
+        }
+
+        async function manualConnect() {
+            const el = document.getElementById('connectResult');
+            el.innerHTML = '';
+            
+            if (typeof window.ethereum === 'undefined') {
+                log('connectResult', '❌ MetaMask not found! Install it first.', 'bad');
+                return;
+            }
+
+            try {
+                log('connectResult', '⏳ Requesting account access...', 'warn');
+                log('connectResult', '👆 CHECK YOUR BROWSER - MetaMask popup should appear!', 'warn');
+                
+                console.log('About to call eth_requestAccounts...');
+                
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                console.log('Got accounts:', accounts);
+                
+                log('connectResult', `✅ SUCCESS! Connected: ${accounts[0]}`, 'good');
+                
+                // Get network
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                const chainName = chainId === '0x1' ? 'Ethereum Mainnet' : 
+                                 chainId === '0xaa36a7' ? 'Sepolia Testnet' : 
+                                 `Chain ${parseInt(chainId, 16)}`;
+                log('connectResult', `Network: ${chainName}`, 'good');
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                log('connectResult', `❌ Error: ${error.message}`, 'bad');
+                
+                if (error.code === 4001) {
+                    log('connectResult', 'You rejected the connection request', 'bad');
+                } else if (error.code === -32002) {
+                    log('connectResult', '⚠️ MetaMask is already processing a request!', 'warn');
+                    log('connectResult', '👉 Check if MetaMask popup is hidden behind another window', 'warn');
+                    log('connectResult', '👉 Or click the MetaMask icon in your browser toolbar', 'warn');
+                }
+            }
+        }
+
+        function openMetaMask() {
+            if (typeof window.ethereum !== 'undefined') {
+                // Try to trigger MetaMask
+                window.ethereum.request({ method: 'eth_requestAccounts' })
+                    .catch(err => console.log('Expected error:', err));
+                
+                alert('Look for the MetaMask popup!\n\nIf you don\'t see it:\n1. Check browser toolbar for MetaMask icon (fox)\n2. Click the puzzle icon (🧩) and find MetaMask\n3. Pin MetaMask for easy access');
+            } else {
+                alert('MetaMask not detected!\n\nPlease install MetaMask:\n1. Go to metamask.io\n2. Click "Download"\n3. Install for your browser\n4. Refresh this page');
+            }
+        }
+
+        // Auto-run diagnostics on load
+        window.addEventListener('load', () => {
+            const diag = document.getElementById('diagnostics');
+            
+            diag.innerHTML = `
+                <div class="status info">
+                    <strong>Browser:</strong> ${navigator.userAgent.includes('Chrome') ? 'Chrome' : 
+                                                  navigator.userAgent.includes('Firefox') ? 'Firefox' : 
+                                                  navigator.userAgent.includes('Edg') ? 'Edge' : 'Unknown'}<br>
+                    <strong>Platform:</strong> ${navigator.platform}<br>
+                    <strong>Ethereum object:</strong> ${typeof window.ethereum !== 'undefined' ? '✅ Found' : '❌ Not found'}<br>
+                    <strong>MetaMask:</strong> ${window.ethereum?.isMetaMask ? '✅ Detected' : '❌ Not detected'}
+                </div>
+            `;
+            
+            // Auto-check on load
+            setTimeout(() => {
+                checkMetaMask();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
