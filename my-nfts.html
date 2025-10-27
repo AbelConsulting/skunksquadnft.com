@@ -282,8 +282,8 @@
                 
                 <div class="footer-section">
                     <h4>Contract Info</h4>
-                    <p class="contract-address">0xf14F75aEDBbDE252616410649f4dd7C1963191c4</p>
-                    <a href="https://sepolia.etherscan.io/address/0xf14F75aEDBbDE252616410649f4dd7C1963191c4" target="_blank">
+                    <p class="contract-address">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</p>
+                    <a href="https://etherscan.io/address/0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF" target="_blank">
                         View on Etherscan
                     </a>
                 </div>
@@ -297,8 +297,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4';
-        const SEPOLIA_RPC = 'https://eth-sepolia.public.blastapi.io';
+        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+        const MAINNET_RPC = 'https://ethereum.publicnode.com';
         
         const CONTRACT_ABI = [
             "function tokenURI(uint256 tokenId) view returns (string)",
@@ -335,7 +335,7 @@
                 document.getElementById('nftGrid').style.display = 'none';
 
                 // Setup provider and contract
-                provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC);
+                provider = new ethers.providers.JsonRpcProvider(MAINNET_RPC);
                 contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
                 // Get collection stats
@@ -481,7 +481,7 @@
             }
 
             const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : '';
-            const etherscanURL = `https://sepolia.etherscan.io/token/${CONTRACT_ADDRESS}?a=${nft.tokenId}`;
+            const etherscanURL = `https://etherscan.io/token/${CONTRACT_ADDRESS}?a=${nft.tokenId}`;
             const arweaveURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
 
             card.innerHTML = `

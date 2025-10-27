@@ -83,7 +83,7 @@
     </div>
 
     <script>
-        const CONTRACT_ADDRESS = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4';
+        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
         let web3, contract, account;
 
         function log(msg) {
@@ -114,7 +114,7 @@
             
             // Load ABI from the generated file
             try {
-                const response = await fetch('abi_sepolia.json');
+                const response = await fetch('abi_mainnet.json');
                 const abi = await response.json();
                 contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
                 log(`✅ Contract initialized with ${abi.length} functions`);
@@ -141,15 +141,15 @@
                 const chainId = await web3.eth.getChainId();
                 log(`Connected! Chain ID: ${chainId}`);
                 
-                if (chainId !== 11155111) {
-                    setStatus('⚠️ Please switch to Sepolia network', 'error');
+                if (chainId !== 1) {
+                    setStatus('⚠️ Please switch to Ethereum Mainnet', 'error');
                     log('Wrong network! Attempting to switch...');
                     try {
                         await window.ethereum.request({
                             method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0xaa36a7' }],
+                            params: [{ chainId: '0x1' }],
                         });
-                        log('Switched to Sepolia');
+                        log('Switched to Ethereum Mainnet');
                     } catch (switchError) {
                         log('Failed to switch network: ' + switchError.message);
                     }
@@ -167,7 +167,7 @@
             document.getElementById('connected').textContent = 'Yes ✅';
             document.getElementById('wallet').textContent = 
                 account.slice(0, 6) + '...' + account.slice(-4);
-            document.getElementById('network').textContent = 'Sepolia Testnet ✅';
+            document.getElementById('network').textContent = 'Ethereum Mainnet ✅';
             document.getElementById('mint-btn').disabled = false;
             setStatus('✅ Wallet connected! Ready to mint', 'success');
             log(`✅ Wallet connected: ${account.slice(0, 10)}...`);
@@ -220,7 +220,7 @@
                 log(`✅ MINT SUCCESS! TX: ${tx.transactionHash}`);
                 setStatus('🎉 NFT minted successfully!', 'success');
                 
-                const etherscanUrl = `https://sepolia.etherscan.io/tx/${tx.transactionHash}`;
+                const etherscanUrl = `https://etherscan.io/tx/${tx.transactionHash}`;
                 log(`View on Etherscan: ${etherscanUrl}`);
                 
                 setTimeout(() => checkSupply(), 2000);

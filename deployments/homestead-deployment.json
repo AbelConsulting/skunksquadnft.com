@@ -1,0 +1,25 @@
+{
+  "network": "homestead",
+  "chainId": 1,
+  "contractAddress": "0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF",
+  "deploymentTx": "0x485326100a206b836ad416b27b92d63944532594c64c1e4f5243d0e45b3538ce",
+  "blockNumber": 23665722,
+  "gasUsed": "2063616",
+  "deployer": "0x897f6d5A329d9481bEF2EE10fD0a5628d1934266",
+  "timestamp": "2025-10-27T02:11:17.454Z",
+  "constructorArgs": {
+    "name": "SkunkSquad NFT",
+    "symbol": "SKUNK",
+    "baseURI": "ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs/metadata/",
+    "contractURI": "ar://wpuACWSswfMtCiUp0Wv_cbpzdIm6kkbAHw_gZ_ZJ3Tc/contract.json",
+    "unrevealedURI": "ar://j57ibv2QPVURMDTsJp271LSUfRdZtx_632Wy31fLT6E/unrevealed.json",
+    "royaltyRecipient": "0x897f6d5A329d9481bEF2EE10fD0a5628d1934266",
+    "royaltyFee": 250
+  },
+  "revenueSharing": {
+    "partnerAddress": "0xeD97F754D65F5c479De75A57D2781489b4F43125",
+    "partnerPercentage": 5,
+    "deployerPercentage": 95
+  },
+  "verified": true
+}

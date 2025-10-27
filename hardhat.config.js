@@ -1,5 +1,5 @@
 require("@nomicfoundation/hardhat-verify");
-require("dotenv/config");
+require("dotenv").config();
 
 module.exports = {
   solidity: {
@@ -26,8 +26,7 @@ module.exports = {
     }
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY, // Single API key for v2
-    customChains: []
+    apiKey: process.env.ETHERSCAN_API_KEY
   },
   sourcify: {
     enabled: false

@@ -6,7 +6,7 @@
 const SkunkSquadConfig = {
     // Contract Configuration
     contract: {
-        address: '0xf14F75aEDBbDE252616410649f4dd7C1963191c4',
+        address: '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF',
         abi: null, // Will be loaded from wallet.js
         mintPrice: '0.01', // ETH
         maxSupply: 10000,
@@ -15,12 +15,12 @@ const SkunkSquadConfig = {
 
     // Network Configuration
     network: {
-        chainId: '0xaa36a7', // Sepolia testnet (11155111)
-        chainIdDecimal: 11155111,
-        name: 'Sepolia',
-        rpcUrl: 'https://sepolia.infura.io/v3/',
-        explorer: 'https://sepolia.etherscan.io',
-        isTestnet: true
+        chainId: '0x1', // Ethereum Mainnet
+        chainIdDecimal: 1,
+        name: 'Ethereum',
+        rpcUrl: 'https://ethereum.publicnode.com',
+        explorer: 'https://etherscan.io',
+        isTestnet: false
     },
 
     // UI Configuration
@@ -65,7 +65,7 @@ const SkunkSquadConfig = {
     // Error Messages
     errors: {
         noMetaMask: '🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/',
-        wrongNetwork: '⚠️ Wrong Network!\n\nPlease switch to Sepolia testnet in MetaMask.',
+        wrongNetwork: '⚠️ Wrong Network!\n\nPlease switch to Ethereum Mainnet in MetaMask.',
         connectionFailed: '❌ Failed to connect wallet. Please try again.',
         mintFailed: '❌ Minting failed. Please try again.',
         insufficientFunds: '💰 Insufficient ETH!\n\nYou need at least 0.01 ETH + gas fees.',
