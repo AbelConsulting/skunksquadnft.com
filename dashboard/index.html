@@ -237,7 +237,10 @@
     <div class="bg-skunk-2"></div>
     
     <div class="header">
-        <h1>🧠 SkunkSquad Ultra Smart Analytics</h1>
+        <h1>🧠 SkunkSquad Live Analytics</h1>
+        <div style="margin: 10px 0; color: #94a3b8; font-size: 0.9em;">
+            Last updated: <span id="last-refresh">--:--:--</span>
+        </div>
         <button class="refresh-btn" onclick="loadData()">🔄 Refresh Data</button>
     </div>
     
@@ -268,83 +271,244 @@
         <div id="live-events" class="live-events">Loading...</div>
     </div>
 
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
     <script>
+        // Mainnet Contract Configuration
+        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+        const RPC_URL = 'https://ethereum.publicnode.com';
+        const ETHERSCAN_API_KEY = ''; // Optional for tx history
+        
+        const CONTRACT_ABI = [
+            {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"MAX_SUPPLY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"MINT_PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"revealedBaseURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}
+        ];
+        
+        let web3;
+        let contract;
+        let revenueChart;
+        let mintsChart;
+        
+        async function initWeb3() {
+            web3 = new Web3(RPC_URL);
+            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+            console.log('✅ Web3 initialized');
+        }
+        
         async function loadData() {
             try {
-                // Load stats
-                const stats = await fetch('/api/stats').then(r => r.json());
+                if (!web3) await initWeb3();
+                
+                // Get contract data
+                const totalSupply = await contract.methods.totalSupply().call();
+                const maxSupply = await contract.methods.MAX_SUPPLY().call();
+                const mintPrice = await contract.methods.MINT_PRICE().call();
+                const priceInEth = web3.utils.fromWei(mintPrice, 'ether');
+                const mintedPercentage = ((totalSupply / maxSupply) * 100).toFixed(2);
+                const totalRevenue = (totalSupply * parseFloat(priceInEth)).toFixed(4);
+                
+                // Check if revealed
+                let revealStatus = 'Unrevealed';
+                try {
+                    const baseURI = await contract.methods.revealedBaseURI().call();
+                    revealStatus = baseURI && baseURI.length > 0 ? 'Revealed ✅' : 'Unrevealed 🎁';
+                } catch (e) {
+                    revealStatus = 'Unrevealed 🎁';
+                }
+                
+                // Update collection stats
                 document.getElementById('collection-stats').innerHTML = `
-                    <div class="stat-value">${stats.totalSupply}/${stats.maxSupply}</div>
-                    <div>Minted (${stats.mintedPercentage}%)</div>
-                    <div>Phase: ${stats.currentPhase}</div>
-                    <div>Revenue: ${stats.revenue.total} ETH</div>
-                `;
-                
-                // Load pricing
-                const pricing = await fetch('/api/pricing').then(r => r.json());
-                document.getElementById('pricing-stats').innerHTML = `
-                    <div class="stat-value">${pricing.current.price} ETH</div>
-                    <div>Demand: ${pricing.current.demandMultiplier}%</div>
-                    <div>Range: ${pricing.bounds.min} - ${pricing.bounds.max} ETH</div>
-                `;
-                
-                // Load trends and create charts
-                const trends = await fetch('/api/trends').then(r => r.json());
-                createRevenueChart(trends.dailyRevenue);
-                createMintsChart(pricing.hourlyMints);
-                
-                // Load events
-                const events = await fetch('/api/events').then(r => r.json());
-                document.getElementById('live-events').innerHTML = events.map(event => `
-                    <div class="event-item">
-                        <strong>${event.type.toUpperCase()}</strong> - ${event.user.substring(0, 8)}... 
-                        - ${new Date(event.timestamp).toLocaleTimeString()}
+                    <div class="stat-value">${totalSupply} / ${maxSupply}</div>
+                    <div style="font-size: 1.2em; margin: 10px 0; color: #10b981;">Minted: ${mintedPercentage}%</div>
+                    <div style="margin: 5px 0;">Status: ${revealStatus}</div>
+                    <div style="margin: 5px 0; color: #fbbf24;">Total Revenue: ${totalRevenue} ETH</div>
+                    <div style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                        <a href="https://etherscan.io/address/${CONTRACT_ADDRESS}" target="_blank" style="color: #3b82f6;">
+                            View on Etherscan →
+                        </a>
                     </div>
-                `).join('');
+                `;
+                
+                // Update pricing stats
+                const remaining = maxSupply - totalSupply;
+                const selloutRevenue = (remaining * parseFloat(priceInEth)).toFixed(2);
+                
+                document.getElementById('pricing-stats').innerHTML = `
+                    <div class="stat-value">${priceInEth} ETH</div>
+                    <div style="font-size: 1.2em; margin: 10px 0; color: #3b82f6;">Fixed Price (No Dynamic)</div>
+                    <div style="margin: 5px 0;">Remaining: ${remaining} NFTs</div>
+                    <div style="margin: 5px 0; color: #fbbf24;">Potential: ${selloutRevenue} ETH</div>
+                    <div style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                        <a href="https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}" target="_blank" style="color: #3b82f6;">
+                            View on OpenSea →
+                        </a>
+                    </div>
+                `;
+                
+                // Get recent transactions from Etherscan
+                await loadRecentTransactions();
+                
+                // Update charts with static data (since we don't have historical data yet)
+                updateCharts(totalSupply);
+                
+                // Update last refresh time
+                document.getElementById('last-refresh').textContent = new Date().toLocaleTimeString();
                 
             } catch (error) {
                 console.error('Failed to load data:', error);
+                document.getElementById('collection-stats').innerHTML = `
+                    <div style="color: #ef4444;">Error loading data. Please check console.</div>
+                    <div style="font-size: 0.9em; margin-top: 10px;">Error: ${error.message}</div>
+                `;
             }
         }
         
-        function createRevenueChart(data) {
-            const ctx = document.getElementById('revenue-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => d.date),
-                    datasets: [{
-                        label: 'Daily Revenue (ETH)',
-                        data: data.map(d => parseFloat(d.revenue)),
-                        borderColor: '#4CAF50',
-                        tension: 0.1
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+        async function loadRecentTransactions() {
+            try {
+                // Get latest block
+                const latestBlock = await web3.eth.getBlockNumber();
+                const fromBlock = Math.max(0, latestBlock - 10000); // Last ~10k blocks
+                
+                // Get Transfer events (mints)
+                const events = await contract.getPastEvents('Transfer', {
+                    fromBlock: fromBlock,
+                    toBlock: 'latest'
+                });
+                
+                // Filter for mints (from zero address)
+                const mints = events.filter(e => e.returnValues.from === '0x0000000000000000000000000000000000000000');
+                
+                // Show last 20 mints
+                const recentMints = mints.slice(-20).reverse();
+                
+                if (recentMints.length > 0) {
+                    document.getElementById('live-events').innerHTML = recentMints.map(event => {
+                        const blockNumber = event.blockNumber;
+                        const tokenId = event.returnValues.tokenId;
+                        const to = event.returnValues.to;
+                        
+                        return `
+                            <div class="event-item">
+                                <strong>MINT #${tokenId}</strong> → ${to.substring(0, 8)}...${to.substring(to.length - 6)}
+                                <div style="font-size: 0.85em; color: #94a3b8; margin-top: 5px;">
+                                    Block: ${blockNumber} | 
+                                    <a href="https://etherscan.io/tx/${event.transactionHash}" target="_blank" style="color: #3b82f6;">
+                                        View Tx →
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('live-events').innerHTML = `
+                        <div class="event-item">
+                            <div style="color: #94a3b8;">No mint events found in recent blocks.</div>
+                            <div style="font-size: 0.85em; margin-top: 5px;">First mint will appear here automatically.</div>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Failed to load transactions:', error);
+                document.getElementById('live-events').innerHTML = `
+                    <div class="event-item">
+                        <div style="color: #fbbf24;">Unable to load recent transactions.</div>
+                        <div style="font-size: 0.85em; margin-top: 5px;">Check console for details.</div>
+                    </div>
+                `;
+            }
         }
         
-        function createMintsChart(data) {
-            const ctx = document.getElementById('mints-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
+        function updateCharts(totalSupply) {
+            // Create mock data based on current supply
+            const days = 7;
+            const dailyRevenue = [];
+            const avgDaily = totalSupply / days;
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const mints = i === 0 ? totalSupply - (avgDaily * 6) : avgDaily;
+                dailyRevenue.push({
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    revenue: (mints * 0.01).toFixed(2)
+                });
+            }
+            
+            // Revenue chart
+            if (revenueChart) revenueChart.destroy();
+            const ctx1 = document.getElementById('revenue-chart').getContext('2d');
+            revenueChart = new Chart(ctx1, {
+                type: 'line',
                 data: {
-                    labels: data.map(d => d.hour + ':00'),
+                    labels: dailyRevenue.map(d => d.date),
                     datasets: [{
-                        label: 'Hourly Mints',
-                        data: data.map(d => parseInt(d.mints)),
-                        backgroundColor: '#2196F3'
+                        label: 'Revenue (ETH)',
+                        data: dailyRevenue.map(d => parseFloat(d.revenue)),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
+            });
+            
+            // Mints distribution (mock 24h data)
+            const hourlyMints = [];
+            for (let i = 0; i < 24; i++) {
+                hourlyMints.push({
+                    hour: i,
+                    mints: Math.floor(Math.random() * 5) // Random for demo
+                });
+            }
+            
+            if (mintsChart) mintsChart.destroy();
+            const ctx2 = document.getElementById('mints-chart').getContext('2d');
+            mintsChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: hourlyMints.map(d => d.hour + ':00'),
+                    datasets: [{
+                        label: 'Mints',
+                        data: hourlyMints.map(d => d.mints),
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: '#94a3b8', maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
             });
         }
         
         // Auto-refresh every 30 seconds
         setInterval(loadData, 30000);
         
-        // Initial load
-        loadData();
+        // Initial load on page ready
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🦨 SkunkSquad Dashboard Loading...');
+            loadData();
+        });
     </script>
 </body>
 </html>
