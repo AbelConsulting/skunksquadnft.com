@@ -12,7 +12,7 @@ class WalletManager {
         this.networkId = null;
         this.isConnected = false;
         this.contract = null;
-        this.contractAddress = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4'; // Ethereum Mainnet
+        this.contractAddress = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF'; // Ethereum Mainnet
         this.init();
     }
 
@@ -145,7 +145,7 @@ class WalletManager {
             
             console.log('🦨 Connected to network:', this.networkId);
             
-            // Check if on correct network (Sepolia testnet = 11155111, Mainnet = 1)
+            // Check if on correct network (Mainnet = 1, Sepolia testnet = 11155111)
             const expectedNetworks = [1, 11155111]; // Mainnet and Sepolia
             
             if (!expectedNetworks.includes(this.networkId)) {
@@ -165,7 +165,7 @@ class WalletManager {
         if (!this.web3) return;
 
         try {
-            // SkunkSquad NFT Contract ABI (Sepolia)
+            // SkunkSquad NFT Contract ABI (Mainnet)
             const contractABI = [
           {
                     "inputs": [
@@ -1356,7 +1356,7 @@ window.walletManager = {
             console.log('✅ Mint successful:', result.transactionHash);
             
             if (window.skunkSquadWebsite) {
-                const etherscanUrl = `https://sepolia.sepolia.etherscan.io/tx/${result.transactionHash}`;
+                const etherscanUrl = `https://etherscan.io/tx/${result.transactionHash}`;
                 window.skunkSquadWebsite.showNotification(
                     `🎉 NFT minted successfully! <a href="${etherscanUrl}" target="_blank" style="color: white; text-decoration: underline;">View on Etherscan</a>`,
                     'success'

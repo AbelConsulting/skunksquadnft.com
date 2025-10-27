@@ -298,7 +298,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
         const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
-        const MAINNET_RPC = 'https://ethereum.publicnode.com';
+        const MAINNET_RPC = 'https://eth.llamarpc.com'; // Fast, reliable public RPC
         
         const CONTRACT_ABI = [
             "function tokenURI(uint256 tokenId) view returns (string)",
@@ -352,17 +352,24 @@
                     document.getElementById('yourBalance').textContent = userBalance.toString();
                 }
 
-                // Load all minted NFTs
-                for (let tokenId = 1; tokenId <= totalSupply; tokenId++) {
-                    const owner = await contract.ownerOf(tokenId);
-                    const tokenURI = await contract.tokenURI(tokenId);
-                    
-                    nfts.push({
-                        tokenId,
-                        owner,
-                        tokenURI,
-                        isOwned: userAddress && owner.toLowerCase() === userAddress.toLowerCase()
-                    });
+                // Load all minted NFTs (start from 0, some contracts start at 1)
+                // Try both tokenId 0 and starting from 1
+                const maxSupply = Math.max(parseInt(totalSupply), 10); // Check at least 10 tokens
+                for (let tokenId = 0; tokenId < maxSupply; tokenId++) {
+                    try {
+                        const owner = await contract.ownerOf(tokenId);
+                        const tokenURI = await contract.tokenURI(tokenId);
+                        
+                        nfts.push({
+                            tokenId,
+                            owner,
+                            tokenURI,
+                            isOwned: userAddress && owner.toLowerCase() === userAddress.toLowerCase()
+                        });
+                    } catch (error) {
+                        // Token doesn't exist, skip it
+                        console.log(`Token ${tokenId} not found`);
+                    }
                 }
 
                 displayNFTs(nfts);
