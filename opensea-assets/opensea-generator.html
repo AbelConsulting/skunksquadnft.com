@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkunkSquad OpenSea Assets Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 48px;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+        
+        .card h2 {
+            color: #a855f7;
+            margin: 0 0 15px 0;
+            font-size: 24px;
+        }
+        
+        .card .size {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        
+        .card .description {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .card a {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+        
+        .instructions {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .instructions h3 {
+            color: #a855f7;
+            margin: 0 0 20px 0;
+        }
+        
+        .instructions ol {
+            color: #94a3b8;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 10px 0;
+        }
+        
+        .instructions strong {
+            color: white;
+        }
+        
+        .warning {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .warning h4 {
+            color: #fbbf24;
+            margin: 0 0 10px 0;
+        }
+        
+        .warning p {
+            color: #94a3b8;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦨 SkunkSquad OpenSea Assets</h1>
+        <p class="subtitle">Professional images for your OpenSea collection</p>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>📍 Logo</h2>
+                <div class="size">350 x 350 pixels (Square)</div>
+                <p class="description">
+                    Circular logo with SkunkSquad branding. Perfect for collection avatar and profile display.
+                </p>
+                <a href="logo-350x350.html" target="_blank">Open Logo Generator →</a>
+            </div>
+            
+            <div class="card">
+                <h2>🖼️ Featured Image</h2>
+                <div class="size">600 x 400 pixels</div>
+                <p class="description">
+                    Showcase card with stats and multiple skunks. Displays prominently on your collection page.
+                </p>
+                <a href="featured-600x400.html" target="_blank">Open Featured Generator →</a>
+            </div>
+            
+            <div class="card">
+                <h2>🎨 Banner</h2>
+                <div class="size">1400 x 400 pixels (Wide)</div>
+                <p class="description">
+                    Full-width banner with SkunkSquad branding and NFT showcase. Appears at top of collection.
+                </p>
+                <a href="banner-1400x400.html" target="_blank">Open Banner Generator →</a>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>📸 How to Use These Assets</h3>
+            <ol>
+                <li>
+                    <strong>Click the button</strong> for the asset you want to create
+                </li>
+                <li>
+                    <strong>Wait for page to load</strong> - you'll see a beautiful preview
+                </li>
+                <li>
+                    <strong>Screenshot the image:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Windows: Press <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">Win + Shift + S</code></li>
+                        <li>Mac: Press <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">Cmd + Shift + 4</code></li>
+                        <li>Or right-click → "Save image as..."</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Crop precisely</strong> to the exact dimensions (follow the border)
+                </li>
+                <li>
+                    <strong>Save as PNG</strong> (highest quality)
+                </li>
+                <li>
+                    <strong>Upload to OpenSea:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Go to <a href="https://opensea.io/studio" style="color: #3b82f6;">opensea.io/studio</a></li>
+                        <li>Find your collection</li>
+                        <li>Click "Edit Collection"</li>
+                        <li>Upload each image in the correct field</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="warning">
+                <h4>⚡ Pro Tips</h4>
+                <p>✅ Use the highest quality screenshot settings</p>
+                <p>✅ Make sure the entire image fits in frame (follow the border)</p>
+                <p>✅ Save as PNG for best quality (not JPG)</p>
+                <p>✅ Test how they look on OpenSea before finalizing</p>
+                <p>✅ You can regenerate and re-upload anytime</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 30px; background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 15px;">
+            <h3 style="color: #10b981; margin: 0 0 15px 0;">✨ All Assets Feature:</h3>
+            <ul style="color: #94a3b8; line-height: 1.8;">
+                <li>🎨 Purple/pink gradient theme (matches your brand)</li>
+                <li>🦨 Your actual skunk images from assets folder</li>
+                <li>✨ Animated glowing effects</li>
+                <li>📊 Collection stats (10K supply, 0.01 ETH, 3.2M+ combos)</li>
+                <li>🎯 Professional grid patterns and styling</li>
+                <li>💎 Hover effects and animations</li>
+                <li>📏 Exact OpenSea-required dimensions</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
