@@ -1332,8 +1332,8 @@ window.walletManager = {
         try {
             console.log(`🦨 Minting ${quantity} NFT(s)...`);
             
-            // Get current price (0.02 ETH fixed)
-            const pricePerNFT = this.web3.utils.toWei('0.02', 'ether');
+            // Get current price (0.01 ETH fixed)
+            const pricePerNFT = this.web3.utils.toWei('0.01', 'ether');
             const totalPrice = this.web3.utils.toBN(pricePerNFT).mul(this.web3.utils.toBN(quantity));
             
             console.log('💰 Total price:', this.web3.utils.fromWei(totalPrice, 'ether'), 'ETH');
@@ -1398,7 +1398,7 @@ window.walletManager = {
         } catch (error) {
             console.error('❌ Failed to get current price:', error);
         }
-        return '0.02'; // Fallback price matches contract
+        return '0.01'; // Fallback price matches contract
     },
 
     async getTotalSupply() {
