@@ -172,7 +172,7 @@
                         Join the Elite Now
                         <span class="btn-highlight">EASY!</span>
                     </button>
-                    <button class="btn btn-outline btn-large" id="buy-with-eth">
+                    <button class="btn btn-outline btn-large" onclick="handleConnectAndBuy()">
                         <span class="btn-icon">🔗</span>
                         I Have Crypto
                     </button>
@@ -706,7 +706,7 @@
                 <button class="modal-close" aria-label="Close modal" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form onsubmit="mintWithEth(); return false;">
+                <form onsubmit="handleConnectAndBuy(); return false;">
                     <div class="mint-details">
                         <label for="mint-quantity">Quantity:</label>
                         <div class="quantity-controls">
@@ -920,15 +920,10 @@ document.getElementById('connect-wallet').addEventListener('click', function(e) 
     connectWallet();
 });
 
-// Also fix the hero buttons
+// Credit card button handler
 document.getElementById('buy-with-card').addEventListener('click', function(e) {
     e.preventDefault();
     buyWithCard();
-});
-
-document.getElementById('buy-with-eth').addEventListener('click', function(e) {
-    e.preventDefault();
-    buyWithWallet();
 });
 
 // Simplified handlers using new architecture
@@ -943,15 +938,11 @@ function closeModal() {
 function connectWallet() {
     window.mintHandler?.quickConnect();
 }
+
 // Update the buyWithCard function
 function buyWithCard() {
     alert('🚀 Credit Card Payment!\n\n✅ Stripe integration ready\n✅ Instant NFT delivery\n✅ Bank-level security\n\nComing 10/10!');
     closeModal();
-}
-
-// Update the buyWithWallet function  
-async function buyWithWallet() {
-    window.mintHandler?.mintFromModal();
 }
         
 // Encapsulate mint flow in an async IIFE to allow await and proper try/catch
