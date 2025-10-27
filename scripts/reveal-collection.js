@@ -1,40 +1,61 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-    console.log("🎭 Revealing Collection...\n");
+    console.log("🎭 Revealing SkunkSquad NFT Collection...\n");
     
-    const CONTRACT_ADDRESS = "0x6BA18b88b64af8898bbb42262ED18EC13DC81315";
+    const CONTRACT_ADDRESS = "0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF";
     
     const [deployer] = await ethers.getSigners();
     const SkunkSquad = await ethers.getContractAt("SkunkSquadNFT", CONTRACT_ADDRESS);
     
     console.log("Revealing with account:", deployer.address);
+    console.log("Contract:", CONTRACT_ADDRESS);
     
-    // The reveal() function might need the baseURI as an argument
-    const NEW_BASE_URI = "https://arweave.net/CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do/";
+    // Check current reveal status
+    try {
+        const isRevealed = await SkunkSquad.revealed();
+        console.log("\nCurrent reveal status:", isRevealed);
+        
+        if (isRevealed) {
+            console.log("\n✅ Collection is already revealed!");
+            console.log("\nChecking token URI...");
+            const tokenURI = await SkunkSquad.tokenURI(1);
+            console.log("Token #1 URI:", tokenURI);
+            return;
+        }
+    } catch (e) {
+        console.log("Note: Could not check reveal status");
+    }
     
     try {
-        console.log("\n🎭 Calling reveal with base URI...");
-        const tx = await SkunkSquad.reveal(NEW_BASE_URI);
+        console.log("\n🎭 Calling reveal()...");
+        const tx = await SkunkSquad.reveal({
+            gasLimit: 100000
+        });
         console.log("⏳ Transaction sent:", tx.hash);
         console.log("   Waiting for confirmation...");
         
         await tx.wait();
         console.log("✅ Collection revealed!");
-        console.log("   View TX:", `https://sepolia.etherscan.io/tx/${tx.hash}`);
+        console.log("   View TX:", `https://etherscan.io/tx/${tx.hash}`);
         
         // Verify
-        console.log("\n🔍 Verifying...");
+        console.log("\n🔍 Verifying reveal...");
+        const isRevealed = await SkunkSquad.revealed();
+        console.log("Revealed status:", isRevealed);
+        
         const tokenURI = await SkunkSquad.tokenURI(1);
         console.log("Token #1 URI:", tokenURI);
         
-        const isCorrect = tokenURI.includes("CP7hoS7Dpke7RXxnTmosH6N3P3_-adXN2NFaIhw54do");
-        console.log("\n✅ Result:", isCorrect ? "SUCCESS! Tokens now use Arweave ✅" : "Still incorrect ❌");
+        console.log("\n✅ SUCCESS! Collection is now revealed!");
+        console.log("\n📊 Next Steps:");
+        console.log("1. Wait 5-10 minutes for OpenSea to update");
+        console.log("2. Refresh my-nfts.html to see images");
+        console.log("3. Check on OpenSea:", `https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}/1`);
         
     } catch (e) {
         console.log("❌ Failed:", e.reason || e.message);
-        console.log("\n💡 The reveal function signature might be different.");
-        console.log("   Checking your SkunkSquadNFT.sol for the exact reveal() function...");
+        console.log("\nError details:", e);
     }
     
     process.exit(0);

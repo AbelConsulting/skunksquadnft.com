@@ -1018,7 +1018,20 @@ async function buyWithWallet() {
 })();
 
 async function handleConnectAndBuy() {
-    window.mintHandler?.handleMint(1);
+    console.log('🦨 handleConnectAndBuy called');
+    console.log('Mint handler available:', !!window.mintHandler);
+    console.log('Wallet manager available:', !!window.walletManager);
+    
+    if (window.mintHandler) {
+        console.log('Using mint handler...');
+        await window.mintHandler.handleMint(1);
+    } else if (window.walletManager) {
+        console.log('Using wallet manager fallback...');
+        await window.walletManager.connectWallet();
+    } else {
+        console.error('❌ No handlers available!');
+        alert('Please wait a moment and try again. The page is still loading...');
+    }
 }
 </script>
 

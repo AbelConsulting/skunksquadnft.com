@@ -177,6 +177,14 @@ window.skunkSquadWebsite = {
     },
 
     async handleConnectAndBuy() {
+        // Use the mint handler if available
+        if (window.mintHandler) {
+            console.log('🦨 Using mint handler...');
+            await window.mintHandler.handleMint(1);
+            return;
+        }
+        
+        // Fallback to basic connection
         if (typeof window.ethereum === 'undefined') {
             alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
             return;
@@ -185,26 +193,30 @@ window.skunkSquadWebsite = {
         const button = document.getElementById('connectBuyBtn');
         
         try {
+            console.log('🦨 Connecting wallet...');
             const accounts = await window.ethereum.request({ 
                 method: 'eth_requestAccounts' 
             });
             
+            console.log('✅ Wallet connected:', accounts[0]);
+            
             button.innerHTML = `
-                <span class="btn-icon">🎯</span>
+                <span class="btn-icon">⛏️</span>
                 <span class="btn-text">Mint NFT</span>
-                <span class="btn-price">(0.02 ETH)</span>
+                <span class="btn-price">(0.01 ETH)</span>
             `;
             
-            this.showPaymentModal();
+            // Show success message
+            this.showNotification(`Wallet connected! Click again to mint.`, 'success');
             
         } catch (error) {
-            console.error('Connection failed:', error);
+            console.error('❌ Connection failed:', error);
             button.innerHTML = `
                 <span class="btn-icon">🦊</span>
                 <span class="btn-text">Connect Wallet & Mint</span>
-                <span class="btn-price">(0.02 ETH)</span>
+                <span class="btn-price">(0.01 ETH)</span>
             `;
-            alert('❌ Connection failed: ' + error.message);
+            this.showNotification('Connection failed: ' + error.message, 'error');
         }
     },
 
@@ -352,7 +364,7 @@ window.quantityManager = {
 
     updateTotal() {
         const quantity = parseInt(document.getElementById('mint-quantity')?.value || 1);
-        const total = (0.02 * quantity).toFixed(3);
+        const total = (0.01 * quantity).toFixed(3);
         const totalElement = document.getElementById('total-eth');
         if (totalElement) {
             totalElement.textContent = `${total} ETH`;
