@@ -805,10 +805,10 @@
     
     // Update price when page loads
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(updatePriceFromContract, 3000); // Give wallet manager time to initialize
+        setTimeout(PRICE, 3000); // Give wallet manager time to initialize
         
         // Update price every 30 seconds (dynamic pricing)
-        setInterval(updatePriceFromContract, 30000);
+        setInterval(PRICE, 30000);
     });
     </script>
     
