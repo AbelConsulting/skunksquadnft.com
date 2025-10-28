@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Direct Wallet Test</title>
+</head>
+<body>
+    <h1>Direct Wallet Test</h1>
+    <button id="testBtn">Test Mint Connection</button>
+    <div id="output"></div>
+
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script>
+        // Inline minimal wallet manager for testing
+        const output = document.getElementById('output');
+        
+        document.getElementById('testBtn').onclick = async function() {
+            output.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                // Check MetaMask
+                if (typeof window.ethereum === 'undefined') {
+                    output.innerHTML += '<p style="color:red">❌ MetaMask not found</p>';
+                    return;
+                }
+                output.innerHTML += '<p style="color:green">✅ MetaMask detected</p>';
+                
+                // Connect
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                output.innerHTML += `<p style="color:green">✅ Connected: ${accounts[0]}</p>`;
+                
+                // Check network
+                const web3 = new Web3(window.ethereum);
+                const chainId = await web3.eth.getChainId();
+                output.innerHTML += `<p style="color:green">✅ Connected to Ethereum (Chain ID: ${chainId})</p>`;
+                
+                // Initialize contract
+                const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+                const CONTRACT_ABI = [{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINT_PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"quantity","type":"uint256"}],"name":"mintNFT","outputs":[],"stateMutability":"payable","type":"function"}];
+                
+                const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+                output.innerHTML += '<p style="color:green">✅ Contract initialized</p>';
+                
+                // Check supply
+                const supply = await contract.methods.totalSupply().call();
+                output.innerHTML += `<p style="color:blue">📊 Total Supply: ${supply} / 10,000</p>`;
+                
+                // Check price
+                const price = await contract.methods.MINT_PRICE().call();
+                const priceEth = web3.utils.fromWei(price, 'ether');
+                output.innerHTML += `<p style="color:blue">💰 Mint Price: ${priceEth} ETH</p>`;
+                
+                // Prompt to mint
+                output.innerHTML += '<p style="color:green">✅ Everything ready! Click OK to mint 1 NFT for 0.01 ETH...</p>';
+                
+                if (confirm(`Mint 1 NFT for ${priceEth} ETH?`)) {
+                    output.innerHTML += '<p style="color:orange">⏳ Minting... Check MetaMask!</p>';
+                    
+                    const tx = await contract.methods.mintNFT(1).send({
+                        from: accounts[0],
+                        value: price
+                    });
+                    
+                    output.innerHTML += `<p style="color:green">🎉 SUCCESS! TX: <a href="https://etherscan.io/tx/${tx.transactionHash}" target="_blank">${tx.transactionHash}</a></p>`;
+                }
+                
+            } catch (error) {
+                output.innerHTML += `<p style="color:red">❌ Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        };
+    </script>
+</body>
+</html>
