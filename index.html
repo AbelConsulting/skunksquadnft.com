@@ -904,22 +904,19 @@
         console.log('🦨 SkunkSquad NFT Website Loaded');
     </script>
 <script>
-<!-- Removed code for non-existent buyNowBtn -->
+// Removed code for non-existent buyNowBtn
 
 // Fix Connect Wallet Button (id="connect-wallet")
-document.getElementById('connect-wallet').addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    connectWallet();
-});
-
-// Fix Connect Wallet Button (id="connect-wallet")
-// document.getElementById('connect-wallet').addEventListener('click', function(e) {
-//     e.preventDefault();
-//     connectWallet();
-// });
-    window.uiManager?.closeModal();
+const connectBtn = document.getElementById('connect-wallet');
+if (connectBtn) {
+    connectBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        connectWallet();
+    });
 }
+
+// Ensure UI manager modal closed if available
+window.uiManager?.closeModal();
 
 function connectWallet() {
     window.mintHandler?.quickConnect();
