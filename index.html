@@ -705,7 +705,7 @@
                 <button class="modal-close" aria-label="Close modal" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form onsubmit="handleConnectAndBuy(); return false;">
+                <form onsubmit="handleConnectAndBuy(document.getElementById('mint-quantity').value); return false;">
                     <div class="mint-details">
                         <label for="mint-quantity">Quantity:</label>
                         <div class="quantity-controls">
@@ -970,14 +970,18 @@ function connectWallet() {
     }
 })();
 
-async function handleConnectAndBuy() {
+async function handleConnectAndBuy(quantity = 1) {
     console.log('🦨 handleConnectAndBuy called');
     console.log('Mint handler available:', !!window.mintHandler);
     console.log('Wallet manager available:', !!window.walletManager);
-    
+
+    // Ensure quantity is a number and within allowed range
+    quantity = parseInt(quantity) || 1;
+    quantity = Math.max(1, Math.min(quantity, 10));
+
     if (window.mintHandler) {
         console.log('Using mint handler...');
-        await window.mintHandler.handleMint(1);
+        await window.mintHandler.handleMint(quantity);
     } else if (window.walletManager) {
         console.log('Using wallet manager fallback...');
         await window.walletManager.connectWallet();
