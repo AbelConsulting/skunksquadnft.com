@@ -218,7 +218,7 @@
     <section id="payment" class="payment-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">💳 Revolutionary Payment System</h2>
+                <h2 class="section-title">💳 Revolutionary Art System</h2>
                 <p class="section-subtitle">
                     The social Club Everyone wants to be a part of but only a few can get into. Now with MEMBERSHIP, anyone can join the elite in seconds.
                 </p>
@@ -798,7 +798,7 @@
             // Fallback to default display
             const priceElements = document.querySelectorAll('.price-eth');
             priceElements.forEach(element => {
-                element.textContent = '0.05 ETH';
+                element.textContent = '0.01 ETH';
             });
         }
     }
@@ -918,12 +918,6 @@ document.getElementById('connect-wallet').addEventListener('click', function(e) 
     e.preventDefault();
     
     connectWallet();
-});
-
-// Credit card button handler
-document.getElementById('buy-with-card').addEventListener('click', function(e) {
-    e.preventDefault();
-    buyWithCard();
 });
 
 // Simplified handlers using new architecture
