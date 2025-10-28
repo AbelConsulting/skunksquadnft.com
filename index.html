@@ -654,15 +654,14 @@
                     <a href="#features">Features</a>
                     <a href="#payment">Credit Cards</a>
                     <a href="#collection">Collection</a>
-                    <a href="#analytics">Analytics</a>
+                    
                 </div>
                 
                 <div class="footer-section">
                     <h4>Resources</h4>
                     <a href="./PAYMENT_GATEWAY_GUIDE.md">Payment Guide</a>
                     <a href="./SECURITY.md">Security Policy</a>
-                    <a href="#" target="_blank">Whitepaper</a>
-                    <a href="#" target="_blank">API Docs</a>
+                   
                 </div>
                 
                 <div class="footer-section">
@@ -728,7 +727,6 @@
     </div>
 
     <!-- Core Scripts (Order matters!) -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
     <script src="./src/js/config.js?v=2"></script>
     <script src="./src/js/ui-manager.js?v=2"></script>
     <script src="./src/js/wallet.js?v=2"></script>
@@ -736,17 +734,7 @@
     <script src="./src/js/main.js?v=2"></script>
     
     <!-- Update price displays throughout the file -->
-    <div class="price-display">
-        <span class="price-eth">0.01 ETH</span>
-        <span class="price-usd">(~$42 USD)</span>
-    </div>
-
-    <!-- Update modal price -->
-    <div style="text-align: center; margin-top: 15px; color: #94a3b8;">
-        <small>Price: <span class="price-eth">0.01 ETH</span> <span class="price-usd">(~$42)</span></small>
-        <br><small style="color: #64748b; font-size: 0.8em;">Fixed pricing • 0.01 ETH per NFT</small>
-    </div>
-
+    <!-- Price displays are now handled programmatically. Add <span class="price-eth"></span> and <span class="price-usd"></span> wherever needed in your markup. -->
     <!-- Update price updater script -->
     <script>
     async function PRICE() {
@@ -791,7 +779,7 @@
                 
             } else {
                 console.log('🦨 Wallet manager not ready, retrying in 2s...');
-                setTimeout(updatePriceFromContract, 2000);
+                setTimeout(PRICE, 2000);
             }
         } catch (error) {
             console.error('❌ Failed to update price from contract:', error);
@@ -799,6 +787,10 @@
             const priceElements = document.querySelectorAll('.price-eth');
             priceElements.forEach(element => {
                 element.textContent = '0.01 ETH';
+            });
+            const usdElements = document.querySelectorAll('.price-usd');
+            usdElements.forEach(element => {
+                element.textContent = '(~$24)';
             });
         }
     }
@@ -811,7 +803,6 @@
         setInterval(PRICE, 30000);
     });
     </script>
-    
     <!-- Countdown Timer Script - Clean Version -->
     <script>
         // Optimized Countdown Timer for Launch Date: October 10, 2025 at 6:10 PM EST
@@ -839,18 +830,11 @@
                 return elements.days && elements.hours && elements.minutes && elements.seconds;
             }
             
+            // Update countdown values based on current time
             function updateCountdown() {
                 const now = Date.now();
-                const distance = launchDate - now;
-                
-                if (distance < 0) {
-                    // Launch reached
-                    if (elements.container) {
-                        elements.container.innerHTML = '<div class="countdown-item"><span class="countdown-number">🚀</span><span class="countdown-unit">LIVE!</span></div>';
-                    }
-                    clearInterval(countdownInterval);
-                    return;
-                }
+                let distance = launchDate - now;
+                if (distance < 0) distance = 0;
                 
                 // Calculate time units more efficiently
                 const days = Math.floor(distance / 86400000); // 1000 * 60 * 60 * 24
@@ -922,12 +906,7 @@ function connectWallet() {
     window.mintHandler?.quickConnect();
 }
 
-// Update the buyWithCard function
-function buyWithCard() {
-    alert('🚀 Credit Card Payment!\n\n✅ Stripe integration ready\n✅ Instant NFT delivery\n✅ Bank-level security\n\nComing 10/10!');
-    closeModal();
-}
-        
+     
 // Encapsulate mint flow in an async IIFE to allow await and proper try/catch
 (async function() {
     try {
