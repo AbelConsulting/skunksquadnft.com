@@ -797,11 +797,19 @@
     
     // Update price when page loads
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(PRICE, 3000); // Give wallet manager time to initialize
-        
+        // Check walletManager readiness every 300ms, update price ASAP
+        let priceInitInterval = setInterval(() => {
+            if (window.walletManager && window.walletManager.contract) {
+                PRICE();
+                clearInterval(priceInitInterval);
+            }
+        }, 300);
+
         // Update price every 30 seconds (dynamic pricing)
         setInterval(PRICE, 30000);
-    });
+            // Use ISO 8601 format for reliable parsing: 'YYYY-MM-DDTHH:mm:ss±HH:MM'
+            // Example: '2025-10-10T18:10:00-05:00' for October 10, 2025, 6:10 PM EST (UTC-5)
+            const launchDate = new Date('2025-10-10T18:10:00-05:00').getTime();
     </script>
     <!-- Countdown Timer Script - Clean Version -->
     <script>
