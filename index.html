@@ -903,16 +903,8 @@
         // Add your analytics code here
         console.log('🦨 SkunkSquad NFT Website Loaded');
     </script>
-    <!-- Add this before the closing </body> tag -->
 <script>
-// Fix Buy Now Button (line 124: id="buyNowBtn")
-const buyNowBtn = document.getElementById('buyNowBtn');
-if (buyNowBtn) {
-  buyNowBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    showPaymentModal();
-  });
-}
+<!-- Removed code for non-existent buyNowBtn -->
 
 // Fix Connect Wallet Button (id="connect-wallet")
 document.getElementById('connect-wallet').addEventListener('click', function(e) {
@@ -921,12 +913,11 @@ document.getElementById('connect-wallet').addEventListener('click', function(e) 
     connectWallet();
 });
 
-// Simplified handlers using new architecture
-function showPaymentModal() {
-    window.uiManager?.showModal();
-}
-
-function closeModal() {
+// Fix Connect Wallet Button (id="connect-wallet")
+// document.getElementById('connect-wallet').addEventListener('click', function(e) {
+//     e.preventDefault();
+//     connectWallet();
+// });
     window.uiManager?.closeModal();
 }
 
