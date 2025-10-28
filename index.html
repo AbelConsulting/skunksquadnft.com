@@ -756,7 +756,7 @@
                 console.log('🦨 Updating price from smart contract...');
                 
                 // Get current smart price
-                const price = await window.walletManager.contract.methods.getCurrentSmartPrice().call();
+                const price = await window.walletManager.contract.methods.price().call();
                 const priceInEth = 0.01; // Fixed price at 0.01 ETH
                 
                 // Update all price displays
