@@ -906,12 +906,13 @@
     <!-- Add this before the closing </body> tag -->
 <script>
 // Fix Buy Now Button (line 124: id="buyNowBtn")
-document.getElementById('buyNowBtn').addEventListener('click', function(e) {
+const buyNowBtn = document.getElementById('buyNowBtn');
+if (buyNowBtn) {
+  buyNowBtn.addEventListener('click', function(e) {
     e.preventDefault();
-    
-    // Show payment modal
     showPaymentModal();
-});
+  });
+}
 
 // Fix Connect Wallet Button (id="connect-wallet")
 document.getElementById('connect-wallet').addEventListener('click', function(e) {
