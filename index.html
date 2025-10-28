@@ -749,14 +749,14 @@
 
     <!-- Update price updater script -->
     <script>
-    async function updatePriceFromContract() {
+    async function PRICE() {
         try {
             // Wait for wallet manager to be initialized
             if (window.walletManager && window.walletManager.contract) {
                 console.log('🦨 Updating price from smart contract...');
                 
                 // Get current smart price
-                const price = await window.walletManager.contract.methods.price().call();
+                const price = await window.walletManager.contract.methods.PRICE().call();
                 const priceInEth = 0.01; // Fixed price at 0.01 ETH
                 
                 // Update all price displays
