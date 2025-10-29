@@ -846,7 +846,7 @@ class WalletManager {
             this.showLoading('Minting NFT...');
             // Get current smart price (dynamic pricing)
             const price = this.web3.utils.toWei('0.01', 'ether'); // Fixed price
-            const totalCost = this.web3.utils.toBN(price).mul(this.web3.utils.toBN(quantity));
+            const totalCost = BigInt(price) * BigInt(quantity);
             // Estimate gas for publicMint function
             const gasEstimate = await this.contract.methods.mintNFT(quantity).estimateGas({
                 from: this.accounts[0],
