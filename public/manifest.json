@@ -1,7 +1,7 @@
 {
   "name": "SkunkSquad NFT",
   "short_name": "SkunkSquad",
-  "description": "World's First Ultra-Smart NFT Collection with Credit Card Payments",
+  "description": "Art by MontanaDad - A collection of 10,000 unique Skunk Squad NFTs with various traits and rarities.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
@@ -47,18 +47,6 @@
     }
   ],
   "shortcuts": [
-    {
-      "name": "Buy NFTs",
-      "short_name": "Buy",
-      "description": "Purchase SkunkSquad NFTs with credit card",
-      "url": "/#payment",
-      "icons": [
-        {
-          "src": "favicon.ico",
-          "sizes": "32x32"
-        }
-      ]
-    },
     {
       "name": "Connect Wallet",
       "short_name": "Wallet",
