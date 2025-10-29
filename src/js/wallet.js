@@ -13,6 +13,8 @@ class WalletManager {
         this.isConnected = false;
         this.contract = null;
         this.contractAddress = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF'; // Ethereum Mainnet
+        this.loading = false;
+        this.walletInfoModal = null;
         this.init();
     }
 
@@ -94,46 +96,30 @@ class WalletManager {
                 this.showWeb3Instructions();
                 return false;
             }
-
-            console.log('🦨 Requesting wallet connection...');
-            
-            const accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts'
-            });
-
+            this.showLoading('Connecting to wallet...');
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            this.hideLoading();
             if (accounts.length > 0) {
                 this.accounts = accounts;
                 this.isConnected = true;
                 this.updateUI();
-                
-                // Get network info
                 await this.getNetworkInfo();
-                
-                // Auto-fill wallet address in forms
                 this.autoFillWalletAddress(accounts[0]);
-                
-                console.log('✅ Wallet connected successfully:', accounts[0]);
-                
                 if (window.skunkSquadWebsite) {
                     window.skunkSquadWebsite.showNotification(
                         `Wallet connected: ${this.shortenAddress(accounts[0])}`,
                         'success'
                     );
                 }
-                
                 return true;
             }
-            
         } catch (error) {
-            console.error('❌ Wallet connection error:', error);
-            
+            this.hideLoading();
+            let msg = 'Failed to connect wallet. Please try again.';
+            if (error.code === 4001) msg = 'Connection request rejected by user.';
             if (window.skunkSquadWebsite) {
-                window.skunkSquadWebsite.showNotification(
-                    'Failed to connect wallet. Please try again.',
-                    'error'
-                );
+                window.skunkSquadWebsite.showNotification(msg, 'error');
             }
-            
             return false;
         }
     }
@@ -852,54 +838,69 @@ class WalletManager {
             const connected = await this.connectWallet();
             if (!connected) return false;
         }
-
         if (!this.contract) {
             console.error('❌ Contract not initialized');
             return false;
         }
-
         try {
-            console.log('🦨 Minting NFT...', { quantity, account: this.accounts[0] });
-            
+            this.showLoading('Minting NFT...');
             // Get current smart price (dynamic pricing)
             const price = this.web3.utils.toWei('0.01', 'ether'); // Fixed price
             const totalCost = this.web3.utils.toBN(price).mul(this.web3.utils.toBN(quantity));
-            
             // Estimate gas for publicMint function
             const gasEstimate = await this.contract.methods.mintNFT(quantity).estimateGas({
                 from: this.accounts[0],
                 value: totalCost
             });
-            
             // Add 20% buffer to gas estimate
             const gasLimit = Math.floor(gasEstimate * 1.2);
-            
             // Send transaction using publicMint
-            const transaction = await this.contract.methods.mintNFT(quantity).send({
+            const sendTx = this.contract.methods.mintNFT(quantity).send({
                 from: this.accounts[0],
                 value: totalCost,
                 gas: gasLimit
             });
-            
-            console.log('✅ NFT minted successfully:', transaction.transactionHash);
-            
-            if (window.skunkSquadWebsite) {
-                window.skunkSquadWebsite.showNotification(
-                    `🎉 Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!`,
-                    'success'
-                );
-            }
-            
+            // Transaction status notifications
+            sendTx.on('transactionHash', (hash) => {
+                this.showLoading('Transaction submitted. Waiting for confirmation...');
+                if (window.skunkSquadWebsite) {
+                    window.skunkSquadWebsite.showNotification(
+                        `Transaction submitted: ${hash}`,
+                        'info'
+                    );
+                }
+            });
+            sendTx.on('receipt', (receipt) => {
+                this.hideLoading();
+                if (window.skunkSquadWebsite) {
+                    window.skunkSquadWebsite.showNotification(
+                        `🎉 Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!`,
+                        'success'
+                    );
+                }
+            });
+            sendTx.on('error', (error) => {
+                this.hideLoading();
+                let errorMessage = 'Failed to mint NFT. Please try again.';
+                if (error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient ETH balance for minting.';
+                } else if (error.message.includes('execution reverted')) {
+                    errorMessage = 'Transaction failed. Check if minting is still active.';
+                } else if (error.code === 4001) {
+                    errorMessage = 'Transaction was rejected by user.';
+                }
+                if (window.skunkSquadWebsite) {
+                    window.skunkSquadWebsite.showNotification(errorMessage, 'error');
+                }
+            });
+            const transaction = await sendTx;
             // Update contract info
             await this.updateContractInfo();
-            
             return transaction;
-            
         } catch (error) {
+            this.hideLoading();
             console.error('❌ Mint NFT error:', error);
-            
             let errorMessage = 'Failed to mint NFT. Please try again.';
-            
             if (error.message.includes('insufficient funds')) {
                 errorMessage = 'Insufficient ETH balance for minting.';
             } else if (error.message.includes('execution reverted')) {
@@ -907,13 +908,93 @@ class WalletManager {
             } else if (error.code === 4001) {
                 errorMessage = 'Transaction was rejected by user.';
             }
-            
             if (window.skunkSquadWebsite) {
                 window.skunkSquadWebsite.showNotification(errorMessage, 'error');
             }
-            
             return false;
         }
+    }
+    // Show wallet info modal
+    async showWalletInfo() {
+        if (!this.isConnected || !this.accounts[0]) return;
+        // Create modal if not exists
+        if (!this.walletInfoModal) {
+            this.walletInfoModal = document.createElement('div');
+            this.walletInfoModal.className = 'wallet-info-modal';
+            this.walletInfoModal.innerHTML = `
+                <div class="wallet-info-content">
+                    <h3>Wallet Info</h3>
+                    <div><strong>Address:</strong> <span id="wallet-info-address"></span></div>
+                    <div><strong>ETH Balance:</strong> <span id="wallet-info-balance">...</span></div>
+                    <div><strong>NFTs Owned:</strong> <span id="wallet-info-nft">...</span></div>
+                    <button id="wallet-info-disconnect" class="btn btn-secondary">Disconnect</button>
+                    <button id="wallet-info-close" class="btn btn-primary">Close</button>
+                </div>
+            `;
+            document.body.appendChild(this.walletInfoModal);
+            document.getElementById('wallet-info-close').onclick = () => {
+                this.walletInfoModal.style.display = 'none';
+            };
+            document.getElementById('wallet-info-disconnect').onclick = () => {
+                this.disconnectWallet();
+                this.walletInfoModal.style.display = 'none';
+            };
+        }
+        // Fill info
+        document.getElementById('wallet-info-address').textContent = this.accounts[0];
+        document.getElementById('wallet-info-balance').textContent = '...';
+        document.getElementById('wallet-info-nft').textContent = '...';
+        this.walletInfoModal.style.display = 'block';
+        // Fetch balances
+        this.getBalance().then(bal => {
+            document.getElementById('wallet-info-balance').textContent = `${parseFloat(bal).toFixed(4)} ETH`;
+        });
+        this.getNFTBalance().then(nft => {
+            document.getElementById('wallet-info-nft').textContent = nft;
+        });
+    }
+
+    disconnectWallet() {
+        this.isConnected = false;
+        this.accounts = [];
+        this.updateUI();
+        if (window.skunkSquadWebsite) {
+            window.skunkSquadWebsite.showNotification('Wallet disconnected', 'info');
+        }
+    }
+
+    showLoading(message = 'Loading...') {
+        let loader = document.getElementById('wallet-loading-indicator');
+        if (!loader) {
+            loader = document.createElement('div');
+            loader.id = 'wallet-loading-indicator';
+            loader.style.position = 'fixed';
+            loader.style.top = '0';
+            loader.style.left = '0';
+            loader.style.width = '100vw';
+            loader.style.height = '100vh';
+            loader.style.background = 'rgba(0,0,0,0.4)';
+            loader.style.zIndex = '9999';
+            loader.style.display = 'flex';
+            loader.style.alignItems = 'center';
+            loader.style.justifyContent = 'center';
+            loader.innerHTML = `<div style="background:#fff;padding:2em;border-radius:8px;box-shadow:0 2px 8px #0002;text-align:center"><span class="loader-spinner" style="display:inline-block;width:32px;height:32px;border:4px solid #22c55e;border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:1em"></span><div>${message}</div></div>`;
+            document.body.appendChild(loader);
+            // Add spinner animation
+            const style = document.createElement('style');
+            style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`;
+            document.head.appendChild(style);
+        } else {
+            loader.querySelector('div > div').textContent = message;
+            loader.style.display = 'flex';
+        }
+        this.loading = true;
+    }
+
+    hideLoading() {
+        const loader = document.getElementById('wallet-loading-indicator');
+        if (loader) loader.style.display = 'none';
+        this.loading = false;
     }
 
     async getBalance(address = null) {
@@ -1111,15 +1192,26 @@ class WalletManager {
             1: 'Ethereum Mainnet',
             11155111: 'Sepolia Testnet'
         };
-        
         const currentNetwork = networkNames[this.networkId] || `Network ${this.networkId}`;
-        
+        let switchBtn = '';
+        if (this.networkId !== 1) {
+            switchBtn = `<button id="switch-mainnet" class="btn btn-primary" style="margin-top:1em">Switch to Mainnet</button>`;
+        }
+        if (this.networkId !== 11155111) {
+            switchBtn += `<button id="switch-sepolia" class="btn btn-secondary" style="margin-top:1em;margin-left:1em">Switch to Sepolia</button>`;
+        }
         if (window.skunkSquadWebsite) {
             window.skunkSquadWebsite.showNotification(
-                `Connected to ${currentNetwork}. For best experience, use Ethereum Mainnet or Sepolia Testnet.`,
+                `Connected to ${currentNetwork}. For best experience, use Ethereum Mainnet or Sepolia Testnet.<br>${switchBtn}`,
                 'info'
             );
         }
+        setTimeout(() => {
+            const mainnetBtn = document.getElementById('switch-mainnet');
+            if (mainnetBtn) mainnetBtn.onclick = () => this.switchToMainnet();
+            const sepoliaBtn = document.getElementById('switch-sepolia');
+            if (sepoliaBtn) sepoliaBtn.onclick = () => this.switchToSepolia();
+        }, 500);
     }
 
     // Public methods for external use
