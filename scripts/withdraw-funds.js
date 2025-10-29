@@ -6,7 +6,7 @@
 const { ethers } = require('ethers');
 require('dotenv').config();
 
-const CONTRACT_ADDRESS = '0xf14F75aEDBbDE252616410649f4dd7C1963191c4';
+const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
 const SEPOLIA_RPC = process.env.SEPOLIA_RPC_URL || 'https://eth-sepolia.public.blastapi.io';
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
