@@ -77,7 +77,7 @@ const SkunkSquadConfig = {
     messages: {
         connected: '✅ Wallet Connected!\n\nClick the button again to mint your NFT.',
         minting: '⏳ Minting in progress...\n\nPlease wait for the transaction to complete.',
-        minted: (txHash) => `🎉 NFT Minted Successfully!\n\nView on Etherscan:\n${SkunkSquadConfig.network.explorer}/tx/${txHash}`
+        minted: (txHash) => `🎉 NFT Minted Successfully!\n\nView on Etherscan:\n${SkunkSquadConfig.utils.getTxLink(txHash)}`
     },
 
     // Utility Functions
@@ -95,13 +95,13 @@ const SkunkSquadConfig = {
         // Format wallet address
         formatAddress(address) {
             if (!address) return '';
-            return `${address.substring(0, 6)}...${address.substring(38)}`;
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
         },
 
         // Calculate total cost
         calculateTotal(quantity) {
             const price = parseFloat(SkunkSquadConfig.contract.mintPrice);
-            return (price * quantity).toFixed(4);
+            return parseFloat((price * quantity).toFixed(4)).toString();
         },
 
         // Get explorer link
@@ -115,7 +115,8 @@ const SkunkSquadConfig = {
     }
 };
 
-// Make config globally available
+// Make config globally available for use in other scripts and modules.
+// If using a module system (e.g., ES Modules or TypeScript), consider exporting instead.
 window.SkunkSquadConfig = SkunkSquadConfig;
 
 console.log('✅ SkunkSquad Config Loaded');

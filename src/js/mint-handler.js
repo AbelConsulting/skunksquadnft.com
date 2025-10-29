@@ -36,7 +36,12 @@ class MintHandler {
             if (!this.wallet) {
                 console.log('⏳ Waiting for wallet manager...');
                 await new Promise(resolve => setTimeout(resolve, 500));
-                this.wallet = window.walletManager;
+                if (window.walletManager) {
+                    this.wallet = window.walletManager;
+                } else {
+                    this.ui.showError(this.config.errors.walletManagerUnavailable || "Wallet manager is unavailable. Please try again later.");
+                    return false;
+                }
             }
 
             // Check if connected
@@ -128,7 +133,7 @@ class MintHandler {
      * Modal-based minting (from payment modal)
      */
     async mintFromModal() {
-        const quantity = parseInt(this.ui.elements.quantityInput?.value || 1);
+        const quantity = parseInt(this.ui.elements.quantityInput?.value) || 1;
         
         this.ui.closeModal();
         
