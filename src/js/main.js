@@ -379,11 +379,45 @@ window.quantityManager = {
     }
 };
 
+
+// Unified Wallet & Mint Card Logic (moved from index.html inline script)
+window.showWalletMintCard = function() {
+    try {
+        const overlay = document.getElementById('wallet-mint-card-overlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        // Initialize wallet manager if an initializer is provided by external scripts
+        if (!window.walletManager && typeof window.initWalletManager === 'function') {
+            window.initWalletManager();
+        }
+
+        // If walletManager exposes a method to fetch price, update visible price elements
+        if (window.walletManager && typeof window.walletManager.getPrice === 'function') {
+            window.walletManager.getPrice().then(priceEth => {
+                if (priceEth) {
+                    document.querySelectorAll('.price-eth').forEach(el => el.textContent = priceEth + ' ETH');
+                }
+            }).catch(err => {
+                console.debug('Price update skipped:', err);
+            });
+        }
+    } catch (error) {
+        console.error('Error showing wallet mint card:', error);
+    }
+};
+
+window.handleConnectAndBuy = async function() {
+    // Only open the popup card for quantity selection and wallet connect
+    window.showWalletMintCard();
+};
+
 // Global functions for HTML onclick handlers
 window.updateQuantity = (change) => window.quantityManager.updateQuantity(change);
 window.closeModal = () => window.skunkSquadWebsite.closeModal();
 window.showPaymentModal = () => window.skunkSquadWebsite.showPaymentModal();
-window.handleConnectAndBuy = () => window.skunkSquadWebsite.handleConnectAndBuy();
 window.mintWithEth = () => window.walletManager?.mintNFT();
 
 // Initialize when DOM is ready

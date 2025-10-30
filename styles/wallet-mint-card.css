@@ -1,0 +1,122 @@
+/* Wallet & Mint Card Styles (moved from index.html) */
+.wmc-card {
+    background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px #000a, 0 1.5px 8px #8b5cf6a0;
+    padding: 2.2em 2em 1.7em 2em;
+    max-width: 370px;
+    width: 92vw;
+    min-width: 0;
+    position: relative;
+    border: 1.5px solid #312e81;
+    animation: wmcFadeIn 0.4s cubic-bezier(.4,0,.2,1);
+    box-sizing: border-box;
+}
+@media (max-width: 480px) {
+    .wmc-card {
+        max-width: 98vw;
+        width: 98vw;
+        padding: 1.2em 0.7em 1.2em 0.7em;
+        font-size: 1.08em;
+    }
+    .wmc-label, .wmc-status, .wmc-wallet-section, .wmc-total {
+        font-size: 1.08em;
+    }
+    .wmc-qty-btn, .wmc-qty-input {
+        font-size: 1.18em;
+        width: 40px;
+        height: 40px;
+    }
+    .wmc-mint-btn {
+        font-size: 1.18em;
+        padding: 1em 0.5em;
+    }
+}
+.wmc-card {
+    overflow-y: auto;
+    max-height: 90vh;
+}
+/* Wallet & Mint Card Styles */
+.wmc-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.7em;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.wmc-close:hover { color: #8b5cf6; }
+.wmc-status {
+    margin-bottom: 1em;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.08em;
+    color: #22c55e;
+    min-height: 1.2em;
+}
+.wmc-wallet-section {
+    margin-bottom: 1em;
+    text-align: center;
+    font-size: 1.05em;
+}
+.wmc-label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #fff;
+    font-weight: 500;
+}
+.wmc-qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+.wmc-qty-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #312e81 0%, #18181b 100%);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px #0002;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.wmc-qty-btn:hover { background: #8b5cf6; color: #fff; }
+.wmc-qty-input {
+    width: 52px;
+    text-align: center;
+    margin: 0 10px;
+    border-radius: 10px;
+    border: 1.5px solid #312e81;
+    background: #222;
+    color: #fff;
+    font-size: 1.1em;
+    padding: 4px 0;
+}
+.wmc-total {
+    margin-bottom: 1em;
+    color: #94a3b8;
+    font-size: 1.05em;
+    text-align: center;
+}
+.wmc-mint-btn {
+    width: 100%;
+    font-size: 1.13em;
+    border-radius: 12px;
+    box-shadow: 0 1px 8px #8b5cf6a0;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-top: 0.5em;
+}
+.wmc-mint-btn:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #22c55e 100%);
+    box-shadow: 0 2px 16px #22c55e80;
+}
+@keyframes wmcFadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
