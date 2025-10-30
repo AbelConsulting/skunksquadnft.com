@@ -375,6 +375,12 @@ window.showWalletMintCard = function() {
             overlay.setAttribute('aria-hidden', 'false');
         }
 
+        // Ensure mint section is visible for quantity selection
+        const mintSection = document.getElementById('wmc-mint-section');
+        if (mintSection) {
+            mintSection.style.display = 'block';
+        }
+
         // Initialize wallet manager if an initializer is provided by external scripts
         if (!window.walletManager && typeof window.initWalletManager === 'function') {
             window.initWalletManager();
