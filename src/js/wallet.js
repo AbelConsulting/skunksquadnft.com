@@ -1240,53 +1240,7 @@ class WalletManager {
     }
 }
 
-// Initialize wallet manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof Web3 !== 'undefined') {
-        window.walletManager = new WalletManager();
-        
-        // Override wallet connection button
-        const connectButton = document.getElementById('connect-wallet');
-        if (connectButton) {
-            connectButton.addEventListener('click', async (e) => {
-                e.preventDefault();
-                
-                if (window.walletManager.isConnected) {
-                    // Show wallet info or disconnect options
-                    window.walletManager.showWalletInfo();
-                } else {
-                    await window.walletManager.connectWallet();
-                }
-            });
-        }
-        
-        // Override ETH purchase buttons
-        const ethButtons = document.querySelectorAll('#buy-with-eth, #buy-with-eth-modal');
-        ethButtons.forEach(button => {
-            button.addEventListener('click', async (e) => {
-                e.preventDefault();
-                
-                // Close modal if open
-                if (window.skunkSquadWebsite) {
-                    window.skunkSquadWebsite.closePurchaseModal();
-                }
-                
-                // Get quantity (default to 1)
-                let quantity = 1;
-                const quantitySelect = document.getElementById('quantity');
-                if (quantitySelect) {
-                    quantity = parseInt(quantitySelect.value) || 1;
-                }
-                
-                // Mint NFT
-                await window.walletManager.mintNFT(quantity);
-            });
-        });
-        
-    } else {
-        console.log('🦨 Web3 not loaded - wallet features disabled');
-    }
-});
+// No automatic WalletManager initialization. Use window.initWalletManager for lazy init only.
 
 // Lazy WalletManager initialization
 window.initWalletManager = function() {
