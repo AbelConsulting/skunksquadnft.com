@@ -71,20 +71,20 @@
 </head>
 <body>
     <!-- Unified Wallet & Mint Popup Card -->
-    <div id="wallet-mint-card-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-        <div id="wallet-mint-card" style="background:#18181b;border-radius:16px;box-shadow:0 4px 32px #0008;padding:2em 2em 1.5em 2em;max-width:350px;width:90vw;position:relative;">
-            <button id="wmc-close" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.5em;color:#fff;cursor:pointer;">&times;</button>
-            <div id="wmc-status" style="margin-bottom:1em;text-align:center;font-weight:600;color:#22c55e;"></div>
-            <div id="wmc-wallet-section" style="margin-bottom:1em;text-align:center;"></div>
+    <div id="wallet-mint-card-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.55);backdrop-filter:blur(6px);z-index:9999;align-items:center;justify-content:center;">
+        <div id="wallet-mint-card" class="wmc-card">
+            <button id="wmc-close" class="wmc-close">&times;</button>
+            <div id="wmc-status" class="wmc-status"></div>
+            <div id="wmc-wallet-section" class="wmc-wallet-section"></div>
             <div id="wmc-mint-section" style="display:none;">
-                <label for="wmc-quantity" style="display:block;margin-bottom:0.5em;color:#fff;">Quantity:</label>
-                <div style="display:flex;align-items:center;justify-content:center;margin-bottom:1em;">
-                    <button type="button" id="wmc-qty-dec" style="width:32px;height:32px;font-size:1.2em;background:#222;border:none;color:#fff;border-radius:8px;">-</button>
-                    <input type="number" id="wmc-quantity" min="1" max="10" value="1" style="width:48px;text-align:center;margin:0 8px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;">
-                    <button type="button" id="wmc-qty-inc" style="width:32px;height:32px;font-size:1.2em;background:#222;border:none;color:#fff;border-radius:8px;">+</button>
+                <label for="wmc-quantity" class="wmc-label">Quantity:</label>
+                <div class="wmc-qty-controls">
+                    <button type="button" id="wmc-qty-dec" class="wmc-qty-btn">-</button>
+                    <input type="number" id="wmc-quantity" min="1" max="10" value="1" class="wmc-qty-input">
+                    <button type="button" id="wmc-qty-inc" class="wmc-qty-btn">+</button>
                 </div>
-                <div style="margin-bottom:1em;color:#94a3b8;">Total: <span id="wmc-total">0.01 ETH</span></div>
-                <button id="wmc-mint-btn" class="btn btn-primary" style="width:100%;font-size:1.1em;" aria-busy="false">
+                <div class="wmc-total">Total: <span id="wmc-total">0.01 ETH</span></div>
+                <button id="wmc-mint-btn" class="wmc-mint-btn btn btn-primary" aria-busy="false">
                     <span id="wmc-mint-btn-text">Mint NFT</span>
                     <span id="wmc-mint-btn-spinner" style="display:none;margin-left:8px"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
                 </button>
@@ -1128,6 +1128,101 @@ async function handleConnectAndBuy() {
 
     <!-- Add these styles to your CSS -->
     <style>
+/* Wallet & Mint Card Styles */
+.wmc-card {
+    background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px #000a, 0 1.5px 8px #8b5cf6a0;
+    padding: 2.2em 2em 1.7em 2em;
+    max-width: 370px;
+    width: 92vw;
+    position: relative;
+    border: 1.5px solid #312e81;
+    animation: wmcFadeIn 0.4s cubic-bezier(.4,0,.2,1);
+}
+.wmc-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.7em;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.wmc-close:hover { color: #8b5cf6; }
+.wmc-status {
+    margin-bottom: 1em;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.08em;
+    color: #22c55e;
+    min-height: 1.2em;
+}
+.wmc-wallet-section {
+    margin-bottom: 1em;
+    text-align: center;
+    font-size: 1.05em;
+}
+.wmc-label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #fff;
+    font-weight: 500;
+}
+.wmc-qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+.wmc-qty-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #312e81 0%, #18181b 100%);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px #0002;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.wmc-qty-btn:hover { background: #8b5cf6; color: #fff; }
+.wmc-qty-input {
+    width: 52px;
+    text-align: center;
+    margin: 0 10px;
+    border-radius: 10px;
+    border: 1.5px solid #312e81;
+    background: #222;
+    color: #fff;
+    font-size: 1.1em;
+    padding: 4px 0;
+}
+.wmc-total {
+    margin-bottom: 1em;
+    color: #94a3b8;
+    font-size: 1.05em;
+    text-align: center;
+}
+.wmc-mint-btn {
+    width: 100%;
+    font-size: 1.13em;
+    border-radius: 12px;
+    box-shadow: 0 1px 8px #8b5cf6a0;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-top: 0.5em;
+}
+.wmc-mint-btn:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #22c55e 100%);
+    box-shadow: 0 2px 16px #22c55e80;
+}
+@keyframes wmcFadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
     /* Force dark theme on feature cards */
     .feature-card {
         background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%) !important;
