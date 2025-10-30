@@ -688,7 +688,7 @@ function showWalletMintCard() {
 
     overlay.style.display = 'flex';
     status.textContent = '';
-    mintBtn.disabled = false;
+    mintBtn.disabled = true;
     mintBtn.setAttribute('aria-busy', 'false');
     mintBtnText.textContent = 'Mint NFT';
     mintBtnSpinner.style.display = 'none';
@@ -698,9 +698,11 @@ function showWalletMintCard() {
     if (window.walletManager && window.walletManager.isConnected && window.walletManager.accounts.length > 0) {
         walletSection.innerHTML = `<div style='color:#22c55e;margin-bottom:0.5em;'>Wallet Connected</div><div style='font-size:0.95em;color:#fff;'>${window.walletManager.shortenAddress(window.walletManager.accounts[0])}</div>`;
         mintSection.style.display = 'block';
+        mintBtn.disabled = false;
     } else {
         walletSection.innerHTML = `<button class='btn btn-primary' id='wmc-connect-btn' style='width:100%;font-size:1.1em;'>Connect Wallet</button>`;
         mintSection.style.display = 'none';
+        mintBtn.disabled = true;
         setTimeout(() => {
             const connectBtn = document.getElementById('wmc-connect-btn');
             if (connectBtn) {
