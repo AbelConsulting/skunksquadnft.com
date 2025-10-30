@@ -177,46 +177,20 @@ window.skunkSquadWebsite = {
     },
 
     async handleConnectAndBuy() {
-        // Use the mint handler if available
-        if (window.mintHandler) {
-            console.log('🦨 Using mint handler...');
-            await window.mintHandler.handleMint(1);
-            return;
-        }
-        
-        // Fallback to basic connection
-        if (typeof window.ethereum === 'undefined') {
-            alert('🦊 MetaMask Required!\n\nPlease install MetaMask to mint NFTs.\n\nVisit: https://metamask.io/');
-            return;
-        }
-
-        const button = document.getElementById('connectBuyBtn');
-        
-        try {
-            console.log('🦨 Connecting wallet...');
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
-            
-            console.log('✅ Wallet connected:', accounts[0]);
-            
-            button.innerHTML = `
-                <span class="btn-icon">⛏️</span>
-                <span class="btn-text">Mint NFT</span>
-                <span class="btn-price">(0.01 ETH)</span>
-            `;
-            
-            // Show success message
-            this.showNotification(`Wallet connected! Click again to mint.`, 'success');
-            
-        } catch (error) {
-            console.error('❌ Connection failed:', error);
-            button.innerHTML = `
-                <span class="btn-icon">🦊</span>
-                <span class="btn-text">Connect Wallet & Mint</span>
-                <span class="btn-price">(0.01 ETH)</span>
-            `;
-            this.showNotification('Connection failed: ' + error.message, 'error');
+        // Always show the popup card for quantity selection and wallet connect
+        window.showWalletMintCard();
+        // Set up mint button in popup to trigger mint
+        const mintBtn = document.getElementById('wmc-mint-btn');
+        if (mintBtn) {
+            mintBtn.onclick = async function() {
+                const qtyInput = document.getElementById('wmc-quantity');
+                const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                if (window.mintHandler) {
+                    await window.mintHandler.handleMint(quantity);
+                } else if (window.walletManager) {
+                    await window.walletManager.mintNFT(quantity);
+                }
+            };
         }
     },
 
