@@ -70,6 +70,27 @@
     </script>
 </head>
 <body>
+    <!-- Unified Wallet & Mint Popup Card -->
+    <div id="wallet-mint-card-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+        <div id="wallet-mint-card" style="background:#18181b;border-radius:16px;box-shadow:0 4px 32px #0008;padding:2em 2em 1.5em 2em;max-width:350px;width:90vw;position:relative;">
+            <button id="wmc-close" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.5em;color:#fff;cursor:pointer;">&times;</button>
+            <div id="wmc-status" style="margin-bottom:1em;text-align:center;font-weight:600;color:#22c55e;"></div>
+            <div id="wmc-wallet-section" style="margin-bottom:1em;text-align:center;"></div>
+            <div id="wmc-mint-section" style="display:none;">
+                <label for="wmc-quantity" style="display:block;margin-bottom:0.5em;color:#fff;">Quantity:</label>
+                <div style="display:flex;align-items:center;justify-content:center;margin-bottom:1em;">
+                    <button type="button" id="wmc-qty-dec" style="width:32px;height:32px;font-size:1.2em;background:#222;border:none;color:#fff;border-radius:8px;">-</button>
+                    <input type="number" id="wmc-quantity" min="1" max="10" value="1" style="width:48px;text-align:center;margin:0 8px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;">
+                    <button type="button" id="wmc-qty-inc" style="width:32px;height:32px;font-size:1.2em;background:#222;border:none;color:#fff;border-radius:8px;">+</button>
+                </div>
+                <div style="margin-bottom:1em;color:#94a3b8;">Total: <span id="wmc-total">0.01 ETH</span></div>
+                <button id="wmc-mint-btn" class="btn btn-primary" style="width:100%;font-size:1.1em;" aria-busy="false">
+                    <span id="wmc-mint-btn-text">Mint NFT</span>
+                    <span id="wmc-mint-btn-spinner" style="display:none;margin-left:8px"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- Top Info Bar -->
     <div class="top-bar">
         <div class="top-bar-container">
@@ -610,16 +631,17 @@
                         <label for="mint-quantity">Quantity:</label>
                         <div class="quantity-controls">
                             <button type="button" onclick="updateQuantity(-1)" aria-label="Decrease quantity">-</button>
-                            <input type="number" id="mint-quantity" min="1" max="10" value="1" required>
+                            <input type="number" id="mint-quantity" min="1" max="10" value="1" required aria-live="polite">
                             <button type="button" onclick="updateQuantity(1)" aria-label="Increase quantity">+</button>
                         </div>
                         <div class="total-cost" aria-live="polite">
                             Total: <span id="total-eth">0.01 ETH</span>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-mint" type="submit">
+                    <button class="btn btn-primary btn-mint" id="mint-action-btn" type="submit" aria-busy="false">
                         <span class="btn-icon" aria-hidden="true">🦊</span>
-                        Connect Wallet & Mint
+                        <span id="mint-btn-text">Connect Wallet & Mint</span>
+                        <span id="mint-btn-spinner" style="display:none;margin-left:8px"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
                     </button>
                 </form>
             </div>
@@ -648,6 +670,137 @@
 
     <!-- Update price updater script -->
     <script>
+// Unified Wallet & Mint Card Logic
+function showWalletMintCard() {
+    const overlay = document.getElementById('wallet-mint-card-overlay');
+    const card = document.getElementById('wallet-mint-card');
+    const closeBtn = document.getElementById('wmc-close');
+    const status = document.getElementById('wmc-status');
+    const walletSection = document.getElementById('wmc-wallet-section');
+    const mintSection = document.getElementById('wmc-mint-section');
+    const mintBtn = document.getElementById('wmc-mint-btn');
+    const mintBtnText = document.getElementById('wmc-mint-btn-text');
+    const mintBtnSpinner = document.getElementById('wmc-mint-btn-spinner');
+    const qtyInput = document.getElementById('wmc-quantity');
+    const qtyDec = document.getElementById('wmc-qty-dec');
+    const qtyInc = document.getElementById('wmc-qty-inc');
+    const total = document.getElementById('wmc-total');
+
+    overlay.style.display = 'flex';
+    status.textContent = '';
+    mintBtn.disabled = false;
+    mintBtn.setAttribute('aria-busy', 'false');
+    mintBtnText.textContent = 'Mint NFT';
+    mintBtnSpinner.style.display = 'none';
+    mintSection.style.display = 'none';
+
+    // Wallet status
+    if (window.walletManager && window.walletManager.isConnected && window.walletManager.accounts.length > 0) {
+        walletSection.innerHTML = `<div style='color:#22c55e;margin-bottom:0.5em;'>Wallet Connected</div><div style='font-size:0.95em;color:#fff;'>${window.walletManager.shortenAddress(window.walletManager.accounts[0])}</div>`;
+        mintSection.style.display = 'block';
+    } else {
+        walletSection.innerHTML = `<button class='btn btn-primary' id='wmc-connect-btn' style='width:100%;font-size:1.1em;'>Connect Wallet</button>`;
+        mintSection.style.display = 'none';
+        setTimeout(() => {
+            const connectBtn = document.getElementById('wmc-connect-btn');
+            if (connectBtn) {
+                connectBtn.onclick = async () => {
+                    connectBtn.disabled = true;
+                    connectBtn.textContent = 'Connecting...';
+                    const connected = await window.walletManager.connectWallet();
+                    if (connected) {
+                        walletSection.innerHTML = `<div style='color:#22c55e;margin-bottom:0.5em;'>Wallet Connected</div><div style='font-size:0.95em;color:#fff;'>${window.walletManager.shortenAddress(window.walletManager.accounts[0])}</div>`;
+                        mintSection.style.display = 'block';
+                    } else {
+                        connectBtn.disabled = false;
+                        connectBtn.textContent = 'Connect Wallet';
+                        status.textContent = 'Failed to connect wallet.';
+                        status.style.color = '#ef4444';
+                    }
+                };
+            }
+        }, 100);
+    }
+
+    // Quantity controls
+    qtyDec.onclick = () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val > 1) qtyInput.value = val - 1;
+        updateTotal();
+    };
+    qtyInc.onclick = () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val < 10) qtyInput.value = val + 1;
+        updateTotal();
+    };
+    qtyInput.oninput = updateTotal;
+    function updateTotal() {
+        const price = 0.01;
+        const qty = parseInt(qtyInput.value) || 1;
+        total.textContent = `${(price * qty).toFixed(4)} ETH`;
+    }
+    updateTotal();
+
+    // Mint button logic
+    mintBtn.onclick = async () => {
+        mintBtn.disabled = true;
+        mintBtn.setAttribute('aria-busy', 'true');
+        mintBtnSpinner.style.display = 'inline-block';
+        mintBtnText.textContent = 'Processing...';
+        status.textContent = '';
+        try {
+            const qty = parseInt(qtyInput.value) || 1;
+            const result = await window.walletManager.mintNFT(qty);
+            if (result && result.transactionHash) {
+                mintBtnText.textContent = 'Success!';
+                mintBtnSpinner.style.display = 'none';
+                mintBtn.classList.add('success');
+                status.textContent = 'NFT minted successfully!';
+                status.style.color = '#22c55e';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 2000);
+            } else {
+                throw new Error('Mint failed');
+            }
+        } catch (error) {
+            mintBtnText.textContent = 'Error!';
+            mintBtnSpinner.style.display = 'none';
+            mintBtn.classList.add('error');
+            status.textContent = error.message || 'Mint failed.';
+            status.style.color = '#ef4444';
+            setTimeout(() => {
+                mintBtn.disabled = false;
+                mintBtn.setAttribute('aria-busy', 'false');
+                mintBtnText.textContent = 'Mint NFT';
+                mintBtn.classList.remove('error');
+            }, 2500);
+        }
+    };
+
+    // Close logic
+    closeBtn.onclick = () => {
+        overlay.style.display = 'none';
+    };
+}
+
+// Add trigger to nav and modal mint buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const navMintBtn = document.getElementById('connectBuyBtn');
+    if (navMintBtn) {
+        navMintBtn.onclick = (e) => {
+            e.preventDefault();
+            showWalletMintCard();
+        };
+    }
+    const modalMintBtn = document.getElementById('mint-action-btn');
+    if (modalMintBtn) {
+        modalMintBtn.onclick = (e) => {
+            e.preventDefault();
+            showWalletMintCard();
+        };
+    }
+});
     async function PRICE() {
         try {
             // Wait for wallet manager to be initialized
@@ -912,19 +1065,61 @@ function buyWithCard() {
 })();
 
 async function handleConnectAndBuy() {
-    console.log('🦨 handleConnectAndBuy called');
-    console.log('Mint handler available:', !!window.mintHandler);
-    console.log('Wallet manager available:', !!window.walletManager);
-    
-    if (window.mintHandler) {
-        console.log('Using mint handler...');
-        await window.mintHandler.handleMint(1);
-    } else if (window.walletManager) {
-        console.log('Using wallet manager fallback...');
-        await window.walletManager.connectWallet();
-    } else {
-        console.error('❌ No handlers available!');
-        alert('Please wait a moment and try again. The page is still loading...');
+    const mintBtn = document.getElementById('mint-action-btn');
+    const mintBtnText = document.getElementById('mint-btn-text');
+    const mintBtnSpinner = document.getElementById('mint-btn-spinner');
+    const quantityInput = document.getElementById('mint-quantity');
+    let quantity = 1;
+    if (quantityInput) {
+        quantity = parseInt(quantityInput.value) || 1;
+    }
+    mintBtn.disabled = true;
+    mintBtn.setAttribute('aria-busy', 'true');
+    mintBtnSpinner.style.display = 'inline-block';
+    mintBtnText.textContent = 'Processing...';
+    try {
+        if (window.mintHandler) {
+            const result = await window.mintHandler.handleMint(quantity);
+            if (result) {
+                mintBtnText.textContent = 'Success!';
+                mintBtnSpinner.style.display = 'none';
+                mintBtn.classList.add('success');
+                setTimeout(() => {
+                    mintBtn.disabled = false;
+                    mintBtn.setAttribute('aria-busy', 'false');
+                    mintBtnText.textContent = 'Connect Wallet & Mint';
+                    mintBtn.classList.remove('success');
+                }, 2500);
+            } else {
+                throw new Error('Mint failed');
+            }
+        } else if (window.walletManager) {
+            const connected = await window.walletManager.connectWallet();
+            if (connected) {
+                mintBtnText.textContent = 'Wallet Connected!';
+                mintBtnSpinner.style.display = 'none';
+                setTimeout(() => {
+                    mintBtn.disabled = false;
+                    mintBtn.setAttribute('aria-busy', 'false');
+                    mintBtnText.textContent = 'Connect Wallet & Mint';
+                }, 2000);
+            } else {
+                throw new Error('Wallet connection failed');
+            }
+        } else {
+            throw new Error('No handlers available');
+        }
+    } catch (error) {
+        mintBtnText.textContent = 'Error!';
+        mintBtnSpinner.style.display = 'none';
+        mintBtn.classList.add('error');
+        alert('❌ ' + (error.message || 'Mint failed'));
+        setTimeout(() => {
+            mintBtn.disabled = false;
+            mintBtn.setAttribute('aria-busy', 'false');
+            mintBtnText.textContent = 'Connect Wallet & Mint';
+            mintBtn.classList.remove('error');
+        }, 2500);
     }
 }
 </script>
