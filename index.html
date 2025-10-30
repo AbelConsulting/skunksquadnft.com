@@ -709,8 +709,8 @@ function showWalletMintCard() {
                     connectBtn.textContent = 'Connecting...';
                     const connected = await window.walletManager.connectWallet();
                     if (connected) {
-                        walletSection.innerHTML = `<div style='color:#22c55e;margin-bottom:0.5em;'>Wallet Connected</div><div style='font-size:0.95em;color:#fff;'>${window.walletManager.shortenAddress(window.walletManager.accounts[0])}</div>`;
-                        mintSection.style.display = 'block';
+                        // Re-run card setup to refresh UI
+                        showWalletMintCard();
                     } else {
                         connectBtn.disabled = false;
                         connectBtn.textContent = 'Connect Wallet';
