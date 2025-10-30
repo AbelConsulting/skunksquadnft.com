@@ -1288,22 +1288,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Initialize wallet manager when page loads
-console.log('🦨 Initializing WalletManager...');
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
+// Lazy WalletManager initialization
+window.initWalletManager = function() {
+    if (!window.walletManager && typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
         window.walletManager = new WalletManager();
-        console.log('✅ WalletManager initialized');
-    } else {
-        console.error('❌ Web3 or WalletManager not available');
+        console.log('✅ WalletManager initialized (on user action)');
     }
-});
-
-// Also initialize immediately if DOM is already loaded
-if (document.readyState !== 'loading') {
-    if (typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
-        window.walletManager = new WalletManager();
-        console.log('✅ WalletManager initialized (immediate)');
-    }
+    return window.walletManager;
 }

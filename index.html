@@ -709,6 +709,8 @@ function showWalletMintCard() {
                 connectBtn.onclick = async () => {
                     connectBtn.disabled = true;
                     connectBtn.textContent = 'Connecting...';
+                    // Lazy init WalletManager on user action
+                    if (!window.walletManager) window.initWalletManager();
                     const connected = await window.walletManager.connectWallet();
                     if (connected) {
                         // Re-run card setup to refresh UI
@@ -724,23 +726,30 @@ function showWalletMintCard() {
         }, 100);
     }
 
-    // Quantity controls
-    qtyDec.onclick = () => {
-        let val = parseInt(qtyInput.value) || 1;
-        if (val > 1) qtyInput.value = val - 1;
-        updateTotal();
-    };
-    qtyInc.onclick = () => {
-        let val = parseInt(qtyInput.value) || 1;
-        if (val < 10) qtyInput.value = val + 1;
-        updateTotal();
-    };
-    qtyInput.oninput = updateTotal;
-    function updateTotal() {
-        const price = 0.01;
+    // Quantity controls and dynamic price updater
+    async function getMintPriceEth() {
+        if (!window.walletManager) window.initWalletManager();
+        if (window.walletManager && window.walletManager.smartPrice) {
+            return parseFloat(window.walletManager.smartPrice);
+        }
+        return 0.01;
+    }
+    async function updateTotal() {
+        const price = await getMintPriceEth();
         const qty = parseInt(qtyInput.value) || 1;
         total.textContent = `${(price * qty).toFixed(4)} ETH`;
     }
+    qtyDec.onclick = async () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val > 1) qtyInput.value = val - 1;
+        await updateTotal();
+    };
+    qtyInc.onclick = async () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val < 10) qtyInput.value = val + 1;
+        await updateTotal();
+    };
+    qtyInput.oninput = updateTotal;
     updateTotal();
 
     // Mint button logic
@@ -752,6 +761,7 @@ function showWalletMintCard() {
         status.textContent = '';
         try {
             const qty = parseInt(qtyInput.value) || 1;
+            if (!window.walletManager) window.initWalletManager();
             const result = await window.walletManager.mintNFT(qty);
             if (result && result.transactionHash) {
                 mintBtnText.textContent = 'Success!';
@@ -806,6 +816,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function PRICE() {
         try {
             // Wait for wallet manager to be initialized
+            if (!window.walletManager) window.initWalletManager();
             if (window.walletManager && window.walletManager.contract) {
                 console.log('🦨 Updating price from smart contract...');
                 
@@ -1015,8 +1026,11 @@ function buyWithCard() {
 
         // Check if wallet manager is available
         if (!window.walletManager) {
-            alert('🔧 Wallet manager not initialized! Please refresh the page!');
-            return;
+            window.initWalletManager();
+            if (!window.walletManager) {
+                alert('🔧 Wallet manager not initialized! Please refresh the page!');
+                return;
+            }
         }
 
         // Connect wallet if not connected
@@ -1067,62 +1081,8 @@ function buyWithCard() {
 })();
 
 async function handleConnectAndBuy() {
-    const mintBtn = document.getElementById('mint-action-btn');
-    const mintBtnText = document.getElementById('mint-btn-text');
-    const mintBtnSpinner = document.getElementById('mint-btn-spinner');
-    const quantityInput = document.getElementById('mint-quantity');
-    let quantity = 1;
-    if (quantityInput) {
-        quantity = parseInt(quantityInput.value) || 1;
-    }
-    mintBtn.disabled = true;
-    mintBtn.setAttribute('aria-busy', 'true');
-    mintBtnSpinner.style.display = 'inline-block';
-    mintBtnText.textContent = 'Processing...';
-    try {
-        if (window.mintHandler) {
-            const result = await window.mintHandler.handleMint(quantity);
-            if (result) {
-                mintBtnText.textContent = 'Success!';
-                mintBtnSpinner.style.display = 'none';
-                mintBtn.classList.add('success');
-                setTimeout(() => {
-                    mintBtn.disabled = false;
-                    mintBtn.setAttribute('aria-busy', 'false');
-                    mintBtnText.textContent = 'Connect Wallet & Mint';
-                    mintBtn.classList.remove('success');
-                }, 2500);
-            } else {
-                throw new Error('Mint failed');
-            }
-        } else if (window.walletManager) {
-            const connected = await window.walletManager.connectWallet();
-            if (connected) {
-                mintBtnText.textContent = 'Wallet Connected!';
-                mintBtnSpinner.style.display = 'none';
-                setTimeout(() => {
-                    mintBtn.disabled = false;
-                    mintBtn.setAttribute('aria-busy', 'false');
-                    mintBtnText.textContent = 'Connect Wallet & Mint';
-                }, 2000);
-            } else {
-                throw new Error('Wallet connection failed');
-            }
-        } else {
-            throw new Error('No handlers available');
-        }
-    } catch (error) {
-        mintBtnText.textContent = 'Error!';
-        mintBtnSpinner.style.display = 'none';
-        mintBtn.classList.add('error');
-        alert('❌ ' + (error.message || 'Mint failed'));
-        setTimeout(() => {
-            mintBtn.disabled = false;
-            mintBtn.setAttribute('aria-busy', 'false');
-            mintBtnText.textContent = 'Connect Wallet & Mint';
-            mintBtn.classList.remove('error');
-        }, 2500);
-    }
+    // Only open the popup card for quantity selection and wallet connect
+    showWalletMintCard();
 }
 </script>
 
