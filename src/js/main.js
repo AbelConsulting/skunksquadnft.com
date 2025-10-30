@@ -412,6 +412,19 @@ window.showWalletMintCard = function() {
 window.handleConnectAndBuy = async function() {
     // Only open the popup card for quantity selection and wallet connect
     window.showWalletMintCard();
+    // When user confirms quantity in popup, call mintHandler.handleMint with correct quantity
+    const mintBtn = document.getElementById('wmc-mint-btn');
+    if (mintBtn) {
+        mintBtn.onclick = async function() {
+            const qtyInput = document.getElementById('wmc-quantity');
+            const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+            if (window.mintHandler) {
+                await window.mintHandler.handleMint(quantity);
+            } else if (window.walletManager) {
+                await window.walletManager.mintNFT(quantity);
+            }
+        };
+    }
 };
 
 // Global functions for HTML onclick handlers

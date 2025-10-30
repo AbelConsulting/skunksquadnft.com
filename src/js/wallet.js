@@ -850,14 +850,14 @@ class WalletManager {
             const qty = BigInt(quantity);
             const totalCost = (price * qty).toString(); // web3 expects string
             // Estimate gas for publicMint function
-            const gasEstimate = await this.contract.methods.mintNFT(quantity).estimateGas({
+            const gasEstimate = await this.contract.methods.mintNFT(qty.toString()).estimateGas({
                 from: this.accounts[0],
                 value: totalCost
             });
             // Add 20% buffer to gas estimate
             const gasLimit = Math.floor(gasEstimate * 1.2);
             // Send transaction using publicMint
-            const sendTx = this.contract.methods.mintNFT(quantity).send({
+            const sendTx = this.contract.methods.mintNFT(qty.toString()).send({
                 from: this.accounts[0],
                 value: totalCost,
                 gas: gasLimit
