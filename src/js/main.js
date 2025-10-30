@@ -396,7 +396,12 @@ window.showWalletMintCard = function() {
 };
 
 window.handleConnectAndBuy = async function() {
-    // Only open the popup card for quantity selection and wallet connect
+    // Always show the popup card overlay for quantity selection and wallet connect
+    const overlay = document.getElementById('wallet-mint-card-overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.setAttribute('aria-hidden', 'false');
+    }
     window.showWalletMintCard();
     // When user confirms quantity in popup, call mintHandler.handleMint with correct quantity
     const mintBtn = document.getElementById('wmc-mint-btn');
