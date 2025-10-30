@@ -177,20 +177,32 @@ window.skunkSquadWebsite = {
     },
 
     async handleConnectAndBuy() {
-        // Always show the popup card for quantity selection and wallet connect
-        window.showWalletMintCard();
-        // Set up mint button in popup to trigger mint
-        const mintBtn = document.getElementById('wmc-mint-btn');
-        if (mintBtn) {
-            mintBtn.onclick = async function() {
-                const qtyInput = document.getElementById('wmc-quantity');
-                const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
-                if (window.mintHandler) {
-                    await window.mintHandler.handleMint(quantity);
-                } else if (window.walletManager) {
-                    await window.walletManager.mintNFT(quantity);
-                }
-            };
+        // Always connect wallet first, then show popup card for quantity selection
+        let walletConnected = false;
+        if (window.walletManager && window.walletManager.isConnected) {
+            walletConnected = true;
+        } else if (window.mintHandler) {
+            // Try to connect wallet using mintHandler
+            walletConnected = await window.mintHandler.connectAndNotify();
+        } else if (window.walletManager) {
+            walletConnected = await window.walletManager.connectWallet();
+        }
+        // After wallet is connected, show popup card
+        if (walletConnected) {
+            window.showWalletMintCard();
+            // Set up mint button in popup to trigger mint
+            const mintBtn = document.getElementById('wmc-mint-btn');
+            if (mintBtn) {
+                mintBtn.onclick = async function() {
+                    const qtyInput = document.getElementById('wmc-quantity');
+                    const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                    if (window.mintHandler) {
+                        await window.mintHandler.handleMint(quantity);
+                    } else if (window.walletManager) {
+                        await window.walletManager.mintNFT(quantity);
+                    }
+                };
+            }
         }
     },
 
