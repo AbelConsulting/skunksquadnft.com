@@ -1242,11 +1242,13 @@ class WalletManager {
 
 // No automatic WalletManager initialization. Use window.initWalletManager for lazy init only.
 
-// Lazy WalletManager initialization
-window.initWalletManager = function() {
-    if (!window.walletManager && typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
-        window.walletManager = new WalletManager();
-        console.log('✅ WalletManager initialized (on user action)');
-    }
-    return window.walletManager;
+// Robust lazy WalletManager initialization
+if (typeof window.initWalletManager !== 'function') {
+    window.initWalletManager = function() {
+        if (!window.walletManager && typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
+            window.walletManager = new WalletManager();
+            console.log('✅ WalletManager initialized (on user action)');
+        }
+        return window.walletManager;
+    };
 }
