@@ -65,7 +65,7 @@ console.log('🦨 mint-handler.js loading...');
                 
                 // Send transaction
                 const accounts = window.walletManager.accounts;
-                const txHash = await contract.methods.mint(quantity).send({
+                const txHash = await contract.methods.mintNFT(quantity).send({  // ✅ Changed from mint to mintNFT
                     from: accounts[0],
                     value: totalCost.toString(),
                     gas: 300000 * quantity
