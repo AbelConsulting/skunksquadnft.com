@@ -11,7 +11,7 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     let currentEthPrice = 2400; // USD
 
     // ========================================
-    // MODAL FUNCTIONS (No dependencies needed)
+    // MODAL FUNCTIONS
     // ========================================
     
     window.showWalletMintCard = function() {
@@ -19,16 +19,10 @@ console.log('🦨 SkunkSquad Main JS Loading...');
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
             overlay.style.display = 'flex';
-            console.log('✅ Modal display set to flex');
-            
-            // Update UI based on wallet connection
+            console.log('✅ Modal opened');
             setTimeout(updateWalletCardUI, 100);
         } else {
             console.error('❌ Modal overlay not found!');
-            console.log('Available elements:', {
-                body: document.body,
-                allDivs: document.querySelectorAll('div').length
-            });
         }
     };
 
@@ -43,12 +37,6 @@ console.log('🦨 SkunkSquad Main JS Loading...');
 
     window.handleConnectAndBuy = function() {
         console.log('🦨 handleConnectAndBuy called');
-        window.showWalletMintCard();
-    };
-
-    // Test function
-    window.testModal = function() {
-        console.log('🧪 Testing modal...');
         window.showWalletMintCard();
     };
 
@@ -91,14 +79,6 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                         if (window.walletManager) {
                             const connected = await window.walletManager.connectWallet();
                             if (connected) updateWalletCardUI();
-                        } else if (window.initWalletManager) {
-                            window.initWalletManager();
-                            setTimeout(async () => {
-                                if (window.walletManager) {
-                                    const connected = await window.walletManager.connectWallet();
-                                    if (connected) updateWalletCardUI();
-                                }
-                            }, 500);
                         }
                     };
                 }
@@ -128,66 +108,59 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     }
 
     // ========================================
-    // BUTTON INITIALIZATION
+    // BUTTON INITIALIZATION - AGGRESSIVE APPROACH
     // ========================================
     
     function initializeButtons() {
         console.log('🔧 Initializing buttons...');
         
-        // Header buttons
-        const connectBuyBtn = document.getElementById('connectBuyBtn');
-        const connectWalletBtn = document.getElementById('connect-wallet');
+        // Find ALL possible button selectors
+        const selectors = [
+            '#connectBuyBtn',
+            '#connect-wallet',
+            'button[data-action="mint"]',
+            'button[data-action="connect"]',
+            '.btn-primary',
+            '.nav-actions button'
+        ];
         
-        console.log('🔍 Found buttons:', { 
-            connectBuyBtn: !!connectBuyBtn, 
-            connectWalletBtn: !!connectWalletBtn 
+        selectors.forEach(selector => {
+            const buttons = document.querySelectorAll(selector);
+            buttons.forEach((btn, index) => {
+                console.log(`Found button: ${selector} [${index}]`, btn);
+                
+                // Remove existing handlers
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                // Add click handler
+                newBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(`🦨 Button clicked: ${selector}`);
+                    window.showWalletMintCard();
+                };
+                
+                console.log(`✅ Handler attached to: ${selector} [${index}]`);
+            });
         });
         
-        if (connectBuyBtn) {
-            connectBuyBtn.onclick = function(e) {
-                e.preventDefault();
-                console.log('🦨 Connect/Buy button clicked!');
-                window.showWalletMintCard();
-            };
-            console.log('✅ Connect/Buy button initialized');
-        } else {
-            console.error('❌ connectBuyBtn not found');
-        }
-        
-        if (connectWalletBtn) {
-            connectWalletBtn.onclick = function(e) {
-                e.preventDefault();
-                console.log('🦨 Connect wallet button clicked!');
-                window.showWalletMintCard();
-            };
-            console.log('✅ Connect wallet button initialized');
-        } else {
-            console.error('❌ connect-wallet button not found');
-        }
-        
-        // Modal close button
+        // Modal controls
         const wmcClose = document.getElementById('wmc-close');
         if (wmcClose) {
-            wmcClose.onclick = function() {
-                console.log('🦨 Close button clicked');
-                window.closeWalletMintCard();
-            };
-            console.log('✅ Modal close button initialized');
+            wmcClose.onclick = () => window.closeWalletMintCard();
+            console.log('✅ Close button initialized');
         }
         
-        // Overlay click to close
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
-            overlay.onclick = function(e) {
-                if (e.target === overlay) {
-                    console.log('🦨 Overlay clicked');
-                    window.closeWalletMintCard();
-                }
+            overlay.onclick = (e) => {
+                if (e.target === overlay) window.closeWalletMintCard();
             };
             console.log('✅ Overlay click handler initialized');
         }
         
-        // Quantity buttons
+        // Quantity controls
         const wmcQtyDec = document.getElementById('wmc-qty-dec');
         const wmcQtyInc = document.getElementById('wmc-qty-inc');
         const wmcQty = document.getElementById('wmc-quantity');
@@ -228,38 +201,69 @@ console.log('🦨 SkunkSquad Main JS Loading...');
             console.log('✅ Mint button initialized');
         }
         
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
-        
-        if (hamburger && navMenu) {
-            hamburger.onclick = function() {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            };
-            console.log('✅ Hamburger menu initialized');
-        }
+        console.log('✅ All buttons initialized');
     }
 
     // ========================================
-    // INITIALIZATION
+    // HIDE ANY ROGUE ELEMENTS
     // ========================================
     
-    // Try multiple initialization methods
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeButtons);
-    } else {
+    function hideRogueElements() {
+        console.log('🔍 Searching for rogue mint cards...');
+        
+        // Look for any visible elements that might be blocking
+        document.querySelectorAll('*').forEach(el => {
+            const text = el.textContent.toLowerCase();
+            if (text.includes('skunksquad mint') && el.id !== 'wallet-mint-card-overlay') {
+                console.warn('⚠️ Found rogue element:', el);
+                el.style.display = 'none';
+                console.log('✅ Hidden rogue element');
+            }
+        });
+    }
+
+    // ========================================
+    // INITIALIZATION - MULTIPLE ATTEMPTS
+    // ========================================
+    
+    // Immediate
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
         initializeButtons();
+        hideRogueElements();
     }
     
-    window.addEventListener('load', initializeButtons);
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('📄 DOM Ready');
+        initializeButtons();
+        hideRogueElements();
+    });
     
-    // Backup initialization
-    setTimeout(initializeButtons, 500);
-    setTimeout(initializeButtons, 1000);
+    // Window Load
+    window.addEventListener('load', () => {
+        console.log('🪟 Window Loaded');
+        initializeButtons();
+        hideRogueElements();
+    });
     
-    // Make functions globally available
+    // Delayed attempts
+    setTimeout(() => {
+        console.log('⏱️ Delayed init (500ms)');
+        initializeButtons();
+        hideRogueElements();
+    }, 500);
+    
+    setTimeout(() => {
+        console.log('⏱️ Delayed init (2000ms)');
+        initializeButtons();
+        hideRogueElements();
+    }, 2000);
+    
+    // Make available globally
     window.initializeButtons = initializeButtons;
+    window.hideRogueElements = hideRogueElements;
+    window.testModal = () => window.showWalletMintCard();
     
     console.log('✅ SkunkSquad Main JS Loaded');
+    console.log('🧪 Test with: window.testModal()');
 })();
