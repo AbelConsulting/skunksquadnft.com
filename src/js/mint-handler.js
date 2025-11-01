@@ -8,12 +8,12 @@ console.log('🦨 mint-handler.js loading...');
 (function() {
     'use strict';
 
-    // Don't wait for dependencies - initialize immediately
+    // Initialize mint handler immediately (NO WAITING LOOP!)
     window.mintHandler = {
         async handleMint(quantity) {
             console.log('🦨 handleMint called with quantity:', quantity);
             
-            // Check dependencies at execution time
+            // Check dependencies ONLY when mint is clicked
             if (typeof Web3 === 'undefined') {
                 console.error('❌ Web3 not loaded');
                 alert('⚠️ Web3 library not loaded. Please refresh the page and try again.');
@@ -78,7 +78,7 @@ console.log('🦨 mint-handler.js loading...');
                 
                 // Show success message
                 setTimeout(() => {
-                    alert(`✅ Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!`);
+                    alert(`✅ Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!\n\nTransaction: ${txHash.transactionHash || txHash}`);
                     if (window.closeWalletMintCard) {
                         window.closeWalletMintCard();
                     }
@@ -108,12 +108,12 @@ console.log('🦨 mint-handler.js loading...');
                 if (mintBtnSpinner) mintBtnSpinner.style.display = 'none';
                 
                 // Show error
-                if (error.message.includes('User denied')) {
-                    alert('❌ Transaction rejected');
-                } else if (error.message.includes('insufficient funds')) {
-                    alert('❌ Insufficient funds');
+                if (error.message && error.message.includes('User denied')) {
+                    alert('❌ Transaction rejected by user');
+                } else if (error.message && error.message.includes('insufficient funds')) {
+                    alert('❌ Insufficient funds in wallet');
                 } else {
-                    alert('❌ Mint failed: ' + error.message);
+                    alert('❌ Mint failed: ' + (error.message || 'Unknown error'));
                 }
             }
         }
