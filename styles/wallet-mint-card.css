@@ -1,122 +1,147 @@
 /* Wallet & Mint Card Styles (moved from index.html) */
+#wallet-mint-card-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 41, 59, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+#wallet-mint-card-overlay.active {
+    display: flex;
+}
+
 .wmc-card {
-    background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px #000a, 0 1.5px 8px #8b5cf6a0;
-    padding: 2.2em 2em 1.7em 2em;
-    max-width: 370px;
-    width: 92vw;
-    min-width: 0;
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     position: relative;
-    border: 1.5px solid #312e81;
-    animation: wmcFadeIn 0.4s cubic-bezier(.4,0,.2,1);
-    box-sizing: border-box;
 }
-@media (max-width: 480px) {
-    .wmc-card {
-        max-width: 98vw;
-        width: 98vw;
-        padding: 1.2em 0.7em 1.2em 0.7em;
-        font-size: 1.08em;
-    }
-    .wmc-label, .wmc-status, .wmc-wallet-section, .wmc-total {
-        font-size: 1.08em;
-    }
-    .wmc-qty-btn, .wmc-qty-input {
-        font-size: 1.18em;
-        width: 40px;
-        height: 40px;
-    }
-    .wmc-mint-btn {
-        font-size: 1.18em;
-        padding: 1em 0.5em;
-    }
-}
-.wmc-card {
-    overflow-y: auto;
-    max-height: 90vh;
-}
-/* Wallet & Mint Card Styles */
+
 .wmc-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    background: none;
+    top: 16px;
+    right: 16px;
+    background: transparent;
     border: none;
-    font-size: 1.7em;
-    color: #fff;
+    color: #94a3b8;
+    font-size: 32px;
     cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
     transition: color 0.2s;
 }
-.wmc-close:hover { color: #8b5cf6; }
-.wmc-status {
-    margin-bottom: 1em;
-    text-align: center;
+
+.wmc-close:hover {
+    color: #f1f5f9;
+}
+
+.wmc-card h2 {
+    color: #f1f5f9;
+    font-size: 24px;
+    margin: 0 0 16px 0;
     font-weight: 700;
-    font-size: 1.08em;
-    color: #22c55e;
-    min-height: 1.2em;
 }
-.wmc-wallet-section {
-    margin-bottom: 1em;
-    text-align: center;
-    font-size: 1.05em;
+
+.wmc-status {
+    margin-bottom: 24px;
+    padding: 12px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 8px;
 }
+
 .wmc-label {
     display: block;
-    margin-bottom: 0.5em;
-    color: #fff;
-    font-weight: 500;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
+
 .wmc-qty-controls {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 1em;
+    gap: 12px;
+    margin-bottom: 20px;
 }
+
 .wmc-qty-btn {
-    width: 34px;
-    height: 34px;
-    font-size: 1.2em;
-    background: linear-gradient(135deg, #312e81 0%, #18181b 100%);
+    background: #334155;
+    color: #f1f5f9;
     border: none;
-    color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 1px 4px #0002;
+    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.2s;
 }
-.wmc-qty-btn:hover { background: #8b5cf6; color: #fff; }
+
+.wmc-qty-btn:hover {
+    background: #475569;
+    transform: scale(1.05);
+}
+
 .wmc-qty-input {
-    width: 52px;
+    flex: 1;
+    background: #0f172a;
+    color: #f1f5f9;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: 600;
     text-align: center;
-    margin: 0 10px;
-    border-radius: 10px;
-    border: 1.5px solid #312e81;
-    background: #222;
-    color: #fff;
-    font-size: 1.1em;
-    padding: 4px 0;
 }
+
 .wmc-total {
-    margin-bottom: 1em;
-    color: #94a3b8;
-    font-size: 1.05em;
+    background: rgba(139, 92, 246, 0.1);
+    border: 2px solid #8b5cf6;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
     text-align: center;
 }
+
+.wmc-total p:first-child {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin: 0 0 4px 0;
+    font-weight: 500;
+}
+
+#wmc-total {
+    color: #f1f5f9;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0;
+}
+
 .wmc-mint-btn {
     width: 100%;
-    font-size: 1.13em;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: #fff;
+    border: none;
     border-radius: 12px;
-    box-shadow: 0 1px 8px #8b5cf6a0;
-    transition: background 0.2s, box-shadow 0.2s;
-    margin-top: 0.5em;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
 }
+
 .wmc-mint-btn:hover {
-    background: linear-gradient(135deg, #8b5cf6 0%, #22c55e 100%);
-    box-shadow: 0 2px 16px #22c55e80;
-}
-@keyframes wmcFadeIn {
-    from { opacity: 0; transform: scale(0.96); }
-    to { opacity: 1; transform: scale(1); }
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.6);
 }

@@ -71,22 +71,32 @@
 </head>
 <body>
     <!-- Unified Wallet & Mint Popup Card -->
-    <div id="wallet-mint-card-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.55);backdrop-filter:blur(6px);z-index:9999;align-items:center;justify-content:center;">
-        <div id="wallet-mint-card" class="wmc-card">
-            <button id="wmc-close" class="wmc-close">&times;</button>
-            <div id="wmc-status" class="wmc-status"></div>
+    <div id="wallet-mint-card-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.75);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;">
+        <div id="wallet-mint-card" class="wmc-card" style="background:#1e293b;border-radius:16px;padding:32px;max-width:480px;width:90%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);position:relative;">
+            <button id="wmc-close" class="wmc-close" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:#94a3b8;font-size:32px;cursor:pointer;line-height:1;padding:4px 8px;transition:color 0.2s;">&times;</button>
+            
+            <h2 style="color:#f1f5f9;font-size:24px;margin:0 0 16px 0;font-weight:700;">🦨 SkunkSquad Mint</h2>
+            
+            <div id="wmc-status" class="wmc-status" style="margin-bottom:24px;padding:12px;background:rgba(139,92,246,0.1);border-radius:8px;"></div>
+            
             <div id="wmc-wallet-section" class="wmc-wallet-section"></div>
+            
             <div id="wmc-mint-section" style="display:none;">
-                <label for="wmc-quantity" class="wmc-label">Quantity:</label>
-                <div class="wmc-qty-controls">
-                    <button type="button" id="wmc-qty-dec" class="wmc-qty-btn">-</button>
-                    <input type="number" id="wmc-quantity" min="1" max="10" value="1" class="wmc-qty-input">
-                    <button type="button" id="wmc-qty-inc" class="wmc-qty-btn">+</button>
+                <label for="wmc-quantity" class="wmc-label" style="display:block;color:#cbd5e1;font-size:14px;font-weight:600;margin-bottom:8px;">Quantity (Max 10):</label>
+                <div class="wmc-qty-controls" style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+                    <button type="button" id="wmc-qty-dec" class="wmc-qty-btn" style="background:#334155;color:#f1f5f9;border:none;border-radius:8px;width:48px;height:48px;font-size:24px;font-weight:700;cursor:pointer;transition:all 0.2s;">−</button>
+                    <input type="number" id="wmc-quantity" min="1" max="10" value="1" class="wmc-qty-input" style="flex:1;background:#0f172a;color:#f1f5f9;border:2px solid #334155;border-radius:8px;padding:12px;font-size:18px;font-weight:600;text-align:center;">
+                    <button type="button" id="wmc-qty-inc" class="wmc-qty-btn" style="background:#334155;color:#f1f5f9;border:none;border-radius:8px;width:48px;height:48px;font-size:24px;font-weight:700;cursor:pointer;transition:all 0.2s;">+</button>
                 </div>
-                <div class="wmc-total">Total: <span id="wmc-total">0.01 ETH</span></div>
-                <button id="wmc-mint-btn" class="wmc-mint-btn btn btn-primary" aria-busy="false">
-                    <span id="wmc-mint-btn-text">Mint NFT</span>
-                    <span id="wmc-mint-btn-spinner" style="display:none;margin-left:8px"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
+                
+                <div class="wmc-total" style="background:rgba(139,92,246,0.1);border:2px solid #8b5cf6;border-radius:12px;padding:16px;margin-bottom:24px;text-align:center;">
+                    <p style="color:#cbd5e1;font-size:14px;margin:0 0 4px 0;font-weight:500;">Total Cost</p>
+                    <p id="wmc-total" style="color:#f1f5f9;font-size:28px;font-weight:800;margin:0;">0.01 ETH (~$42 USD)</p>
+                </div>
+                
+                <button id="wmc-mint-btn" class="wmc-mint-btn btn btn-primary" style="width:100%;background:linear-gradient(135deg,#8b5cf6 0%,#6366f1 100%);color:#fff;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 25px -5px rgba(139,92,246,0.4);">
+                    <span id="wmc-mint-btn-text">🚀 Mint Now</span>
+                    <span id="wmc-mint-btn-spinner" style="display:none;margin-left:8px;"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
                 </button>
             </div>
         </div>
@@ -170,17 +180,7 @@
                 </h1>
                 
                 <p class="hero-description">
-                    Finally, Networking group you have a chance to get into! No mortgage needed, apes and punks, pugys, dreamers, stoners, devs, techs, builders, financiers welcome! 
-                    Easily mint to join the most exclusive digital community in seconds. 
-                    We've made the impossible... possible.
-                </p>
-
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <span>30-Second Membership</span>
-                    </div>
-                    <div class="feature-item">
+                    Finally, Networking group you have a chance to get into! No mortgage needed, apes and punks, pugys, dream
                         <div class="feature-icon">🔒</div>
                         <span>Bank-Level Security</span>
                     </div>
@@ -607,7 +607,7 @@
 
     <!-- Floating Social Bar -->
     <div class="floating-social">
-        <a href="https://twitter.com/skunksquadnft" class="floating-social-btn twitter" target="_blank" rel="noopener" title="Follow us on Twitter/X">
+        <a href="https://x.com/MontanaDad406" class="floating-social-btn twitter" target="_blank" rel="noopener" title="Follow us on Twitter/X">
             <span class="floating-icon">𝕏</span>
         </a>
         <a href="https://discord.gg/skunksquad" class="floating-social-btn discord" target="_blank" rel="noopener" title="Join our Discord">
@@ -618,45 +618,15 @@
         </a>
     </div>
 
-    <!-- Purchase Modal (Polished & Accessible) -->
-    <div class="modal" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Mint SkunkSquad NFT</h2>
-                <button class="modal-close" aria-label="Close modal" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form onsubmit="showWalletMintCard(); return false;">
-                    <div class="mint-details">
-                        <label for="mint-quantity">Quantity:</label>
-                        <div class="quantity-controls">
-                            <button type="button" onclick="updateQuantity(-1)" aria-label="Decrease quantity">-</button>
-                            <input type="number" id="mint-quantity" min="1" max="10" value="1" required aria-live="polite">
-                            <button type="button" onclick="updateQuantity(1)" aria-label="Increase quantity">+</button>
-                        </div>
-                        <div class="total-cost" aria-live="polite">
-                            Total: <span id="total-eth">0.01 ETH</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-mint" id="mint-action-btn" type="submit" aria-busy="false">
-                        <span class="btn-icon" aria-hidden="true">🦊</span>
-                        <span id="mint-btn-text">Connect Wallet & Mint</span>
-                        <span id="mint-btn-spinner" style="display:none;margin-left:8px"><svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg></span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Core Scripts (Order matters!) -->
-    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
-    <script src="./src/js/config.js?v=2"></script>
-    <script src="./src/js/ui-manager.js?v=2"></script>
-    <script src="./src/js/wallet.js?v=2"></script>
-    <script src="./src/js/mint-handler.js?v=2"></script>
-    <script src="./src/js/main.js?v=2"></script>
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js" defer></script>
+    <script src="./src/js/config.js?v=2" defer></script>
+    <script src="./src/js/ui-manager.js?v=2" defer></script>
+    <script src="./src/js/wallet.js?v=2" defer></script>
+    <script src="./src/js/mint-handler.js?v=2" defer></script>
+    <script src="./src/js/main.js?v=2" defer></script>
     
-    <!-- Update price displays throughout the file -->
+    <!-- TODO: Implement dynamic price updates throughout the file for ETH/USD values -->
     <div class="price-display">
         <span class="price-eth">0.01 ETH</span>
         <span class="price-usd">(~$42 USD)</span>
@@ -664,7 +634,7 @@
 
     <!-- Update modal price -->
     <div style="text-align: center; margin-top: 15px; color: #94a3b8;">
-        <small>Price: <span class="price-eth">0.01 ETH</span> <span class="price-usd">(~$42)</span></small>
+        <small>Price: <span class="price-eth">0.01 ETH</span> <span class="price-usd">(~$42 USD)</span></small>
         <br><small style="color: #64748b; font-size: 0.8em;">Fixed pricing • 0.01 ETH per NFT</small>
     </div>
 
