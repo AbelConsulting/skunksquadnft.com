@@ -77,10 +77,15 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                     connectBtn.onclick = async function() {
                         console.log('🦨 Modal connect button clicked');
                         
+                        // 🔥 LAZY INIT - Create walletManager if it doesn't exist
+                        if (!window.walletManager && typeof window.initWalletManager === 'function') {
+                            console.log('🔧 Initializing walletManager...');
+                            window.initWalletManager();
+                        }
+                        
                         // Check if walletManager exists
                         if (!window.walletManager) {
                             console.error('❌ walletManager not found!');
-                            console.log('Available window properties:', Object.keys(window).filter(k => k.includes('wallet') || k.includes('Manager')));
                             alert('⚠️ Wallet manager not loaded. Please refresh the page and try again.');
                             return;
                         }
