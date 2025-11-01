@@ -844,36 +844,48 @@ class WalletManager {
         }
         try {
             this.showLoading('Minting NFT...');
-            // Get current smart price (dynamic pricing)
+            
+            // ✅ FIXED: Use BigInt instead of toBN
             const priceStr = this.web3.utils.toWei('0.01', 'ether'); // Fixed price (string)
             const price = BigInt(priceStr);
             const qty = BigInt(quantity);
             const totalCost = (price * qty).toString(); // web3 expects string
-            // Estimate gas for publicMint function
+            
+            console.log('🦨 Minting NFT...', { quantity, totalCost, priceStr });
+            
+            // Estimate gas for mintNFT function
             const gasEstimate = await this.contract.methods.mintNFT(qty.toString()).estimateGas({
                 from: this.accounts[0],
                 value: totalCost
             });
-            // Add 20% buffer to gas estimate
-            const gasLimit = Math.floor(gasEstimate * 1.2);
-            // Send transaction using publicMint
+            
+            // ✅ FIXED: Convert BigInt gasEstimate to Number properly
+            const gasLimit = Math.floor(Number(gasEstimate) * 1.2);
+            
+            console.log('🦨 Gas estimate:', { gasEstimate: gasEstimate.toString(), gasLimit });
+            
+            // Send transaction using mintNFT
             const sendTx = this.contract.methods.mintNFT(qty.toString()).send({
                 from: this.accounts[0],
                 value: totalCost,
                 gas: gasLimit
             });
+            
             // Transaction status notifications
             sendTx.on('transactionHash', (hash) => {
                 this.showLoading('Transaction submitted. Waiting for confirmation...');
+                console.log('🦨 Transaction hash:', hash);
                 if (window.skunkSquadWebsite) {
                     window.skunkSquadWebsite.showNotification(
-                        `Transaction submitted: ${hash}`,
+                        `Transaction submitted: ${hash.slice(0, 10)}...`,
                         'info'
                     );
                 }
             });
+            
             sendTx.on('receipt', (receipt) => {
                 this.hideLoading();
+                console.log('✅ Transaction receipt:', receipt);
                 if (window.skunkSquadWebsite) {
                     window.skunkSquadWebsite.showNotification(
                         `🎉 Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!`,
@@ -881,8 +893,10 @@ class WalletManager {
                     );
                 }
             });
+            
             sendTx.on('error', (error) => {
                 this.hideLoading();
+                console.error('❌ Transaction error:', error);
                 let errorMessage = 'Failed to mint NFT. Please try again.';
                 if (error.message.includes('insufficient funds')) {
                     errorMessage = 'Insufficient ETH balance for minting.';
@@ -895,10 +909,14 @@ class WalletManager {
                     window.skunkSquadWebsite.showNotification(errorMessage, 'error');
                 }
             });
+            
             const transaction = await sendTx;
+            
             // Update contract info
             await this.updateContractInfo();
+            
             return transaction;
+            
         } catch (error) {
             this.hideLoading();
             console.error('❌ Mint NFT error:', error);
