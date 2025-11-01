@@ -96,8 +96,10 @@ console.log('🦨 main.js loading...');
         console.log('🦨 showWalletMintCard called');
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
-            overlay.style.display = 'flex';
+            overlay.classList.add('show');
             updateWalletCardUI();
+        } else {
+            console.error('❌ Wallet mint card overlay not found!');
         }
     };
 
@@ -105,7 +107,7 @@ console.log('🦨 main.js loading...');
         console.log('🦨 closeWalletMintCard called');
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
-            overlay.style.display = 'none';
+            overlay.classList.remove('show');
         }
     };
 
@@ -115,18 +117,22 @@ console.log('🦨 main.js loading...');
         const mintSection = document.getElementById('wmc-mint-section');
         const statusEl = document.getElementById('wmc-status');
         
-        if (!walletSection || !mintSection || !statusEl) return;
+        if (!walletSection || !mintSection || !statusEl) {
+            console.error('❌ Wallet card elements not found');
+            return;
+        }
 
         if (window.walletManager && window.walletManager.isConnected) {
             // Wallet connected - show mint section
             statusEl.innerHTML = `<p style="color:#22c55e">✅ Wallet Connected: ${window.walletManager.shortenAddress(window.walletManager.accounts[0])}</p>`;
             walletSection.style.display = 'none';
             mintSection.style.display = 'block';
+            updateWmcTotal(parseInt(document.getElementById('wmc-quantity')?.value || 1));
         } else {
             // Wallet not connected - show connect button
             statusEl.innerHTML = `<p style="color:#f59e0b">⚠️ Please connect your wallet to mint</p>`;
             walletSection.innerHTML = `
-                <button id="wmc-connect-btn" class="wmc-mint-btn btn btn-primary">
+                <button id="wmc-connect-btn" class="wmc-mint-btn" style="margin-bottom: 0;">
                     <span>🦊 Connect Wallet</span>
                 </button>
             `;
@@ -137,11 +143,14 @@ console.log('🦨 main.js loading...');
             const connectBtn = document.getElementById('wmc-connect-btn');
             if (connectBtn) {
                 connectBtn.addEventListener('click', async function() {
+                    console.log('🦨 Connect button clicked in modal');
                     if (window.walletManager) {
                         const connected = await window.walletManager.connectWallet();
                         if (connected) {
                             updateWalletCardUI();
                         }
+                    } else {
+                        console.error('❌ Wallet manager not available');
                     }
                 });
             }
@@ -160,6 +169,9 @@ console.log('🦨 main.js loading...');
     };
 
     function updateWmcTotal(quantity) {
+        const PRICE_PER_NFT = 0.01; // ETH
+        const currentEthPrice = 2400; // USD, should be fetched dynamically
+        
         const totalEth = (PRICE_PER_NFT * quantity).toFixed(4);
         const totalUsd = (totalEth * currentEthPrice).toFixed(2);
         const totalEl = document.getElementById('wmc-total');
@@ -173,25 +185,36 @@ console.log('🦨 main.js loading...');
     window.handleConnectAndBuy = async function(quantity = 1) {
         console.log('🦨 handleConnectAndBuy called', { quantity });
         
+        // Show the modal first
+        window.showWalletMintCard();
+        
         // Ensure wallet manager is initialized
         if (!window.walletManager) {
             console.log('Initializing wallet manager...');
-            window.initWalletManager();
-            await new Promise(resolve => setTimeout(resolve, 500));
+            if (typeof window.initWalletManager === 'function') {
+                window.initWalletManager();
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
         }
         
         quantity = parseInt(quantity, 10) || 1;
         quantity = Math.max(1, Math.min(quantity, 10));
         
+        // Try to connect wallet if not connected
+        if (window.walletManager && !window.walletManager.isConnected) {
+            console.log('🦨 Wallet not connected, attempting connection...');
+            const connected = await window.walletManager.connectWallet();
+            if (connected) {
+                updateWalletCardUI(); // Update UI to show mint form
+            }
+            return; // Let user manually click mint after connecting
+        }
+        
+        // If already connected and we have mint handler, proceed with mint
         if (window.mintHandler && typeof window.mintHandler.handleMint === 'function') {
             await window.mintHandler.handleMint(quantity);
-        } else if (window.walletManager && typeof window.walletManager.connectWallet === 'function') {
-            const connected = await window.walletManager.connectWallet();
-            if (connected && window.mintHandler) {
-                await window.mintHandler.handleMint(quantity);
-            }
         } else {
-            console.error('❌ No handlers available!');
+            console.error('❌ Mint handler not available!');
             alert('Please wait a moment and try again. The page is still loading...');
         }
     };
@@ -223,7 +246,33 @@ console.log('🦨 main.js loading...');
 
     // DOM Ready Event Listeners
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🦨 DOM Content Loaded - Setting up event listeners');
+        console.log('🦨 DOM Content Loaded - Setting up wallet card event listeners');
+        
+        // Header buttons - THE CRITICAL FIX!
+        const connectBuyBtn = document.getElementById('connectBuyBtn');
+        const connectWalletBtn = document.getElementById('connect-wallet');
+        
+        if (connectBuyBtn) {
+            connectBuyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🦨 Connect/Buy button clicked');
+                window.handleConnectAndBuy();
+            });
+            console.log('✅ Connect/Buy button listener attached');
+        } else {
+            console.error('❌ connectBuyBtn not found!');
+        }
+        
+        if (connectWalletBtn) {
+            connectWalletBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🦨 Connect wallet button clicked');
+                window.showWalletMintCard();
+            });
+            console.log('✅ Connect wallet button listener attached');
+        } else {
+            console.error('❌ connect-wallet button not found!');
+        }
         
         // Wallet Mint Card - Close button
         const wmcClose = document.getElementById('wmc-close');
@@ -275,76 +324,11 @@ console.log('🦨 main.js loading...');
         const wmcMintBtn = document.getElementById('wmc-mint-btn');
         if (wmcMintBtn) {
             wmcMintBtn.addEventListener('click', async function() {
-                const quantity = parseInt(document.getElementById('wmc-quantity').value) || 1;
-                await window.handleConnectAndBuy(quantity);
-            });
-            console.log('✅ WMC mint button listener attached');
-        }
-        
-        // Header buttons - Remove inline onclick
-        const connectBuyBtn = document.getElementById('connectBuyBtn');
-        const connectWalletBtn = document.getElementById('connect-wallet');
-        
-        if (connectBuyBtn) {
-            connectBuyBtn.addEventListener('click', () => window.handleConnectAndBuy());
-            console.log('✅ Connect/Buy button listener attached');
-        }
-        
-        if (connectWalletBtn) {
-            connectWalletBtn.addEventListener('click', () => window.showWalletMintCard());
-            console.log('✅ Connect wallet button listener attached');
-        }
-        
-        // Mobile menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
-        
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
-        }
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href === '#' || href === '#home') {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (href.startsWith('#')) {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-        });
-        
-        // Fetch ETH price for USD conversion
-        fetchEthPrice();
-        
-        console.log('🦨 All event listeners attached successfully');
-    });
-
-    // Fetch ETH price from CoinGecko
-    async function fetchEthPrice() {
-        try {
-            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-            const data = await response.json();
-            if (data && data.ethereum && data.ethereum.usd) {
-                currentEthPrice = data.ethereum.usd;
-                console.log('✅ ETH Price updated:', currentEthPrice);
+                const quantity = parseInt(document.getElementById('wmc-quantity')?.value || 1);
+                console.log('🦨 Mint button clicked in modal, quantity:', quantity);
                 
-                // Update all USD displays
-                updateWmcTotal(parseInt(document.getElementById('wmc-quantity')?.value || 1));
-            }
-        } catch (error) {
-            console.warn('⚠️ Could not fetch ETH price:', error);
-        }
-    }
-
-    console.log('🦨 main.js loaded successfully');
-})();
+                if (window.mintHandler && typeof window.mintHandler.handleMint === 'function') {
+                    await window.mintHandler.handleMint(quantity);
+                } else {
+                    console.error('❌ Mint handler not available');
+                    alert('Mint handler not ready. Please refresh the page and try
