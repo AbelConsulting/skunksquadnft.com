@@ -331,4 +331,19 @@ console.log('🦨 main.js loading...');
                     await window.mintHandler.handleMint(quantity);
                 } else {
                     console.error('❌ Mint handler not available');
-                    alert('Mint handler not ready. Please refresh the page and try
+                    alert('Mint handler not ready. Please refresh the page and try again.');
+                }
+            });
+            console.log('✅ WMC mint button listener attached');
+        }
+        
+        // Add this temporarily for debugging
+        console.log('🔍 Debugging wallet card:');
+        console.log('Overlay element:', document.getElementById('wallet-mint-card-overlay'));
+        console.log('Card element:', document.getElementById('wallet-mint-card'));
+        console.log('Close button:', document.getElementById('wmc-close'));
+    });
+
+    // Initialize performance monitoring
+    performanceMonitor.init();
+})();
