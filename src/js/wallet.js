@@ -7,73 +7,85 @@ console.log('🦨 wallet.js loading...');
 
 class WalletManager {
     constructor() {
+        console.log('🦨 Initializing Wallet Manager...');
+        
+        // ✅ MODERN PROVIDER DETECTION
         this.web3 = null;
         this.accounts = [];
-        this.networkId = null;
-        this.isConnected = false;
         this.contract = null;
-        this.contractAddress = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF'; // Ethereum Mainnet
-        this.loading = false;
-        this.walletInfoModal = null;
+        this.isConnected = false;
+        this.currentNetwork = null;
+        
+        // Use modern provider (MetaMask's ethereum object)
+        if (typeof window.ethereum !== 'undefined') {
+            console.log('✅ MetaMask detected');
+            this.provider = window.ethereum;
+        } else {
+            console.warn('⚠️ No Web3 provider detected');
+            this.provider = null;
+        }
+        
         this.init();
     }
 
     async init() {
-        console.log('🦨 Initializing Wallet Manager...');
+        console.log('🔧 Initializing Web3...');
+        
+        if (!this.provider) {
+            console.error('❌ No Ethereum provider found. Please install MetaMask.');
+            return;
+        }
         
         try {
-            // Check if Web3 is available
-            if (typeof window.ethereum !== 'undefined') {
-                this.web3 = new Web3(window.ethereum);
-                
-                // Setup event listeners
-                this.setupEventListeners();
-                
-                // Check if already connected
-                await this.checkConnection();
-                
-                // Setup contract interaction
-                await this.setupContract();
-                
-            } else if (typeof window.web3 !== 'undefined') {
-                // Legacy dapp browsers
-                this.web3 = new Web3(window.web3.currentProvider);
-                console.log('🦨 Using legacy Web3 provider');
-            } else {
-                console.log('🦨 No Web3 provider detected');
-                this.showWeb3Instructions();
-            }
+            // ✅ MODERN WEB3 INITIALIZATION
+            this.web3 = new Web3(this.provider);
+            console.log('✅ Web3 initialized with provider');
+            
+            // Check if already connected
+            await this.checkConnection();
+            
+            // Setup event listeners for account/network changes
+            this.setupEventListeners();
             
         } catch (error) {
-            console.error('❌ Wallet manager initialization failed:', error);
+            console.error('❌ Error initializing Web3:', error);
         }
     }
 
     setupEventListeners() {
-        if (window.ethereum) {
-            // Account changes
-            window.ethereum.on('accountsChanged', (accounts) => {
-                console.log('🦨 Accounts changed:', accounts);
-                this.handleAccountsChanged(accounts);
-            });
-
-            // Network changes
-            window.ethereum.on('chainChanged', (chainId) => {
-                console.log('🦨 Network changed:', chainId);
-                this.handleNetworkChanged(chainId);
-            });
-
-            // Connection events
-            window.ethereum.on('connect', (connectInfo) => {
-                console.log('🦨 Wallet connected:', connectInfo);
-                this.handleConnect(connectInfo);
-            });
-
-            window.ethereum.on('disconnect', (error) => {
-                console.log('🦨 Wallet disconnected:', error);
-                this.handleDisconnect(error);
-            });
-        }
+        if (!this.provider) return;
+        
+        console.log('🎧 Setting up event listeners...');
+        
+        // ✅ MODERN EVENT LISTENERS
+        
+        // Account changed
+        this.provider.on('accountsChanged', async (accounts) => {
+            console.log('🔄 Accounts changed:', accounts);
+            
+            if (accounts.length === 0) {
+                console.log('⚠️ Wallet disconnected');
+                this.isConnected = false;
+                this.accounts = [];
+                window.dispatchEvent(new Event('walletDisconnected'));
+            } else {
+                this.accounts = accounts;
+                this.isConnected = true;
+                await this.setupContract();
+                window.dispatchEvent(new CustomEvent('walletConnected', { 
+                    detail: { address: accounts[0] } 
+                }));
+            }
+        });
+        
+        // Chain changed
+        this.provider.on('chainChanged', (chainId) => {
+            console.log('🔄 Chain changed:', chainId);
+            // Reload page on chain change (recommended by MetaMask)
+            window.location.reload();
+        });
+        
+        console.log('✅ Event listeners set up');
     }
 
     async checkConnection() {
@@ -91,57 +103,84 @@ class WalletManager {
     }
 
     async connectWallet() {
+        console.log('🦨 connectWallet called');
+        
+        if (!this.provider) {
+            alert('⚠️ Please install MetaMask to connect your wallet!');
+            return false;
+        }
+        
         try {
-            if (!window.ethereum) {
-                this.showWeb3Instructions();
-                return false;
-            }
-            this.showLoading('Connecting to wallet...');
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            this.hideLoading();
-            if (accounts.length > 0) {
-                this.accounts = accounts;
-                this.isConnected = true;
-                this.updateUI();
-                await this.getNetworkInfo();
-                this.autoFillWalletAddress(accounts[0]);
-                if (window.skunkSquadWebsite) {
-                    window.skunkSquadWebsite.showNotification(
-                        `Wallet connected: ${this.shortenAddress(accounts[0])}`,
-                        'success'
-                    );
-                }
-                return true;
-            }
+            console.log('📱 Requesting account access...');
+            
+            // ✅ MODERN METHOD - Request accounts
+            const accounts = await this.provider.request({ 
+                method: 'eth_requestAccounts' 
+            });
+            
+            console.log('✅ Accounts received:', accounts);
+            
+            this.accounts = accounts;
+            this.isConnected = true;
+            
+            // Get network info
+            await this.getNetworkInfo();
+            
+            // Setup contract
+            await this.setupContract();
+            
+            console.log('✅ Wallet connected:', this.shortenAddress(accounts[0]));
+            
+            // Dispatch custom event
+            window.dispatchEvent(new CustomEvent('walletConnected', { 
+                detail: { address: accounts[0] } 
+            }));
+            
+            return true;
+            
         } catch (error) {
-            this.hideLoading();
-            let msg = 'Failed to connect wallet. Please try again.';
-            if (error.code === 4001) msg = 'Connection request rejected by user.';
-            if (window.skunkSquadWebsite) {
-                window.skunkSquadWebsite.showNotification(msg, 'error');
+            console.error('❌ Error connecting wallet:', error);
+            
+            if (error.code === 4001) {
+                console.log('⚠️ User rejected connection request');
+                alert('Connection request rejected. Please try again.');
+            } else {
+                alert('Failed to connect wallet: ' + error.message);
             }
+            
             return false;
         }
     }
 
     async getNetworkInfo() {
         try {
-            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            this.networkId = parseInt(chainId, 16);
+            // ✅ MODERN METHOD - Get chain ID
+            const chainId = await this.provider.request({ 
+                method: 'eth_chainId' 
+            });
             
-            console.log('🦨 Connected to network:', this.networkId);
+            const chainIdNum = parseInt(chainId, 16);
+            console.log('🌐 Connected to chain ID:', chainIdNum);
             
-            // Check if on correct network (Mainnet = 1, Sepolia testnet = 11155111)
-            const expectedNetworks = [1, 11155111]; // Mainnet and Sepolia
+            const networkNames = {
+                1: 'Ethereum Mainnet',
+                5: 'Goerli Testnet',
+                11155111: 'Sepolia Testnet',
+                137: 'Polygon Mainnet',
+                80001: 'Mumbai Testnet'
+            };
             
-            if (!expectedNetworks.includes(this.networkId)) {
-                this.showNetworkWarning();
-            }
+            this.currentNetwork = {
+                chainId: chainIdNum,
+                name: networkNames[chainIdNum] || `Chain ${chainIdNum}`
+            };
             
-            return this.networkId;
+            console.log('✅ Network:', this.currentNetwork.name);
+            
+            return this.currentNetwork;
             
         } catch (error) {
-            console.error('❌ Get network info error:', error);
+            console.error('❌ Error getting network info:', error);
             return null;
         }
     }
@@ -1192,102 +1231,50 @@ class WalletManager {
                 params: {
                     type: 'ERC721',
                     options: {
-                        address: this.contractAddress,
-                        symbol: 'SKUNK',
-                        decimals: 0,
-                        image: 'https://skunksquadnft.com/images/logo.png',
-                    },
-                },
+                        address: this.contractAddress, // Contract address of the token
+                        symbol: 'SKUNK', // Token symbol
+                        decimals: 0, // Token decimals
+                        image: 'https://example.com/token-image.png' // Token image (optional)
+                    }
+                }
             });
-
+            
             if (wasAdded) {
-                console.log('✅ Token added to wallet');
+                console.log('✅ Token successfully added to wallet');
+                if (window.skunkSquadWebsite) {
+                    window.skunkSquadWebsite.showNotification('Token added to wallet', 'success');
+                }
+            } else {
+                console.log('⚠️ Token addition to wallet rejected');
             }
         } catch (error) {
-            console.error('❌ Add token to wallet error:', error);
-        }
-    }
-
-    // Error/Warning displays
-    showWeb3Instructions() {
-        const message = `
-            <div class="web3-instructions">
-                <h3>🦊 Web3 Wallet Required</h3>
-                <p>To interact with SkunkSquad NFTs, you need a Web3 wallet like MetaMask.</p>
-                <a href="https://metamask.io/download/" target="_blank" class="btn btn-primary">
-                    Install MetaMask
-                </a>
-            </div>
-        `;
-        
-        if (window.skunkSquadWebsite) {
-            window.skunkSquadWebsite.showNotification(
-                'MetaMask or Web3 wallet required for NFT features',
-                'info'
-            );
+            console.error('❌ Error adding token to wallet:', error);
+            if (window.skunkSquadWebsite) {
+                window.skunkSquadWebsite.showNotification('Failed to add token to wallet', 'error');
+            }
         }
     }
 
     showNetworkWarning() {
-        const networkNames = {
-            1: 'Ethereum Mainnet',
-            11155111: 'Sepolia Testnet'
-        };
-        const currentNetwork = networkNames[this.networkId] || `Network ${this.networkId}`;
-        let switchBtn = '';
-        if (this.networkId !== 1) {
-            switchBtn = `<button id="switch-mainnet" class="btn btn-primary" style="margin-top:1em">Switch to Mainnet</button>`;
+        const expectedNetworks = [1, 11155111]; // Mainnet and Sepolia
+        const currentNetwork = this.networkId;
+        
+        let networkName = 'Unknown Network';
+        if (currentNetwork === 1) {
+            networkName = 'Ethereum Mainnet';
+        } else if (currentNetwork === 11155111) {
+            networkName = 'Sepolia Testnet';
         }
-        if (this.networkId !== 11155111) {
-            switchBtn += `<button id="switch-sepolia" class="btn btn-secondary" style="margin-top:1em;margin-left:1em">Switch to Sepolia</button>`;
-        }
+        
+        const message = `⚠️ You are currently connected to ${networkName}. Please switch to the Ethereum Mainnet or Sepolia Testnet.`;
+        
         if (window.skunkSquadWebsite) {
-            window.skunkSquadWebsite.showNotification(
-                `Connected to ${currentNetwork}. For best experience, use Ethereum Mainnet or Sepolia Testnet.<br>${switchBtn}`,
-                'info'
-            );
-        }
-        setTimeout(() => {
-            const mainnetBtn = document.getElementById('switch-mainnet');
-            if (mainnetBtn) mainnetBtn.onclick = () => this.switchToMainnet();
-            const sepoliaBtn = document.getElementById('switch-sepolia');
-            if (sepoliaBtn) sepoliaBtn.onclick = () => this.switchToSepolia();
-        }, 500);
-    }
-
-    // Public methods for external use
-    async switchToMainnet() {
-        try {
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x1' }], // Mainnet
-            });
-        } catch (error) {
-            console.error('❌ Switch network error:', error);
-        }
-    }
-
-    async switchToSepolia() {
-        try {
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0xaa36a7' }], // Sepolia
-            });
-        } catch (error) {
-            console.error('❌ Switch network error:', error);
+            window.skunkSquadWebsite.showNotification(message, 'warning');
+        } else {
+            alert(message);
         }
     }
 }
 
-// No automatic WalletManager initialization. Use window.initWalletManager for lazy init only.
-
-// Robust lazy WalletManager initialization
-if (typeof window.initWalletManager !== 'function') {
-    window.initWalletManager = function() {
-        if (!window.walletManager && typeof Web3 !== 'undefined' && typeof WalletManager !== 'undefined') {
-            window.walletManager = new WalletManager();
-            console.log('✅ WalletManager initialized (on user action)');
-        }
-        return window.walletManager;
-    };
-}
+// Global instance
+window.skunkSquadWallet = new WalletManager();
