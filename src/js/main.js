@@ -281,6 +281,20 @@ console.log('🦨 main.js loading...');
             console.log('✅ WMC mint button listener attached');
         }
         
+        // Header buttons - Remove inline onclick
+        const connectBuyBtn = document.getElementById('connectBuyBtn');
+        const connectWalletBtn = document.getElementById('connect-wallet');
+        
+        if (connectBuyBtn) {
+            connectBuyBtn.addEventListener('click', () => window.handleConnectAndBuy());
+            console.log('✅ Connect/Buy button listener attached');
+        }
+        
+        if (connectWalletBtn) {
+            connectWalletBtn.addEventListener('click', () => window.showWalletMintCard());
+            console.log('✅ Connect wallet button listener attached');
+        }
+        
         // Mobile menu toggle
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
