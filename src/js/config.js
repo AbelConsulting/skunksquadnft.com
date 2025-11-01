@@ -115,8 +115,93 @@ const SkunkSquadConfig = {
     }
 };
 
+const CONFIG = {
+    // Infura Project ID (get free key from infura.io)
+    INFURA_PROJECT_ID: 'a2c6c1df8f4e4003bdd98abdec26ad64', // Replace with your actual key
+    
+    // ✅ MAINNET Contract (Your Live Contract)
+    CONTRACT_ADDRESS: '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF',
+    
+    // ✅ MAINNET Network Settings
+    CHAIN_ID: 1, // Ethereum Mainnet (was 11155111 for Sepolia)
+    NETWORK_NAME: 'Ethereum Mainnet',
+    
+    // ✅ MAINNET RPC URLs
+    get RPC_URL() {
+        return this.INFURA_PROJECT_ID 
+            ? `https://mainnet.infura.io/v3/a2c6c1df8f4e4003bdd98abdec26ad64`
+            : null;
+    },
+    
+    get WSS_URL() {
+        return this.INFURA_PROJECT_ID 
+            ? `wss://mainnet.infura.io/ws/v3/a2c6c1df8f4e4003bdd98abdec26ad64`
+            : null;
+    },
+    
+    // ✅ MAINNET Block Explorer
+    EXPLORER_URL: 'https://etherscan.io',
+    
+    // Contract ABI (add your actual ABI here)
+    CONTRACT_ABI: [
+        {
+            "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
+            "name": "mint",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "PRICE",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "MAX_SUPPLY",
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+            "stateMutability": "view",
+            "type": "function"
+        }
+        // Add more ABI methods as needed
+    ],
+    
+    // Pricing
+    PRICE_PER_NFT: 0.01, // ETH (10000000000000000 wei)
+    MAX_MINT_PER_TX: 10,
+    MAX_SUPPLY: 10000,
+    
+    // UI Settings
+    ENABLE_ANIMATIONS: true,
+    ENABLE_SOUND: false,
+};
+
+// Make globally available
+window.CONFIG = CONFIG;
+
+// Validation
+if (CONFIG.CHAIN_ID === 1) {
+    console.log('✅ Config loaded for MAINNET');
+    console.log('📍 Contract:', CONFIG.CONTRACT_ADDRESS);
+    console.log('🔗 Explorer:', CONFIG.EXPLORER_URL);
+} else {
+    console.warn('⚠️ Not on Mainnet! Chain ID:', CONFIG.CHAIN_ID);
+}
+
+console.log('🔑 Infura:', CONFIG.INFURA_PROJECT_ID ? 'Connected' : '⚠️ Missing key');
+
 // Make config globally available for use in other scripts and modules.
 // If using a module system (e.g., ES Modules or TypeScript), consider exporting instead.
 window.SkunkSquadConfig = SkunkSquadConfig;
 
 console.log('✅ SkunkSquad Config Loaded');
+console.log('✅ Config loaded with Infura:', CONFIG.INFURA_PROJECT_ID ? 'Connected' : 'Missing key!');
