@@ -69,6 +69,24 @@
         ]
     }
     </script>
+
+    <!-- OLD CSP (too restrictive) - REMOVE THIS -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="..."> -->
+
+    <!-- NEW CSP - Allow inline event handlers -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://api.coingecko.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https: blob:;
+        connect-src 'self' https://sepolia.infura.io https://mainnet.infura.io https://api.coingecko.com wss://sepolia.infura.io wss://mainnet.infura.io;
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        upgrade-insecure-requests;
+    ">
 </head>
 <body>
     <!-- Unified Wallet & Mint Popup Card -->
@@ -134,12 +152,12 @@
             </div>
             
             <div class="nav-actions">
-                <button class="btn btn-primary" id="connectBuyBtn" type="button" onclick="window.showWalletMintCard()">
+                <button class="btn btn-primary" id="connectBuyBtn" type="button" data-action="mint">
                     <span class="btn-icon">🦊</span>
                     <span class="btn-text">Mint</span>
                     <span class="btn-price">(0.01 ETH)</span>
                 </button>
-                <button class="btn btn-secondary" id="connect-wallet" onclick="window.showWalletMintCard()">
+                <button class="btn btn-secondary" id="connect-wallet" data-action="connect">
                     <span class="btn-icon">🦊</span>
                     <span class="btn-text">Connect Wallet</span>
                 </button>
