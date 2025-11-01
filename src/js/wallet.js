@@ -843,32 +843,46 @@ class WalletManager {
             return false;
         }
         try {
-            this.showLoading('Minting NFT...');
+            this.showLoading('Preparing transaction...');
             
-            // ✅ FIXED: Use BigInt instead of toBN
-            const priceStr = this.web3.utils.toWei('0.01', 'ether'); // Fixed price (string)
-            const price = BigInt(priceStr);
+            // ✅ Price calculation
+            const pricePerNFT = '0.01'; // 0.01 ETH per NFT
+            const priceInWei = this.web3.utils.toWei(pricePerNFT, 'ether');
             const qty = BigInt(quantity);
-            const totalCost = (price * qty).toString(); // web3 expects string
+            const pricePerNFTBigInt = BigInt(priceInWei);
+            const totalCost = (pricePerNFTBigInt * qty).toString();
             
-            console.log('🦨 Minting NFT...', { quantity, totalCost, priceStr });
+            console.log('🦨 Minting NFT...', { 
+                quantity: quantity.toString(),
+                pricePerNFT,
+                totalCostWei: totalCost,
+                totalCostEth: this.web3.utils.fromWei(totalCost, 'ether')
+            });
             
-            // Estimate gas for mintNFT function
-            const gasEstimate = await this.contract.methods.mintNFT(qty.toString()).estimateGas({
+            this.showLoading('Estimating gas...');
+            
+            // ✅ Gas estimation
+            const gasEstimate = await this.contract.methods.mintNFT(quantity.toString()).estimateGas({
                 from: this.accounts[0],
                 value: totalCost
             });
             
-            // ✅ FIXED: Convert BigInt gasEstimate to Number properly
-            const gasLimit = Math.floor(Number(gasEstimate) * 1.2);
+            // ✅ Handle both BigInt and Number
+            const gasEstimateNum = typeof gasEstimate === 'bigint' ? Number(gasEstimate) : parseInt(gasEstimate);
+            const gasLimit = Math.floor(gasEstimateNum * 1.2);
             
-            console.log('🦨 Gas estimate:', { gasEstimate: gasEstimate.toString(), gasLimit });
+            console.log('🦨 Gas estimate:', { 
+                estimate: gasEstimateNum.toString(), 
+                withBuffer: gasLimit.toString() 
+            });
             
-            // Send transaction using mintNFT
-            const sendTx = this.contract.methods.mintNFT(qty.toString()).send({
+            this.showLoading('Waiting for wallet confirmation...');
+            
+            // ✅ Send transaction
+            const sendTx = this.contract.methods.mintNFT(quantity.toString()).send({
                 from: this.accounts[0],
                 value: totalCost,
-                gas: gasLimit
+                gas: gasLimit.toString()
             });
             
             // Transaction status notifications
@@ -897,17 +911,7 @@ class WalletManager {
             sendTx.on('error', (error) => {
                 this.hideLoading();
                 console.error('❌ Transaction error:', error);
-                let errorMessage = 'Failed to mint NFT. Please try again.';
-                if (error.message.includes('insufficient funds')) {
-                    errorMessage = 'Insufficient ETH balance for minting.';
-                } else if (error.message.includes('execution reverted')) {
-                    errorMessage = 'Transaction failed. Check if minting is still active.';
-                } else if (error.code === 4001) {
-                    errorMessage = 'Transaction was rejected by user.';
-                }
-                if (window.skunkSquadWebsite) {
-                    window.skunkSquadWebsite.showNotification(errorMessage, 'error');
-                }
+                this.handleMintError(error);
             });
             
             const transaction = await sendTx;
@@ -920,18 +924,35 @@ class WalletManager {
         } catch (error) {
             this.hideLoading();
             console.error('❌ Mint NFT error:', error);
-            let errorMessage = 'Failed to mint NFT. Please try again.';
-            if (error.message.includes('insufficient funds')) {
-                errorMessage = 'Insufficient ETH balance for minting.';
-            } else if (error.message.includes('execution reverted')) {
-                errorMessage = 'Transaction failed. Check if minting is still active.';
-            } else if (error.code === 4001) {
-                errorMessage = 'Transaction was rejected by user.';
-            }
-            if (window.skunkSquadWebsite) {
-                window.skunkSquadWebsite.showNotification(errorMessage, 'error');
-            }
+            this.handleMintError(error);
             return false;
+        }
+    }
+
+    // ✅ Add helper method for error handling
+    handleMintError(error) {
+        let errorMessage = 'Failed to mint NFT. Please try again.';
+        
+        if (error.message) {
+            if (error.message.includes('insufficient funds')) {
+                errorMessage = 'Insufficient ETH balance for minting + gas fees.';
+            } else if (error.message.includes('execution reverted')) {
+                errorMessage = 'Transaction reverted. Minting may be paused or sold out.';
+            } else if (error.message.includes('gas required exceeds')) {
+                errorMessage = 'Gas limit too low. Please try again.';
+            } else if (error.message.includes('nonce')) {
+                errorMessage = 'Transaction conflict. Please wait and try again.';
+            }
+        }
+        
+        if (error.code === 4001) {
+            errorMessage = 'Transaction was rejected by user.';
+        } else if (error.code === -32603) {
+            errorMessage = 'Internal error. Please check your wallet and try again.';
+        }
+        
+        if (window.skunkSquadWebsite) {
+            window.skunkSquadWebsite.showNotification(errorMessage, 'error');
         }
     }
     // Show wallet info modal
