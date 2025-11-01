@@ -18,7 +18,7 @@ const SkunkSquadConfig = {
         chainId: '0x1', // Ethereum Mainnet
         chainIdDecimal: 1,
         name: 'Ethereum',
-        rpcUrl: 'https://ethereum.publicnode.com',
+        rpcUrl: 'https://mainnet.infura.io/v3/a2c6c1df8f4e4003bdd98abdec26ad64', // ✅ Use Infura for reliability
         explorer: 'https://etherscan.io',
         isTestnet: false
     },
@@ -116,33 +116,33 @@ const SkunkSquadConfig = {
 };
 
 const CONFIG = {
-    // Infura Project ID (get free key from infura.io)
-    INFURA_PROJECT_ID: 'a2c6c1df8f4e4003bdd98abdec26ad64', // Replace with your actual key
+    // Infura Project ID
+    INFURA_PROJECT_ID: 'a2c6c1df8f4e4003bdd98abdec26ad64',
     
-    // ✅ MAINNET Contract (Your Live Contract)
+    // ✅ MAINNET Contract
     CONTRACT_ADDRESS: '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF',
     
     // ✅ MAINNET Network Settings
-    CHAIN_ID: 1, // Ethereum Mainnet (was 11155111 for Sepolia)
+    CHAIN_ID: 1, // Ethereum Mainnet
     NETWORK_NAME: 'Ethereum Mainnet',
     
     // ✅ MAINNET RPC URLs
     get RPC_URL() {
         return this.INFURA_PROJECT_ID 
-            ? `https://mainnet.infura.io/v3/a2c6c1df8f4e4003bdd98abdec26ad64`
+            ? `https://mainnet.infura.io/v3/${this.INFURA_PROJECT_ID}`
             : null;
     },
     
     get WSS_URL() {
         return this.INFURA_PROJECT_ID 
-            ? `wss://mainnet.infura.io/ws/v3/a2c6c1df8f4e4003bdd98abdec26ad64`
+            ? `wss://mainnet.infura.io/ws/v3/${this.INFURA_PROJECT_ID}`
             : null;
     },
     
     // ✅ MAINNET Block Explorer
     EXPLORER_URL: 'https://etherscan.io',
     
-    // Contract ABI (add your actual ABI here)
+    // Contract ABI
     CONTRACT_ABI: [
         {
             "inputs": [{"internalType": "uint256", "name": "quantity", "type": "uint256"}],
@@ -172,11 +172,10 @@ const CONFIG = {
             "stateMutability": "view",
             "type": "function"
         }
-        // Add more ABI methods as needed
     ],
     
     // Pricing
-    PRICE_PER_NFT: 0.01, // ETH (10000000000000000 wei)
+    PRICE_PER_NFT: 0.01, // ETH
     MAX_MINT_PER_TX: 10,
     MAX_SUPPLY: 10000,
     
@@ -187,21 +186,17 @@ const CONFIG = {
 
 // Make globally available
 window.CONFIG = CONFIG;
+window.SkunkSquadConfig = SkunkSquadConfig;
 
 // Validation
 if (CONFIG.CHAIN_ID === 1) {
     console.log('✅ Config loaded for MAINNET');
     console.log('📍 Contract:', CONFIG.CONTRACT_ADDRESS);
     console.log('🔗 Explorer:', CONFIG.EXPLORER_URL);
+    console.log('🌐 RPC:', CONFIG.RPC_URL);
 } else {
     console.warn('⚠️ Not on Mainnet! Chain ID:', CONFIG.CHAIN_ID);
 }
 
-console.log('🔑 Infura:', CONFIG.INFURA_PROJECT_ID ? 'Connected' : '⚠️ Missing key');
-
-// Make config globally available for use in other scripts and modules.
-// If using a module system (e.g., ES Modules or TypeScript), consider exporting instead.
-window.SkunkSquadConfig = SkunkSquadConfig;
-
+console.log('🔑 Infura:', CONFIG.INFURA_PROJECT_ID ? '✅ Connected' : '⚠️ Missing key');
 console.log('✅ SkunkSquad Config Loaded');
-console.log('✅ Config loaded with Infura:', CONFIG.INFURA_PROJECT_ID ? 'Connected' : 'Missing key!');
