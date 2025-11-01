@@ -205,63 +205,39 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     }
 
     // ========================================
-    // HIDE ANY ROGUE ELEMENTS
-    // ========================================
-    
-    function hideRogueElements() {
-        console.log('🔍 Searching for rogue mint cards...');
-        
-        // Look for any visible elements that might be blocking
-        document.querySelectorAll('*').forEach(el => {
-            const text = el.textContent.toLowerCase();
-            if (text.includes('skunksquad mint') && el.id !== 'wallet-mint-card-overlay') {
-                console.warn('⚠️ Found rogue element:', el);
-                el.style.display = 'none';
-                console.log('✅ Hidden rogue element');
-            }
-        });
-    }
-
-    // ========================================
     // INITIALIZATION - MULTIPLE ATTEMPTS
     // ========================================
     
     // Immediate
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
         initializeButtons();
-        hideRogueElements();
     }
     
     // DOM Ready
     document.addEventListener('DOMContentLoaded', () => {
         console.log('📄 DOM Ready');
         initializeButtons();
-        hideRogueElements();
     });
     
     // Window Load
     window.addEventListener('load', () => {
         console.log('🪟 Window Loaded');
         initializeButtons();
-        hideRogueElements();
     });
     
     // Delayed attempts
     setTimeout(() => {
         console.log('⏱️ Delayed init (500ms)');
         initializeButtons();
-        hideRogueElements();
     }, 500);
     
     setTimeout(() => {
         console.log('⏱️ Delayed init (2000ms)');
         initializeButtons();
-        hideRogueElements();
     }, 2000);
     
     // Make available globally
     window.initializeButtons = initializeButtons;
-    window.hideRogueElements = hideRogueElements;
     window.testModal = () => window.showWalletMintCard();
     
     console.log('✅ SkunkSquad Main JS Loaded');
