@@ -43,6 +43,7 @@
 
 .wmc-close:hover {
     color: #f1f5f9;
+    transform: scale(1.1);
 }
 
 .wmc-card h2 {
@@ -92,6 +93,10 @@
     transform: scale(1.05);
 }
 
+.wmc-qty-btn:active {
+    transform: scale(0.95);
+}
+
 .wmc-qty-input {
     flex: 1;
     background: #0f172a;
@@ -102,6 +107,11 @@
     font-size: 18px;
     font-weight: 600;
     text-align: center;
+}
+
+.wmc-qty-input:focus {
+    outline: none;
+    border-color: #8b5cf6;
 }
 
 .wmc-total {
@@ -144,4 +154,40 @@
 .wmc-mint-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.6);
+}
+
+.wmc-mint-btn:active {
+    transform: translateY(0);
+}
+
+.wmc-mint-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Button Styles (moved from index.html) */
+button {
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #7a4bcf;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.4);
 }
