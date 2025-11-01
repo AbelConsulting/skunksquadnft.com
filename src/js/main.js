@@ -96,7 +96,8 @@ console.log('🦨 main.js loading...');
         console.log('🦨 showWalletMintCard called');
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
-            overlay.classList.add('show');
+            overlay.style.display = 'flex'; // Direct style instead of class
+            console.log('✅ Modal opened');
             updateWalletCardUI();
         } else {
             console.error('❌ Wallet mint card overlay not found!');
@@ -107,7 +108,8 @@ console.log('🦨 main.js loading...');
         console.log('🦨 closeWalletMintCard called');
         const overlay = document.getElementById('wallet-mint-card-overlay');
         if (overlay) {
-            overlay.classList.remove('show');
+            overlay.style.display = 'none'; // Direct style instead of class
+            console.log('✅ Modal closed');
         }
     };
 
@@ -337,11 +339,30 @@ console.log('🦨 main.js loading...');
             console.log('✅ WMC mint button listener attached');
         }
         
-        // Add this temporarily for debugging
-        console.log('🔍 Debugging wallet card:');
-        console.log('Overlay element:', document.getElementById('wallet-mint-card-overlay'));
-        console.log('Card element:', document.getElementById('wallet-mint-card'));
-        console.log('Close button:', document.getElementById('wmc-close'));
+        // DEBUG: Check if elements exist
+        console.log('🔍 DEBUGGING BUTTON INITIALIZATION');
+        console.log('DOM ready state:', document.readyState);
+        
+        // Check immediately
+        console.log('Immediate check:');
+        console.log('connectBuyBtn:', document.getElementById('connectBuyBtn'));
+        console.log('connect-wallet:', document.getElementById('connect-wallet'));
+        
+        // Check on DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚨 DOM READY - Checking buttons:');
+            console.log('connectBuyBtn:', document.getElementById('connectBuyBtn'));
+            console.log('connect-wallet:', document.getElementById('connect-wallet'));
+            
+            // Add the rest of your existing DOMContentLoaded code here...
+        });
+        
+        // Check on window load (backup)
+        window.addEventListener('load', function() {
+            console.log('🚨 WINDOW LOAD - Checking buttons:');
+            console.log('connectBuyBtn:', document.getElementById('connectBuyBtn'));
+            console.log('connect-wallet:', document.getElementById('connect-wallet'));
+        });
     });
 
     // Initialize performance monitoring
