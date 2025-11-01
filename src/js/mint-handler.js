@@ -8,41 +8,21 @@ console.log('🦨 mint-handler.js loading...');
 (function() {
     'use strict';
 
-    // ========================================
-    // REMOVE THIS INFINITE LOOP SECTION:
-    // ========================================
-    /*
-    // OLD CODE - DELETE THIS:
-    function waitForDependencies() {
-        console.log('⏳ Waiting for dependencies...');
-        if (typeof Web3 === 'undefined' || !window.walletManager) {
-            setTimeout(waitForDependencies, 100);
-            return;
-        }
-        // ...
-    }
-    waitForDependencies();
-    */
-
-    // ========================================
-    // NEW CODE - USE THIS INSTEAD:
-    // ========================================
-    
-    // Initialize mint handler (don't wait for dependencies)
+    // Don't wait for dependencies - initialize immediately
     window.mintHandler = {
         async handleMint(quantity) {
             console.log('🦨 handleMint called with quantity:', quantity);
             
-            // Check dependencies at execution time, not load time
+            // Check dependencies at execution time
             if (typeof Web3 === 'undefined') {
                 console.error('❌ Web3 not loaded');
-                alert('Web3 library not loaded. Please refresh the page.');
+                alert('⚠️ Web3 library not loaded. Please refresh the page and try again.');
                 return;
             }
             
             if (!window.walletManager) {
                 console.error('❌ Wallet manager not initialized');
-                alert('Wallet manager not ready. Please refresh the page.');
+                alert('⚠️ Wallet manager not ready. Please refresh the page and try again.');
                 return;
             }
             
@@ -99,7 +79,9 @@ console.log('🦨 mint-handler.js loading...');
                 // Show success message
                 setTimeout(() => {
                     alert(`✅ Successfully minted ${quantity} NFT${quantity > 1 ? 's' : ''}!`);
-                    window.closeWalletMintCard();
+                    if (window.closeWalletMintCard) {
+                        window.closeWalletMintCard();
+                    }
                     
                     // Reset button
                     if (mintBtn) {
@@ -137,7 +119,7 @@ console.log('🦨 mint-handler.js loading...');
         }
     };
     
-    console.log('✅ Mint handler loaded');
+    console.log('✅ Mint handler initialized');
 })();
 
 class MintHandler {
