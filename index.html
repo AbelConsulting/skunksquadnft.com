@@ -81,8 +81,13 @@
         "name": "SkunkSquad NFT",
         "description": "Art by MontanaDad",
         "url": "https://skunksquadnft.com",
-        "logo": "https://skunksquadnft.com/assets/charlesskunk.webp",
+        "logo": [
+            "https://skunksquadnft.com/assets/charlesskunk.webp",
         "sameAs": [
+            "https://twitter.com/MontanaDad406",
+            "https://discord.gg/skunksquad",
+            "https://opensea.io/collection/skunksquad-nft"
+        ]
             "https://x.com/MontanaDad406",
             "https://discord.gg/skunksquad",
             "https://opensea.io/collection/skunksquad-nft"
@@ -90,27 +95,10 @@
     }
     </script>
 
-    <!-- OLD CSP (too restrictive) - REMOVE THIS -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="..."> -->
-
-    <!-- NEW CSP - Allow inline event handlers -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' https://unpkg.com;
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: https: blob:;
-        connect-src 'self' https://unpkg.com https://sepolia.infura.io https://mainnet.infura.io https://api.coingecko.com wss://sepolia.infura.io wss://mainnet.infura.io;
-        frame-src 'none';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-        upgrade-insecure-requests;
-    "> -->
-</head>
+    </head>
 <body>
     <!-- Unified Wallet & Mint Popup Card -->
-    <div id="wallet-mint-card-overlay">
+    <div id="wallet-mint-card-overlay" style="display: none;">
         <div id="wallet-mint-card" class="wmc-card">
             <button id="wmc-close" class="wmc-close">&times;</button>
             
@@ -177,7 +165,7 @@
                     <span class="btn-text">Mint</span>
                     <span class="btn-price">(0.01 ETH)</span>
                 </button>
-                <button class="btn btn-secondary" id="connect-wallet" data-action="connect">
+                <button class="btn btn-secondary" id="connect-wallet" type="button" data-action="connect">
                     <span class="btn-icon">🦊</span>
                     <span class="btn-text">Connect Wallet</span>
                 </button>
