@@ -629,12 +629,17 @@
                 
                 <div class="footer-section">
                     <h4>Contract Info</h4>
-                    <p class="contract-address">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</p>
+                    <p class="contract-address">
+                        <strong>Contract Address:</strong>
+                        <code id="contract-address">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</code>
+                        <button onclick="copyContractAddress()" class="copy-btn" title="Copy to clipboard">📋</button>
+                    </p>
                     <a href="https://etherscan.io/address/0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF" target="_blank">
-                        View on Etherscan
-                    </a>
+                        <span class="social-icon">🔎</span>
+                        <span class="social-text">View on Etherscan</span>
+                    <a href="https://opensea.io/collection/skunksquad-nft" target="_blank" class="footer-opensea-link">
                     <a href="https://opensea.io/collection/skunksquad-nft" target="_blank" style="margin-top: 8px; display: inline-block;">
-                        🌊 View on OpenSea
+                        View on OpenSea 🌊
                     </a>
                 </div>
             </div>
@@ -667,5 +672,13 @@
     <script src="./src/js/wallet.js?v=2" defer></script>
     <script src="./src/js/mint-handler.js?v=2" defer></script>
     <script src="./src/js/main.js?v=2" defer></script>
+    <script>
+        function copyContractAddress() {
+            const address = document.getElementById('contract-address').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                alert('Contract address copied!');
+            });
+        }
+    </script>
 </body>
 </html>
