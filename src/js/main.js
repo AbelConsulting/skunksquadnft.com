@@ -76,9 +76,38 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                 if (connectBtn) {
                     connectBtn.onclick = async function() {
                         console.log('🦨 Modal connect button clicked');
-                        if (window.walletManager) {
+                        
+                        // Check if walletManager exists
+                        if (!window.walletManager) {
+                            console.error('❌ walletManager not found!');
+                            console.log('Available window properties:', Object.keys(window).filter(k => k.includes('wallet') || k.includes('Manager')));
+                            alert('⚠️ Wallet manager not loaded. Please refresh the page and try again.');
+                            return;
+                        }
+                        
+                        // Check if connectWallet function exists
+                        if (typeof window.walletManager.connectWallet !== 'function') {
+                            console.error('❌ connectWallet function not found!');
+                            console.log('walletManager object:', window.walletManager);
+                            alert('⚠️ Wallet connection function not available. Please refresh the page.');
+                            return;
+                        }
+                        
+                        console.log('✅ walletManager found, attempting to connect...');
+                        
+                        try {
                             const connected = await window.walletManager.connectWallet();
-                            if (connected) updateWalletCardUI();
+                            console.log('Connection result:', connected);
+                            
+                            if (connected) {
+                                console.log('✅ Wallet connected successfully');
+                                updateWalletCardUI();
+                            } else {
+                                console.warn('⚠️ Connection failed or was rejected');
+                            }
+                        } catch (error) {
+                            console.error('❌ Error connecting wallet:', error);
+                            alert('Failed to connect wallet: ' + error.message);
                         }
                     };
                 }
