@@ -15,6 +15,14 @@ class WalletManager {
         this.contract = null;
         this.isConnected = false;
         this.currentNetwork = null;
+        this.networkId = null;
+        this.loading = false;
+        this.walletInfoModal = null;
+        
+        // ✅ ADD CONTRACT ADDRESS from config
+        this.contractAddress = window.SKUNKSQUAD_CONFIG?.CONTRACT_ADDRESS || '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+        
+        console.log('📍 Contract address:', this.contractAddress);
         
         // Use modern provider (MetaMask's ethereum object)
         if (typeof window.ethereum !== 'undefined') {
@@ -41,11 +49,16 @@ class WalletManager {
             this.web3 = new Web3(this.provider);
             console.log('✅ Web3 initialized with provider');
             
-            // Check if already connected
+            // ✅ Check if already connected
             await this.checkConnection();
             
             // Setup event listeners for account/network changes
             this.setupEventListeners();
+            
+            // ✅ Setup contract immediately if connected
+            if (this.isConnected) {
+                await this.setupContract();
+            }
             
         } catch (error) {
             console.error('❌ Error initializing Web3:', error);
@@ -89,13 +102,26 @@ class WalletManager {
     }
 
     async checkConnection() {
+        if (!this.provider) return;
+        
         try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            // ✅ MODERN METHOD - Check existing accounts
+            const accounts = await this.provider.request({ 
+                method: 'eth_accounts' 
+            });
+            
             if (accounts.length > 0) {
+                console.log('🔗 Previously connected account found:', accounts[0]);
                 this.accounts = accounts;
                 this.isConnected = true;
+                
+                // Get network info
+                await this.getNetworkInfo();
+                
+                // Update UI
                 this.updateUI();
-                console.log('🦨 Wallet already connected:', accounts[0]);
+            } else {
+                console.log('ℹ️ No previously connected accounts');
             }
         } catch (error) {
             console.error('❌ Check connection error:', error);
@@ -187,12 +213,18 @@ class WalletManager {
 
     
     async setupContract() {
-        if (!this.web3) return;
+        if (!this.web3) {
+            console.warn('⚠️ Web3 not initialized, cannot setup contract');
+            return;
+        }
 
         try {
+            console.log('📄 Setting up contract...');
+            console.log('📍 Contract address:', this.contractAddress);
+            
             // SkunkSquad NFT Contract ABI (Mainnet)
             const contractABI = [
-          {
+                {
                     "inputs": [
                               {
                                         "internalType": "string",
@@ -841,7 +873,7 @@ class WalletManager {
 ];
 
             this.contract = new this.web3.eth.Contract(contractABI, this.contractAddress);
-            console.log('🦨 Contract initialized:', this.contractAddress);
+            console.log('✅ Contract initialized:', this.contractAddress);
             
             // Update contract info
             await this.updateContractInfo();
@@ -1276,5 +1308,16 @@ class WalletManager {
     }
 }
 
-// Global instance
-window.skunkSquadWallet = new WalletManager();
+// ✅ NO AUTOMATIC INITIALIZATION - Use lazy init
+// Global lazy WalletManager initialization
+if (typeof window.initWalletManager !== 'function') {
+    window.initWalletManager = function() {
+        if (!window.walletManager && typeof Web3 !== 'undefined') {
+            window.walletManager = new WalletManager();
+            console.log('✅ WalletManager initialized (lazy load)');
+        }
+        return window.walletManager;
+    };
+}
+
+console.log('✅ Wallet.js loaded - Use window.initWalletManager() to initialize');
