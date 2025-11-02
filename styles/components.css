@@ -1362,6 +1362,69 @@
         gap: var(--space-md);
     }
     
+    .gallery-item {
+        padding: var(--space-sm);
+    }
+    
+    .gallery-img {
+        height: 120px;
+    }
+    
+    /* Optimize new visual enhancements for mobile */
+    .rarity-tier {
+        padding: var(--space-md);
+    }
+    
+    .rarity-tier-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .rarity-percentage {
+        font-size: 1.2rem;
+    }
+    
+    /* Reduce stat card complexity */
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+    
+    .stat-icon-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .stat-number {
+        font-size: 1.75rem;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+    }
+    
+    /* Dashboard cards mobile */
+    .dashboard-card h3 {
+        font-size: 1.25rem;
+    }
+    
+    .metric {
+        padding: var(--space-sm);
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+    }
+    
+    /* Section title mobile */
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
     /* Performance optimizations for mobile */
     .hero-background,
     .hero-grid,

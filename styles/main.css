@@ -892,6 +892,52 @@ h1, h2, h3, h4, h5, h6 {
         gap: 1rem;
     }
     
+    .gallery-item {
+        max-width: 100%;
+    }
+    
+    .gallery-img {
+        height: 200px;
+    }
+    
+    /* Further reduce animations on small screens */
+    .gradient-text,
+    .section-title,
+    .hero-title {
+        animation: none;
+    }
+    
+    /* Simplify rarity cards */
+    .rarity-grid {
+        gap: var(--space-md);
+    }
+    
+    .rarity-tier {
+        padding: var(--space-sm);
+    }
+    
+    /* Optimize button sizes */
+    .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.9rem;
+    }
+    
+    /* Section padding optimization */
+    .payment-section,
+    .collection-section,
+    .analytics-section {
+        padding: var(--space-xl) 0;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-md);
+    }
+    
+    .section-subtitle {
+        font-size: 0.9rem;
+    }
+    
     /* Show hero visual on larger mobile devices */
     .hero-visual {
         display: block;
@@ -1413,6 +1459,47 @@ img[loading="lazy"].loaded {
         min-width: 44px;
     }
     
+    /* Reduce animation complexity on mobile */
+    .gradient-text,
+    .section-title {
+        animation: none;
+        background-size: 100% 100%;
+    }
+    
+    /* Simplify button effects on mobile */
+    .btn::before {
+        display: none;
+    }
+    
+    .btn:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.01);
+    }
+    
+    /* Reduce glow effects for performance */
+    .rarity-tier::before,
+    .stat-card::before,
+    .dashboard-card::before {
+        display: none;
+    }
+    
+    .rarity-tier:hover,
+    .stat-card:hover,
+    .dashboard-card:hover {
+        transform: translateY(-3px) scale(1.01);
+    }
+    
+    /* Simplify box shadows on mobile */
+    .rarity-tier.common,
+    .rarity-tier.rare,
+    .rarity-tier.epic,
+    .rarity-tier.ultra {
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .stat-card:hover {
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+    
     /* Optimize images for mobile */
     img {
         width: 100%;
@@ -1436,6 +1523,17 @@ img[loading="lazy"].loaded {
     .stat-icon {
         width: 50px;
         height: 50px;
+    }
+    
+    /* Reduce hero title size on mobile */
+    .hero-title {
+        font-size: 2rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    /* Optimize section dividers */
+    .section-divider.animated::before {
+        animation: none;
     }
 }
 
