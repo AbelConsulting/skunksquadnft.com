@@ -80,11 +80,16 @@ class WalletManager {
                 console.log('⚠️ Wallet disconnected');
                 this.isConnected = false;
                 this.accounts = [];
+                this.updateUI();
                 window.dispatchEvent(new Event('walletDisconnected'));
             } else {
+                console.log('✅ Account switched to:', accounts[0]);
                 this.accounts = accounts;
                 this.isConnected = true;
+                await this.getNetworkInfo();
                 await this.setupContract();
+                this.updateUI();
+                this.autoFillWalletAddress(accounts[0]);
                 window.dispatchEvent(new CustomEvent('walletConnected', { 
                     detail: { address: accounts[0] } 
                 }));
@@ -94,7 +99,7 @@ class WalletManager {
         // Chain changed
         this.provider.on('chainChanged', (chainId) => {
             console.log('🔄 Chain changed:', chainId);
-            // Reload page on chain change (recommended by MetaMask)
+            this.networkId = parseInt(chainId, 16);
             window.location.reload();
         });
         
@@ -1022,8 +1027,11 @@ class WalletManager {
             errorMessage = 'Internal error. Please check your wallet and try again.';
         }
         
-        if (window.skunkSquadWebsite) {
+        if (window.skunkSquadWebsite && window.skunkSquadWebsite.showNotification) {
             window.skunkSquadWebsite.showNotification(errorMessage, 'error');
+        } else {
+            alert('❌ ' + errorMessage);
+            console.error('❌ Mint error:', errorMessage);
         }
     }
     // Show wallet info modal
@@ -1198,6 +1206,8 @@ class WalletManager {
 
     // UI update methods
     updateUI() {
+        console.log('🎨 Updating UI, connected:', this.isConnected, 'accounts:', this.accounts);  // ✅ ADD THIS LINE
+    
         const connectButton = document.getElementById('connect-wallet');
         
         if (connectButton) {
