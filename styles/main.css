@@ -719,6 +719,7 @@ h1, h2, h3, h4, h5, h6 {
     /* Mobile Navigation Menu */
     .hamburger {
         display: flex !important;
+        touch-action: manipulation;
     }
     
     .nav-secondary {
@@ -732,13 +733,16 @@ h1, h2, h3, h4, h5, h6 {
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition: opacity 0.4s ease, visibility 0s linear 0.4s;
         border-top: none !important;
+        pointer-events: none;
     }
     
     .nav-secondary.active {
         opacity: 1;
         visibility: visible;
+        transition: opacity 0.4s ease, visibility 0s linear 0s;
+        pointer-events: auto;
     }
     
     .nav-secondary-container {
