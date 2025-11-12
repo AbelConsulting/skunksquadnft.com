@@ -467,15 +467,18 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.5rem;
     z-index: 1001;
     position: relative;
+    background: transparent;
+    border: none;
+    gap: 3px;
 }
 
 .hamburger span {
     width: 25px;
     height: 3px;
     background: #ffffff;
-    margin: 3px 0;
     transition: 0.3s;
     border-radius: 2px;
+    display: block;
 }
 
 .hamburger.active span:nth-child(1) {

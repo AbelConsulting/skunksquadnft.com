@@ -19,10 +19,21 @@ console.log('🦨 SkunkSquad Main JS Loading...');
         const navSecondary = document.querySelector('.nav-secondary');
         const navMenu = document.getElementById('nav-menu');
         
-        console.log('🍔 Initializing hamburger menu...', { hamburger, navSecondary, navMenu });
+        console.log('🍔 Initializing hamburger menu...', { 
+            hamburger, 
+            navSecondary, 
+            navMenu,
+            hamburgerDisplay: hamburger ? window.getComputedStyle(hamburger).display : 'not found',
+            hamburgerVisible: hamburger ? hamburger.offsetParent !== null : false
+        });
         
         if (hamburger && navSecondary) {
-            hamburger.addEventListener('click', function(e) {
+            // Remove any existing listeners first
+            const newHamburger = hamburger.cloneNode(true);
+            hamburger.parentNode.replaceChild(newHamburger, hamburger);
+            
+            // Add click listener to the new element
+            newHamburger.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
@@ -31,25 +42,33 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                 const isActive = navSecondary.classList.contains('active');
                 
                 // Toggle classes
-                hamburger.classList.toggle('active');
+                newHamburger.classList.toggle('active');
                 navSecondary.classList.toggle('active');
                 
                 // Prevent body scroll when menu is open
                 if (!isActive) {
                     document.body.style.overflow = 'hidden';
+                    console.log('🍔 Menu opened');
                 } else {
                     document.body.style.overflow = '';
+                    console.log('🍔 Menu closed');
                 }
-                
-                console.log('🍔 Menu state:', !isActive ? 'open' : 'closed');
+            });
+            
+            // Add touch event for mobile
+            newHamburger.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                console.log('🍔 Hamburger touched!');
+                newHamburger.click();
             });
             
             // Close menu when clicking on nav-secondary background
             navSecondary.addEventListener('click', function(e) {
                 if (e.target === navSecondary || e.target.classList.contains('nav-secondary-container')) {
-                    hamburger.classList.remove('active');
+                    newHamburger.classList.remove('active');
                     navSecondary.classList.remove('active');
                     document.body.style.overflow = '';
+                    console.log('🍔 Menu closed by background click');
                 }
             });
             
@@ -58,16 +77,20 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                 const navLinks = navMenu.querySelectorAll('.nav-link');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
-                        hamburger.classList.remove('active');
+                        newHamburger.classList.remove('active');
                         navSecondary.classList.remove('active');
                         document.body.style.overflow = '';
+                        console.log('🍔 Menu closed by nav link click');
                     });
                 });
             }
             
             console.log('✅ Hamburger menu initialized');
         } else {
-            console.error('❌ Hamburger or nav-secondary not found!');
+            console.error('❌ Hamburger or nav-secondary not found!', {
+                hamburger: !!hamburger,
+                navSecondary: !!navSecondary
+            });
         }
     }
 
