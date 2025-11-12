@@ -11,6 +11,56 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     let currentEthPrice = 2400; // USD
 
     // ========================================
+    // HAMBURGER MENU TOGGLE
+    // ========================================
+    
+    function initHamburgerMenu() {
+        const hamburger = document.getElementById('hamburger');
+        const navSecondary = document.querySelector('.nav-secondary');
+        const navMenu = document.getElementById('nav-menu');
+        
+        console.log('🍔 Initializing hamburger menu...', { hamburger, navSecondary, navMenu });
+        
+        if (hamburger && navSecondary) {
+            hamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('🍔 Hamburger clicked!');
+                
+                // Toggle classes
+                hamburger.classList.toggle('active');
+                navSecondary.classList.toggle('active');
+                
+                console.log('🍔 Menu state:', navSecondary.classList.contains('active') ? 'open' : 'closed');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!hamburger.contains(e.target) && !navSecondary.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navSecondary.classList.remove('active');
+                }
+            });
+            
+            // Close menu when clicking on a nav link
+            if (navMenu) {
+                const navLinks = navMenu.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        navSecondary.classList.remove('active');
+                    });
+                });
+            }
+            
+            console.log('✅ Hamburger menu initialized');
+        } else {
+            console.error('❌ Hamburger or nav-secondary not found!');
+        }
+    }
+
+    // ========================================
     // MODAL FUNCTIONS
     // ========================================
     
@@ -251,12 +301,14 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     document.addEventListener('DOMContentLoaded', () => {
         console.log('📄 DOM Ready');
         initializeButtons();
+        initHamburgerMenu();
     });
     
     // Window Load
     window.addEventListener('load', () => {
         console.log('🪟 Window Loaded');
         initializeButtons();
+        initHamburgerMenu();
     });
     
     // Delayed attempts
