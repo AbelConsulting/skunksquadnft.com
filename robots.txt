@@ -1,0 +1,13 @@
+# SkunkSquad NFT - Robots.txt
+User-agent: *
+Allow: /
+Disallow: /src/
+Disallow: /*.py$
+Disallow: /*.sh$
+Disallow: /*.md$
+
+# Sitemap
+Sitemap: https://skunksquadnft.com/sitemap.xml
+
+# Crawl delay to prevent overload
+Crawl-delay: 1
