@@ -28,18 +28,28 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                 
                 console.log('🍔 Hamburger clicked!');
                 
+                const isActive = navSecondary.classList.contains('active');
+                
                 // Toggle classes
                 hamburger.classList.toggle('active');
                 navSecondary.classList.toggle('active');
                 
-                console.log('🍔 Menu state:', navSecondary.classList.contains('active') ? 'open' : 'closed');
+                // Prevent body scroll when menu is open
+                if (!isActive) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+                
+                console.log('🍔 Menu state:', !isActive ? 'open' : 'closed');
             });
             
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!hamburger.contains(e.target) && !navSecondary.contains(e.target)) {
+            // Close menu when clicking on nav-secondary background
+            navSecondary.addEventListener('click', function(e) {
+                if (e.target === navSecondary || e.target.classList.contains('nav-secondary-container')) {
                     hamburger.classList.remove('active');
                     navSecondary.classList.remove('active');
+                    document.body.style.overflow = '';
                 }
             });
             
@@ -50,6 +60,7 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                     link.addEventListener('click', function() {
                         hamburger.classList.remove('active');
                         navSecondary.classList.remove('active');
+                        document.body.style.overflow = '';
                     });
                 });
             }
