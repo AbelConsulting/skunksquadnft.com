@@ -1,14 +1,20 @@
-// Networking Tool - Member Directory & Connections
-// SkunkSquad NFT Collection
+/**
+ * SkunkSquad Networking Portal
+ * Member directory and connections management
+ */
 
-// Sample member data (in production, this would come from a backend)
+// =============================================================================
+// SAMPLE DATA
+// =============================================================================
+
 const SAMPLE_MEMBERS = [
     {
         id: 1,
         name: "Alex Rivera",
         title: "Blockchain Developer",
         location: "San Francisco, CA",
-        industry: "Technology",
+        region: "north-america",
+        industry: "tech",
         avatar: "https://i.pravatar.cc/150?img=1",
         bio: "Building the future of Web3. Passionate about DeFi and NFT infrastructure.",
         interests: ["DeFi", "Smart Contracts", "Gaming", "DAOs"],
@@ -26,7 +32,8 @@ const SAMPLE_MEMBERS = [
         name: "Sarah Chen",
         title: "NFT Artist",
         location: "New York, NY",
-        industry: "Arts",
+        region: "north-america",
+        industry: "creative",
         avatar: "https://i.pravatar.cc/150?img=5",
         bio: "Digital artist exploring the intersection of traditional and crypto art.",
         interests: ["Digital Art", "PFP Collections", "Generative Art"],
@@ -44,7 +51,8 @@ const SAMPLE_MEMBERS = [
         name: "Marcus Johnson",
         title: "Community Manager",
         location: "Los Angeles, CA",
-        industry: "Community",
+        region: "north-america",
+        industry: "crypto",
         avatar: "https://i.pravatar.cc/150?img=12",
         bio: "Helping Web3 communities grow and thrive. SkunkSquad forever!",
         interests: ["Community Building", "NFTs", "Metaverse", "Gaming"],
@@ -63,7 +71,8 @@ const SAMPLE_MEMBERS = [
         name: "Emily Watson",
         title: "Crypto Investor",
         location: "London, UK",
-        industry: "Finance",
+        region: "europe",
+        industry: "finance",
         avatar: "https://i.pravatar.cc/150?img=9",
         bio: "Early adopter. Investing in the future of digital ownership.",
         interests: ["DeFi", "Blue Chip NFTs", "Trading"],
@@ -80,7 +89,8 @@ const SAMPLE_MEMBERS = [
         name: "David Kim",
         title: "Game Developer",
         location: "Seoul, South Korea",
-        industry: "Gaming",
+        region: "asia",
+        industry: "tech",
         avatar: "https://i.pravatar.cc/150?img=14",
         bio: "Building play-to-earn games with real utility for NFT holders.",
         interests: ["GameFi", "Metaverse", "Unity", "Unreal Engine"],
@@ -88,7 +98,7 @@ const SAMPLE_MEMBERS = [
         nfts: 6,
         joinDate: "Mar 2024",
         verified: true,
-        whale: false,
+        whale: true,
         online: true,
         twitter: "https://twitter.com/davidkim",
         discord: "davidkim#9012"
@@ -98,7 +108,8 @@ const SAMPLE_MEMBERS = [
         name: "Jessica Martinez",
         title: "Marketing Strategist",
         location: "Miami, FL",
-        industry: "Marketing",
+        region: "north-america",
+        industry: "entrepreneur",
         avatar: "https://i.pravatar.cc/150?img=20",
         bio: "Helping Web3 projects reach their audience. NFT enthusiast.",
         interests: ["Marketing", "Branding", "Social Media", "NFTs"],
@@ -116,7 +127,8 @@ const SAMPLE_MEMBERS = [
         name: "Ryan Thompson",
         title: "Full Stack Developer",
         location: "Austin, TX",
-        industry: "Technology",
+        region: "north-america",
+        industry: "tech",
         avatar: "https://i.pravatar.cc/150?img=33",
         bio: "Building dApps and NFT marketplaces. Open source contributor.",
         interests: ["Web3", "React", "Node.js", "Smart Contracts"],
@@ -124,7 +136,7 @@ const SAMPLE_MEMBERS = [
         nfts: 9,
         joinDate: "Feb 2024",
         verified: true,
-        whale: false,
+        whale: true,
         online: true,
         twitter: "https://twitter.com/rthompson",
         github: "https://github.com/rthompson"
@@ -134,7 +146,8 @@ const SAMPLE_MEMBERS = [
         name: "Nicole Brown",
         title: "DAO Contributor",
         location: "Berlin, Germany",
-        industry: "Community",
+        region: "europe",
+        industry: "crypto",
         avatar: "https://i.pravatar.cc/150?img=25",
         bio: "Active in multiple DAOs. Governance and community advocate.",
         interests: ["DAOs", "Governance", "DeFi", "Community"],
@@ -142,7 +155,7 @@ const SAMPLE_MEMBERS = [
         nfts: 11,
         joinDate: "Jan 2024",
         verified: true,
-        whale: false,
+        whale: true,
         founder: true,
         online: true,
         twitter: "https://twitter.com/nicoleb",
@@ -150,16 +163,22 @@ const SAMPLE_MEMBERS = [
     }
 ];
 
-// State management
+// =============================================================================
+// STATE MANAGEMENT
+// =============================================================================
+
 let allMembers = [...SAMPLE_MEMBERS];
 let filteredMembers = [...SAMPLE_MEMBERS];
 let currentFilter = 'all';
-let myConnections = [2, 5]; // IDs of connected members
-let pendingRequests = [4]; // IDs of pending connection requests
+let searchTerm = '';
+let myConnections = [2, 5];
+let pendingRequests = [4];
 
-// Initialize networking page
+// =============================================================================
+// INITIALIZATION
+// =============================================================================
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Check authentication
     if (typeof MembersAuth === 'undefined' || !MembersAuth.isAuthenticated()) {
         window.location.href = './members.html';
         return;
@@ -177,29 +196,44 @@ function initNetworking() {
     renderSuggestions();
 }
 
-// Update network statistics
+// =============================================================================
+// STATS & UPDATES
+// =============================================================================
+
 function updateNetworkStats() {
-    document.getElementById('total-members').textContent = allMembers.length;
-    document.getElementById('my-connections').textContent = myConnections.length;
-    document.getElementById('pending-requests').textContent = pendingRequests.length;
+    const totalMembers = document.getElementById('totalMembers');
+    const totalCountries = document.getElementById('totalCountries');
+    const totalIndustries = document.getElementById('totalIndustries');
+    const onlineNow = document.getElementById('onlineNow');
     
-    const onlineCount = allMembers.filter(m => m.online).length;
-    document.getElementById('online-now').textContent = onlineCount;
+    if (totalMembers) totalMembers.textContent = allMembers.length;
+    if (onlineNow) onlineNow.textContent = allMembers.filter(m => m.online).length;
+    
+    const uniqueRegions = new Set(allMembers.map(m => m.region)).size;
+    const uniqueIndustries = new Set(allMembers.map(m => m.industry)).size;
+    
+    if (totalCountries) totalCountries.textContent = uniqueRegions * 5; // Approximate
+    if (totalIndustries) totalIndustries.textContent = uniqueIndustries;
 }
 
-// Render member grid
+// =============================================================================
+// MEMBER GRID
+// =============================================================================
+
 function renderMemberGrid() {
-    const grid = document.getElementById('member-grid');
-    const memberCount = document.getElementById('member-count');
+    const grid = document.getElementById('memberGrid');
+    const visibleCount = document.getElementById('visibleCount');
+    
+    if (!grid) return;
     
     if (filteredMembers.length === 0) {
         grid.innerHTML = `
             <div class="empty-state" style="grid-column: 1/-1;">
-                <h3>No members found</h3>
+                <h3>😢 No members found</h3>
                 <p>Try adjusting your filters or search terms</p>
             </div>
         `;
-        memberCount.textContent = '0 members';
+        if (visibleCount) visibleCount.textContent = '0';
         return;
     }
 
@@ -245,10 +279,13 @@ function renderMemberGrid() {
         </div>
     `).join('');
 
-    memberCount.textContent = `${filteredMembers.length} member${filteredMembers.length !== 1 ? 's' : ''}`;
+    if (visibleCount) visibleCount.textContent = filteredMembers.length;
 }
 
-// Show member profile modal
+// =============================================================================
+// PROFILE MODAL
+// =============================================================================
+
 function showProfile(memberId) {
     const member = allMembers.find(m => m.id === memberId);
     if (!member) return;
@@ -256,7 +293,9 @@ function showProfile(memberId) {
     const isConnected = myConnections.includes(memberId);
     const isPending = pendingRequests.includes(memberId);
 
-    const modal = document.getElementById('profile-modal');
+    const modal = document.getElementById('profileModal');
+    if (!modal) return;
+    
     modal.innerHTML = `
         <div class="profile-modal-overlay" onclick="closeProfile()"></div>
         <div class="profile-modal-content">
@@ -347,36 +386,41 @@ function showProfile(memberId) {
             <div class="profile-actions">
                 ${isConnected ? `
                     <button class="btn btn-secondary" onclick="handleDisconnect(${memberId})">
-                        Disconnect
+                        🔗 Disconnect
                     </button>
                     <button class="btn btn-primary" onclick="handleMessage(${memberId})">
-                        Send Message
+                        💬 Send Message
                     </button>
                 ` : isPending ? `
                     <button class="btn btn-secondary" disabled>
-                        Request Pending
+                        ⏳ Request Pending
                     </button>
                 ` : `
                     <button class="btn btn-primary" onclick="handleConnect(${memberId})">
-                        Connect
+                        🤝 Connect
                     </button>
                 `}
             </div>
         </div>
     `;
     
-    modal.classList.add('active');
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
 function closeProfile() {
-    const modal = document.getElementById('profile-modal');
-    modal.classList.remove('active');
-    modal.innerHTML = '';
+    const modal = document.getElementById('profileModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.innerHTML = '';
+    }
     document.body.style.overflow = '';
 }
 
-// Connection handlers
+// =============================================================================
+// CONNECTION HANDLERS
+// =============================================================================
+
 function handleConnect(memberId) {
     const member = allMembers.find(m => m.id === memberId);
     if (!member) return;
@@ -386,7 +430,7 @@ function handleConnect(memberId) {
     renderPendingRequests();
     closeProfile();
     
-    showToast(`Connection request sent to ${member.name}`, 'success');
+    showToast(`Connection request sent to ${member.name}! 🤝`, 'success');
 }
 
 function handleDisconnect(memberId) {
@@ -408,7 +452,7 @@ function handleMessage(memberId) {
     if (!member) return;
     
     closeProfile();
-    showToast('Messaging feature coming soon!', 'info');
+    showToast('💬 Messaging feature coming soon!', 'info');
 }
 
 function acceptConnection(memberId) {
@@ -422,27 +466,29 @@ function acceptConnection(memberId) {
     renderPendingRequests();
     renderMyConnections();
     
-    showToast(`You're now connected with ${member.name}`, 'success');
+    showToast(`✅ You're now connected with ${member.name}!`, 'success');
 }
 
 function declineConnection(memberId) {
-    const member = allMembers.find(m => m.id === memberId);
-    if (!member) return;
-
     pendingRequests = pendingRequests.filter(id => id !== memberId);
     updateNetworkStats();
     renderPendingRequests();
     
-    showToast(`Connection request declined`, 'info');
+    showToast('Connection request declined', 'info');
 }
 
-// Render My Connections
+// =============================================================================
+// MY NETWORK TABS
+// =============================================================================
+
 function renderMyConnections() {
-    const container = document.getElementById('connections-list');
+    const container = document.getElementById('connectionsList');
+    if (!container) return;
+    
     const connections = allMembers.filter(m => myConnections.includes(m.id));
     
     if (connections.length === 0) {
-        container.innerHTML = '<div class="empty-state">No connections yet. Start connecting with members!</div>';
+        container.innerHTML = '<div class="empty-state">No connections yet. Start connecting with members! 🤝</div>';
         return;
     }
 
@@ -465,9 +511,10 @@ function renderMyConnections() {
     `).join('');
 }
 
-// Render Pending Requests
 function renderPendingRequests() {
-    const container = document.getElementById('pending-list');
+    const container = document.getElementById('pendingList');
+    if (!container) return;
+    
     const pending = allMembers.filter(m => pendingRequests.includes(m.id));
     
     if (pending.length === 0) {
@@ -484,19 +531,20 @@ function renderPendingRequests() {
             </div>
             <div class="connection-actions">
                 <button class="btn btn-sm btn-primary" onclick="acceptConnection(${member.id})">
-                    Accept
+                    ✓ Accept
                 </button>
                 <button class="btn btn-sm btn-secondary" onclick="declineConnection(${member.id})">
-                    Decline
+                    ✕ Decline
                 </button>
             </div>
         </div>
     `).join('');
 }
 
-// Render Connection Suggestions
 function renderSuggestions() {
-    const container = document.getElementById('suggestions-list');
+    const container = document.getElementById('suggestionsList');
+    if (!container) return;
+    
     const suggestions = allMembers
         .filter(m => !myConnections.includes(m.id) && !pendingRequests.includes(m.id))
         .slice(0, 5);
@@ -515,20 +563,26 @@ function renderSuggestions() {
             </div>
             <div class="connection-actions">
                 <button class="btn btn-sm btn-primary" onclick="handleConnect(${member.id})">
-                    Connect
+                    🤝 Connect
                 </button>
             </div>
         </div>
     `).join('');
 }
 
-// Setup event listeners
+// =============================================================================
+// EVENT LISTENERS
+// =============================================================================
+
 function setupEventListeners() {
     // Search
-    document.getElementById('member-search').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        filterMembers(searchTerm);
-    });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value.toLowerCase();
+            applyFilters();
+        });
+    }
 
     // Filter tabs
     document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -542,9 +596,13 @@ function setupEventListeners() {
     });
 
     // Filter dropdowns
-    document.querySelectorAll('.filter-select').forEach(select => {
-        select.addEventListener('change', applyFilters);
-    });
+    const locationFilter = document.getElementById('locationFilter');
+    const industryFilter = document.getElementById('industryFilter');
+    const sortBy = document.getElementById('sortBy');
+    
+    if (locationFilter) locationFilter.addEventListener('change', applyFilters);
+    if (industryFilter) industryFilter.addEventListener('change', applyFilters);
+    if (sortBy) sortBy.addEventListener('change', applyFilters);
 
     // Network tabs
     document.querySelectorAll('.network-tab').forEach(tab => {
@@ -557,17 +615,26 @@ function setupEventListeners() {
             });
             
             const tabName = tab.dataset.tab;
-            document.getElementById(`${tabName}-tab`).classList.add('active');
+            const targetTab = document.getElementById(`${tabName}Tab`);
+            if (targetTab) targetTab.classList.add('active');
         });
     });
 }
 
-// Filter members by search
-function filterMembers(searchTerm) {
-    if (!searchTerm) {
-        filteredMembers = [...allMembers];
-    } else {
-        filteredMembers = allMembers.filter(member => 
+// =============================================================================
+// FILTERING & SORTING
+// =============================================================================
+
+function applyFilters() {
+    const locationFilter = document.getElementById('locationFilter')?.value || '';
+    const industryFilter = document.getElementById('industryFilter')?.value || '';
+    const sortBy = document.getElementById('sortBy')?.value || 'recent';
+    
+    let results = [...allMembers];
+    
+    // Apply search
+    if (searchTerm) {
+        results = results.filter(member => 
             member.name.toLowerCase().includes(searchTerm) ||
             member.title.toLowerCase().includes(searchTerm) ||
             member.location.toLowerCase().includes(searchTerm) ||
@@ -575,56 +642,50 @@ function filterMembers(searchTerm) {
         );
     }
     
-    applyFilters();
-}
-
-// Apply all filters
-function applyFilters() {
-    const locationFilter = document.getElementById('filter-location').value;
-    const industryFilter = document.getElementById('filter-industry').value;
-    const sortBy = document.getElementById('filter-sort').value;
-    
-    let results = [...filteredMembers];
-    
-    // Apply current filter tab
+    // Apply filter tabs
     if (currentFilter === 'online') {
         results = results.filter(m => m.online);
     } else if (currentFilter === 'verified') {
         results = results.filter(m => m.verified);
-    } else if (currentFilter === 'whales') {
+    } else if (currentFilter === 'whale') {
         results = results.filter(m => m.whale);
     }
     
     // Apply location filter
-    if (locationFilter && locationFilter !== 'all') {
-        results = results.filter(m => m.location.includes(locationFilter));
+    if (locationFilter) {
+        results = results.filter(m => m.region === locationFilter);
     }
     
     // Apply industry filter
-    if (industryFilter && industryFilter !== 'all') {
+    if (industryFilter) {
         results = results.filter(m => m.industry === industryFilter);
     }
     
     // Apply sorting
-    if (sortBy === 'connections') {
-        results.sort((a, b) => b.connections - a.connections);
+    if (sortBy === 'name') {
+        results.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'nfts') {
         results.sort((a, b) => b.nfts - a.nfts);
-    } else if (sortBy === 'recent') {
-        // Sort by join date (most recent first)
-        results.sort((a, b) => new Date(b.joinDate) - new Date(a.joinDate));
+    } else if (sortBy === 'joined') {
+        const monthOrder = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6 };
+        results.sort((a, b) => {
+            const aMonth = monthOrder[a.joinDate.split(' ')[0]];
+            const bMonth = monthOrder[b.joinDate.split(' ')[0]];
+            return bMonth - aMonth;
+        });
     }
     
     filteredMembers = results;
     renderMemberGrid();
 }
 
-// Toast notification
+// =============================================================================
+// UI HELPERS
+// =============================================================================
+
 function showToast(message, type = 'info') {
     const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
+    if (existingToast) existingToast.remove();
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -640,6 +701,7 @@ function showToast(message, type = 'info') {
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         z-index: 10000;
         animation: slideIn 0.3s ease;
+        font-weight: 500;
     `;
 
     document.body.appendChild(toast);
@@ -650,7 +712,10 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Make functions globally available
+// =============================================================================
+// GLOBAL API
+// =============================================================================
+
 window.showProfile = showProfile;
 window.closeProfile = closeProfile;
 window.handleConnect = handleConnect;
