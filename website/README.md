@@ -344,7 +344,7 @@ npm test -- --watch
 
 ### Technical Support
 - **Email**: tech@skunksquadnft.com
-- **Discord**: [SkunkSquad Community](https://discord.gg/skunksquad)
+- **Discord**: [SkunkSquad Community](https://discord.gg/QrqYCVZM)
 - **Documentation**: [docs.skunksquadnft.com](https://docs.skunksquadnft.com)
 
 ### Security Issues
@@ -368,4 +368,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 **🦨 SkunkSquad NFT Team**  
 *Building the future of digital ownership*
 
-[Website](https://skunksquadnft.com) • [Twitter](https://twitter.com/skunksquadnft) • [Discord](https://discord.gg/skunksquad) • [OpenSea](https://opensea.io/collection/skunksquad)
+[Website](https://skunksquadnft.com) • [Twitter](https://twitter.com/skunksquadnft) • [Discord](https://discord.gg/QrqYCVZM) • [OpenSea](https://opensea.io/collection/skunksquad)
