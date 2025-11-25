@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 SkunkSquad Analytics Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../public/favicon.svg">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="../index.html" class="back-link">← Back to Home</a>
+                <h1>📊 SkunkSquad Analytics</h1>
+            </div>
+            <div class="header-right">
+                <div class="network-status" id="networkStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+                <button class="refresh-btn" id="refreshBtn" title="Refresh Data">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            
+            <!-- Key Metrics Section -->
+            <section class="metrics-section">
+                <h2 class="section-title">Key Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">🎨</div>
+                        <div class="metric-content">
+                            <span class="metric-label">Total Minted</span>
+                            <span class="metric-value" id="totalMinted">
+                                <span class="loading-skeleton">Loading...</span>
+                            </span>
+                            <span class="metric-subtitle">
+                                <span id="mintProgress">0</span>% of max supply
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-content">
+                            <span class="metric-label">Total Revenue</span>
+                            <span class="metric-value" id="totalRevenue">
+                                <span class="loading-skeleton">Loading...</span>
+                            </span>
+                            <span class="metric-subtitle" id="revenueUSD">≈ $0 USD</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-content">
+                            <span class="metric-label">Unique Holders</span>
+                            <span class="metric-value" id="uniqueHolders">
+                                <span class="loading-skeleton">Loading...</span>
+                            </span>
+                            <span class="metric-subtitle">Active collectors</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">💎</div>
+                        <div class="metric-content">
+                            <span class="metric-label">Floor Price</span>
+                            <span class="metric-value" id="floorPrice">
+                                <span class="loading-skeleton">0.01 ETH</span>
+                            </span>
+                            <span class="metric-subtitle">Mint price</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Supply & Minting Section -->
+            <section class="supply-section">
+                <div class="section-header">
+                    <h2 class="section-title">Supply & Minting Progress</h2>
+                </div>
+                <div class="supply-grid">
+                    <div class="supply-card">
+                        <div class="supply-visual">
+                            <svg class="progress-ring" width="200" height="200">
+                                <circle class="progress-ring-bg" cx="100" cy="100" r="90" stroke-width="12"/>
+                                <circle class="progress-ring-fill" id="supplyProgressRing" cx="100" cy="100" r="90" stroke-width="12"/>
+                            </svg>
+                            <div class="progress-center">
+                                <span class="progress-percentage" id="supplyPercentage">0%</span>
+                                <span class="progress-label">Minted</span>
+                            </div>
+                        </div>
+                        <div class="supply-stats">
+                            <div class="stat-row">
+                                <span class="stat-label">Total Supply:</span>
+                                <span class="stat-value">10,000 NFTs</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Minted:</span>
+                                <span class="stat-value" id="mintedCount">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Remaining:</span>
+                                <span class="stat-value" id="remainingCount">10,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Recent Minting Activity</h3>
+                        <div class="activity-list" id="recentActivity">
+                            <div class="activity-loading">Loading recent transactions...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contract Information -->
+            <section class="contract-section">
+                <h2 class="section-title">Smart Contract Information</h2>
+                <div class="contract-grid">
+                    <div class="info-card">
+                        <div class="info-label">Contract Address</div>
+                        <div class="info-value">
+                            <code id="contractAddress">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</code>
+                            <button class="copy-btn" onclick="copyToClipboard('contractAddress')">📋</button>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-label">Network</div>
+                        <div class="info-value">Ethereum Mainnet</div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-label">Mint Price</div>
+                        <div class="info-value" id="mintPrice">0.01 ETH</div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-label">Max Per Transaction</div>
+                        <div class="info-value">10 NFTs</div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-label">Revealed Status</div>
+                        <div class="info-value" id="revealedStatus">
+                            <span class="loading-skeleton">Checking...</span>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-label">Contract Owner</div>
+                        <div class="info-value">
+                            <code id="contractOwner" class="small-code">Loading...</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Holders -->
+            <section class="holders-section">
+                <h2 class="section-title">Top Holders</h2>
+                <div class="holders-table-container">
+                    <table class="holders-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Address</th>
+                                <th>Balance</th>
+                                <th>% of Supply</th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdersTableBody">
+                            <tr>
+                                <td colspan="4" class="table-loading">Loading holder data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Minting History Chart -->
+            <section class="chart-section">
+                <h2 class="section-title">Minting History</h2>
+                <div class="chart-container">
+                    <canvas id="mintingChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Real-time Stats -->
+            <section class="stats-section">
+                <h2 class="section-title">Network Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">⛽</span>
+                            <span class="stat-title">Gas Price</span>
+                        </div>
+                        <div class="stat-value" id="gasPrice">
+                            <span class="loading-skeleton">Loading...</span>
+                        </div>
+                        <div class="stat-subtitle">Current network gas</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">💱</span>
+                            <span class="stat-title">ETH Price</span>
+                        </div>
+                        <div class="stat-value" id="ethPrice">
+                            <span class="loading-skeleton">Loading...</span>
+                        </div>
+                        <div class="stat-subtitle" id="ethChange">24h change</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">🔗</span>
+                            <span class="stat-title">Block Number</span>
+                        </div>
+                        <div class="stat-value" id="blockNumber">
+                            <span class="loading-skeleton">Loading...</span>
+                        </div>
+                        <div class="stat-subtitle">Latest block</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">⏱️</span>
+                            <span class="stat-title">Last Update</span>
+                        </div>
+                        <div class="stat-value" id="lastUpdate">Just now</div>
+                        <div class="stat-subtitle">Auto-refreshes every 30s</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links -->
+            <section class="links-section">
+                <h2 class="section-title">Quick Links</h2>
+                <div class="links-grid">
+                    <a href="https://etherscan.io/address/0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF" target="_blank" class="link-card">
+                        <span class="link-icon">🔍</span>
+                        <span class="link-text">View on Etherscan</span>
+                        <span class="link-arrow">→</span>
+                    </a>
+                    <a href="https://opensea.io/collection/skunksquad-nft" target="_blank" class="link-card">
+                        <span class="link-icon">🌊</span>
+                        <span class="link-text">OpenSea Collection</span>
+                        <span class="link-arrow">→</span>
+                    </a>
+                    <a href="../members.html" class="link-card">
+                        <span class="link-icon">👥</span>
+                        <span class="link-text">Members Area</span>
+                        <span class="link-arrow">→</span>
+                    </a>
+                    <a href="../sampleart.html" class="link-card">
+                        <span class="link-icon">🎨</span>
+                        <span class="link-text">View Collection</span>
+                        <span class="link-arrow">→</span>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>SkunkSquad NFT Analytics Dashboard | Data updates every 30 seconds</p>
+        <p>Built with ❤️ by MontanaDad</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="./dashboard.js"></script>
+</body>
+</html>
