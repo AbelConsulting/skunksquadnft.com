@@ -77,6 +77,17 @@ body {
     background-clip: text;
 }
 
+.members-only-badge {
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
 .header-right {
     display: flex;
     align-items: center;
