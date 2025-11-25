@@ -64,20 +64,16 @@ let mintingChart;
 // Initialize dashboard
 async function initDashboard() {
     try {
-        updateStatus('Connecting to Ethereum...', 'warning');
+        updateStatus('Connecting to Ethereum Mainnet...', 'warning');
         
-        // Try to use MetaMask if available, otherwise use Infura
-        if (typeof window.ethereum !== 'undefined') {
-            web3 = new Web3(window.ethereum);
-            updateStatus('Connected via MetaMask', 'success');
-        } else {
-            // Fallback to public RPC
-            web3 = new Web3('https://eth.llamarpc.com');
-            updateStatus('Connected to Ethereum', 'success');
-        }
+        // Always use Mainnet RPC for dashboard data
+        web3 = new Web3('https://eth.llamarpc.com');
+        updateStatus('Connected to Ethereum Mainnet', 'success');
+        console.log('📊 Dashboard: Using Mainnet RPC for data');
         
         // Initialize contract
         contract = new web3.eth.Contract(CONTRACT_ABI, CONFIG.CONTRACT_ADDRESS);
+        console.log('📝 Contract initialized:', CONFIG.CONTRACT_ADDRESS);
         
         // Load all data
         await loadAllData();

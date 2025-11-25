@@ -116,39 +116,22 @@ async function handleWalletAuth() {
         const address = accounts[0];
         console.log('👛 Wallet connected:', address);
         
-        // Check network
+        // Get network info (but don't enforce it)
         const networkId = await web3Instance.eth.net.getId();
-        console.log('🌐 Current network ID:', networkId, '| Required:', MEMBERS_CONFIG.NETWORK_ID);
+        console.log('🌐 Connected to network ID:', networkId);
         
-        if (networkId !== MEMBERS_CONFIG.NETWORK_ID) {
-            const networkNames = {
-                1: 'Ethereum Mainnet',
-                11155111: 'Sepolia Testnet',
-                5: 'Goerli Testnet',
-                137: 'Polygon',
-                80001: 'Mumbai Testnet'
-            };
-            const currentNetwork = networkNames[networkId] || `Network ${networkId}`;
-            const requiredNetwork = networkNames[MEMBERS_CONFIG.NETWORK_ID] || `Network ${MEMBERS_CONFIG.NETWORK_ID}`;
-            
-            const error = new Error('WRONG_NETWORK');
-            error.currentNetwork = currentNetwork;
-            error.requiredNetwork = requiredNetwork;
-            error.networkId = networkId;
-            throw error;
-        }
+        // Always check NFTs on Mainnet using a public RPC provider
+        // This way users can connect with any network but we verify NFTs on Mainnet
+        button.innerHTML = '<span class="btn-icon">🔍</span> Verifying NFTs on Mainnet...';
         
-        // Initialize contract
-        contract = new web3Instance.eth.Contract(NFT_ABI, MEMBERS_CONFIG.CONTRACT_ADDRESS);
-        
-        // Verify NFT ownership
-        button.innerHTML = '<span class="btn-icon">🔍</span> Verifying NFTs...';
+        const mainnetWeb3 = new Web3('https://eth.llamarpc.com');
+        const mainnetContract = new mainnetWeb3.eth.Contract(NFT_ABI, MEMBERS_CONFIG.CONTRACT_ADDRESS);
         
         console.log('🔍 Checking NFT balance for address:', address);
         console.log('📝 Contract:', MEMBERS_CONFIG.CONTRACT_ADDRESS);
-        console.log('🌐 Network ID:', networkId);
+        console.log('🌐 Checking on: Ethereum Mainnet');
         
-        const nftBalance = await contract.methods.balanceOf(address).call();
+        const nftBalance = await mainnetContract.methods.balanceOf(address).call();
         console.log('💎 NFT Balance:', nftBalance);
         
         if (parseInt(nftBalance) === 0) {
@@ -157,11 +140,11 @@ async function handleWalletAuth() {
         
         console.log(`✅ User owns ${nftBalance} SkunkSquad NFT(s)`);
         
-        // Get owned token IDs
+        // Get owned token IDs from Mainnet
         const tokenIds = [];
         for (let i = 0; i < Math.min(nftBalance, 10); i++) {
             try {
-                const tokenId = await contract.methods.tokenOfOwnerByIndex(address, i).call();
+                const tokenId = await mainnetContract.methods.tokenOfOwnerByIndex(address, i).call();
                 tokenIds.push(tokenId);
             } catch (e) {
                 console.warn('Could not fetch token at index', i);
@@ -209,16 +192,6 @@ async function handleWalletAuth() {
                 '🦊 No Wallet Found',
                 'Please install MetaMask or another Web3 wallet to continue.',
                 'https://metamask.io'
-            );
-        } else if (error.message === 'WRONG_NETWORK') {
-            const currentNet = error.currentNetwork || 'Unknown Network';
-            const requiredNet = error.requiredNetwork || 'Ethereum Mainnet';
-            
-            showAuthError(
-                '🔗 Wrong Network Detected',
-                `You are currently connected to <strong>${currentNet}</strong>.<br><br>SkunkSquad NFTs are on <strong>${requiredNet}</strong>.<br><br>Please switch your wallet to ${requiredNet} to continue.`,
-                null,
-                true // Add switch network button
             );
         } else if (error.message === 'NO_NFT') {
             showAuthError(
