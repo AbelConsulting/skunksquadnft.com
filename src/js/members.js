@@ -1,9 +1,12 @@
 /**
- * SkunkSquad Members Portal Features
- * Handles member-specific functionality and interactions
+ * SkunkSquad Members Portal
+ * Member-specific functionality and interactions
  */
 
-// Quick action handlers
+// =============================================================================
+// QUICK ACTION HANDLERS
+// =============================================================================
+
 function openNetworking() {
     window.location.href = '/networking.html';
 }
@@ -11,8 +14,7 @@ function openNetworking() {
 function openRewards() {
     showFeatureModal(
         '🎁 Member Rewards Program',
-        `
-        <p><strong>Exclusive Benefits & Perks</strong></p>
+        `<p><strong>Exclusive Benefits & Perks</strong></p>
         <ul style="text-align: left; margin: 1rem 0;">
             <li>💎 Monthly NFT airdrops</li>
             <li>🛍️ Exclusive merchandise</li>
@@ -20,20 +22,15 @@ function openRewards() {
             <li>💰 Partnership discounts</li>
             <li>⭐ Loyalty rewards</li>
         </ul>
-        <p class="text-muted">Earn points for holding, participating, and referring new members.</p>
-        `,
-        '🔜 Launching Soon',
-        () => {
-            console.log('Rewards feature clicked');
-        }
+        <p class="text-muted">Earn points for holding, participating, and referring new members.</p>`,
+        '🔜 Launching Soon'
     );
 }
 
 function openEvents() {
     showFeatureModal(
         '📅 Exclusive Events Calendar',
-        `
-        <p><strong>VIP Access & Premium Experiences</strong></p>
+        `<p><strong>VIP Access & Premium Experiences</strong></p>
         <ul style="text-align: left; margin: 1rem 0;">
             <li>🍽️ Private networking dinners</li>
             <li>💼 Investment seminars</li>
@@ -41,20 +38,16 @@ function openEvents() {
             <li>🌐 Virtual meetups</li>
             <li>✈️ Global conferences</li>
         </ul>
-        <p class="text-muted">Join exclusive events designed for elite networking and growth.</p>
-        `,
-        '📆 Calendar Coming Soon',
-        () => {
-            console.log('Events feature clicked');
-        }
+        <p class="text-muted">Join exclusive events designed for elite networking and growth.</p>`,
+        '📆 Calendar Coming Soon'
     );
 }
 
-/**
- * Show feature modal
- */
-function showFeatureModal(title, content, buttonText, buttonAction) {
-    // Remove existing modal if any
+// =============================================================================
+// UI COMPONENTS
+// =============================================================================
+
+function showFeatureModal(title, content, buttonText) {
     const existing = document.querySelector('.feature-modal');
     if (existing) existing.remove();
     
@@ -78,24 +71,41 @@ function showFeatureModal(title, content, buttonText, buttonAction) {
     `;
     
     document.body.appendChild(modal);
-    
-    // Animate in
-    setTimeout(() => {
-        modal.classList.add('active');
-    }, 10);
+    setTimeout(() => modal.classList.add('active'), 10);
 }
 
-/**
- * Initialize member portal charts
- */
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function copyToClipboard(text, successMessage = 'Copied!') {
+    navigator.clipboard.writeText(text)
+        .then(() => showToast(successMessage, 'success'))
+        .catch(err => {
+            console.error('Failed to copy:', err);
+            showToast('Copy failed', 'error');
+        });
+}
+
+// =============================================================================
+// CHARTS & ANALYTICS
+// =============================================================================
+
 function initMemberCharts() {
     const portfolioCanvas = document.getElementById('portfolioChart');
-    if (!portfolioCanvas) return;
+    if (!portfolioCanvas || typeof Chart === 'undefined') return;
     
-    const ctx = portfolioCanvas.getContext('2d');
-    
-    // Simple portfolio chart (replace with real data)
-    new Chart(ctx, {
+    new Chart(portfolioCanvas.getContext('2d'), {
         type: 'line',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -113,17 +123,13 @@ function initMemberCharts() {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
-                legend: {
-                    display: false
-                }
+                legend: { display: false }
             },
             scales: {
                 y: {
                     beginAtZero: false,
                     ticks: {
-                        callback: function(value) {
-                            return '$' + value;
-                        }
+                        callback: value => '$' + value
                     }
                 }
             }
@@ -131,88 +137,50 @@ function initMemberCharts() {
     });
 }
 
-/**
- * Copy text to clipboard
- */
-function copyToClipboard(text, successMessage = 'Copied!') {
-    navigator.clipboard.writeText(text).then(() => {
-        showToast(successMessage, 'success');
-    }).catch(err => {
-        console.error('Failed to copy:', err);
-        showToast('Copy failed', 'error');
-    });
-}
+// =============================================================================
+// MEMBER DATA
+// =============================================================================
 
-/**
- * Show toast notification
- */
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-/**
- * Load member NFTs
- */
 async function loadMemberNFTs() {
     const member = window.MembersAuth?.getCurrentMember();
     if (!member || !member.tokenIds) return;
     
     console.log('Loading NFTs for member:', member.displayName);
     console.log('Token IDs:', member.tokenIds);
-    
-    // In production, fetch actual NFT metadata
-    // For now, just log the information
 }
 
-/**
- * Update member activity
- */
 function updateMemberActivity() {
     const lastActive = new Date().toLocaleTimeString();
     console.log('Member activity updated:', lastActive);
 }
 
-/**
- * Initialize member portal features
- */
+// =============================================================================
+// INITIALIZATION
+// =============================================================================
+
 function initMemberPortal() {
     console.log('🦨 Initializing member portal features...');
     
-    // Load charts if Chart.js is available
-    if (typeof Chart !== 'undefined') {
-        initMemberCharts();
-    }
-    
-    // Load member NFTs
+    initMemberCharts();
     loadMemberNFTs();
     
-    // Set up activity tracking
-    setInterval(updateMemberActivity, 60000); // Every minute
+    // Activity tracking
+    setInterval(updateMemberActivity, 60000);
     
     console.log('✅ Member portal features initialized');
 }
 
-// Initialize on DOM ready
+// Initialize
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMemberPortal);
 } else {
     initMemberPortal();
 }
 
-// Export functions for global use
+// =============================================================================
+// GLOBAL API
+// =============================================================================
+
 window.MembersPortal = {
     openNetworking,
     openRewards,
