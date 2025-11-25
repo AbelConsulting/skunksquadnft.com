@@ -5,24 +5,7 @@
 
 // Quick action handlers
 function openNetworking() {
-    showFeatureModal(
-        '🤝 Elite Networking',
-        `
-        <p><strong>Connect with Fellow Members</strong></p>
-        <ul style="text-align: left; margin: 1rem 0;">
-            <li>✨ Private member directory</li>
-            <li>💬 Direct messaging system</li>
-            <li>🌍 Global networking events</li>
-            <li>🤝 Collaboration opportunities</li>
-            <li>📊 Professional profiles</li>
-        </ul>
-        <p class="text-muted">Build lasting relationships with elite collectors and entrepreneurs worldwide.</p>
-        `,
-        '🚀 Coming Soon!',
-        () => {
-            console.log('Networking feature clicked');
-        }
-    );
+    window.location.href = '/networking.html';
 }
 
 function openRewards() {

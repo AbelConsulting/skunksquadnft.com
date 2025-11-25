@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤝 Elite Networking | SkunkSquad</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Connect with elite SkunkSquad members worldwide. Network, collaborate, and build lasting relationships.">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    <link rel="stylesheet" href="./styles/networking.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+</head>
+<body class="members-body">
+    <!-- Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">NETWORKING</span>
+                </div>
+                
+                <div class="member-status">
+                    <a href="./members.html" class="btn btn-outline btn-sm">← Back to Portal</a>
+                    <button class="btn btn-secondary btn-sm" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="networking-main">
+        <div class="container">
+            
+            <!-- Page Header -->
+            <section class="page-header">
+                <h1>🤝 Elite Member Networking</h1>
+                <p>Connect, collaborate, and build lasting relationships with SkunkSquad members worldwide</p>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="network-stats">
+                <div class="stat-card-small">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalMembers">--</span>
+                        <span class="stat-label">Total Members</span>
+                    </div>
+                </div>
+                <div class="stat-card-small">
+                    <div class="stat-icon">🌍</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalCountries">--</span>
+                        <span class="stat-label">Countries</span>
+                    </div>
+                </div>
+                <div class="stat-card-small">
+                    <div class="stat-icon">💼</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalIndustries">--</span>
+                        <span class="stat-label">Industries</span>
+                    </div>
+                </div>
+                <div class="stat-card-small">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="onlineNow">--</span>
+                        <span class="stat-label">Online Now</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search and Filters -->
+            <section class="search-filters">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search members by name, location, or industry..." class="search-input">
+                </div>
+                
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All Members</button>
+                    <button class="filter-tab" data-filter="online">🟢 Online</button>
+                    <button class="filter-tab" data-filter="verified">✓ Verified</button>
+                    <button class="filter-tab" data-filter="whale">🐋 Whales (5+ NFTs)</button>
+                </div>
+                
+                <div class="filter-dropdowns">
+                    <select id="locationFilter" class="filter-select">
+                        <option value="">🌍 All Locations</option>
+                        <option value="north-america">North America</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <select id="industryFilter" class="filter-select">
+                        <option value="">💼 All Industries</option>
+                        <option value="tech">Technology</option>
+                        <option value="finance">Finance</option>
+                        <option value="crypto">Crypto/Web3</option>
+                        <option value="entrepreneur">Entrepreneurship</option>
+                        <option value="creative">Creative/Arts</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <select id="sortBy" class="filter-select">
+                        <option value="recent">Recently Active</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="nfts">Most NFTs</option>
+                        <option value="joined">Recently Joined</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Member Directory -->
+            <section class="member-directory">
+                <div class="directory-header">
+                    <h2>Member Directory</h2>
+                    <span class="member-count"><span id="visibleCount">0</span> members</span>
+                </div>
+                
+                <div id="memberGrid" class="member-grid">
+                    <!-- Members will be dynamically loaded here -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading members...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Network -->
+            <section class="my-network">
+                <h2>🔗 My Network</h2>
+                <div class="network-tabs">
+                    <button class="network-tab active" data-tab="connections">Connections</button>
+                    <button class="network-tab" data-tab="pending">Pending Requests</button>
+                    <button class="network-tab" data-tab="suggestions">Suggested</button>
+                </div>
+                
+                <div class="network-content">
+                    <div id="connectionsTab" class="tab-content active">
+                        <div id="connectionsList" class="connections-list">
+                            <p class="empty-state">No connections yet. Start networking!</p>
+                        </div>
+                    </div>
+                    
+                    <div id="pendingTab" class="tab-content">
+                        <div id="pendingList" class="connections-list">
+                            <p class="empty-state">No pending requests</p>
+                        </div>
+                    </div>
+                    
+                    <div id="suggestionsTab" class="tab-content">
+                        <div id="suggestionsList" class="suggestions-list">
+                            <p class="empty-state">Loading suggestions...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Member Profile Modal -->
+    <div id="profileModal" class="profile-modal" style="display: none;">
+        <div class="profile-modal-overlay" onclick="closeProfileModal()"></div>
+        <div class="profile-modal-content">
+            <button class="profile-close" onclick="closeProfileModal()">&times;</button>
+            
+            <div class="profile-header">
+                <img id="profileAvatar" src="" alt="" class="profile-avatar">
+                <div class="profile-info">
+                    <h2 id="profileName">--</h2>
+                    <p id="profileTitle">--</p>
+                    <p id="profileLocation">--</p>
+                </div>
+                <div class="profile-badges">
+                    <!-- Badges will be added dynamically -->
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <span class="stat-value" id="profileNFTs">0</span>
+                    <span class="stat-label">NFTs Owned</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="stat-value" id="profileConnections">0</span>
+                    <span class="stat-label">Connections</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="stat-value" id="profileJoined">--</span>
+                    <span class="stat-label">Member Since</span>
+                </div>
+            </div>
+            
+            <div class="profile-body">
+                <div class="profile-section">
+                    <h3>About</h3>
+                    <p id="profileBio">--</p>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Interests</h3>
+                    <div id="profileInterests" class="interest-tags">
+                        <!-- Tags will be added dynamically -->
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Social Links</h3>
+                    <div id="profileSocial" class="social-links">
+                        <!-- Social links will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn btn-primary" onclick="connectWithMember()">
+                    <span class="btn-icon">🤝</span> Connect
+                </button>
+                <button class="btn btn-secondary" onclick="sendMessage()">
+                    <span class="btn-icon">💬</span> Message
+                </button>
+                <button class="btn btn-outline" onclick="shareProfile()">
+                    <span class="btn-icon">🔗</span> Share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./src/js/members-auth.js"></script>
+    <script src="./src/js/networking.js"></script>
+    
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            const member = window.MembersAuth?.getCurrentMember();
+            if (!member) {
+                window.location.href = './members.html';
+                return;
+            }
+            
+            // Setup logout
+            document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                if (confirm('Logout from members portal?')) {
+                    window.MembersAuth.logout();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
