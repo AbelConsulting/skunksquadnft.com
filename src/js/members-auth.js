@@ -118,8 +118,24 @@ async function handleWalletAuth() {
         
         // Check network
         const networkId = await web3Instance.eth.net.getId();
+        console.log('🌐 Current network ID:', networkId, '| Required:', MEMBERS_CONFIG.NETWORK_ID);
+        
         if (networkId !== MEMBERS_CONFIG.NETWORK_ID) {
-            throw new Error('WRONG_NETWORK');
+            const networkNames = {
+                1: 'Ethereum Mainnet',
+                11155111: 'Sepolia Testnet',
+                5: 'Goerli Testnet',
+                137: 'Polygon',
+                80001: 'Mumbai Testnet'
+            };
+            const currentNetwork = networkNames[networkId] || `Network ${networkId}`;
+            const requiredNetwork = networkNames[MEMBERS_CONFIG.NETWORK_ID] || `Network ${MEMBERS_CONFIG.NETWORK_ID}`;
+            
+            const error = new Error('WRONG_NETWORK');
+            error.currentNetwork = currentNetwork;
+            error.requiredNetwork = requiredNetwork;
+            error.networkId = networkId;
+            throw error;
         }
         
         // Initialize contract
@@ -195,10 +211,14 @@ async function handleWalletAuth() {
                 'https://metamask.io'
             );
         } else if (error.message === 'WRONG_NETWORK') {
+            const currentNet = error.currentNetwork || 'Unknown Network';
+            const requiredNet = error.requiredNetwork || 'Ethereum Mainnet';
+            
             showAuthError(
-                '🔗 Wrong Network',
-                'Please switch to Ethereum Mainnet in your wallet.',
-                null
+                '🔗 Wrong Network Detected',
+                `You are currently connected to <strong>${currentNet}</strong>.<br><br>SkunkSquad NFTs are on <strong>${requiredNet}</strong>.<br><br>Please switch your wallet to ${requiredNet} to continue.`,
+                null,
+                true // Add switch network button
             );
         } else if (error.message === 'NO_NFT') {
             showAuthError(
@@ -397,11 +417,46 @@ function updateMemberAvatar(tokenId) {
 }
 
 /**
+ * Switch to Ethereum Mainnet
+ */
+async function switchToMainnet() {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x1' }], // 0x1 = Mainnet
+        });
+        
+        // Close error modal
+        const modal = document.querySelector('.auth-error-modal');
+        if (modal) modal.remove();
+        
+        // Retry authentication
+        setTimeout(() => {
+            handleWalletAuth();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Failed to switch network:', error);
+        
+        if (error.code === 4902) {
+            alert('Please manually switch to Ethereum Mainnet in your wallet settings.');
+        } else {
+            alert('Failed to switch network. Please switch to Ethereum Mainnet manually in your wallet.');
+        }
+    }
+}
+
+/**
  * Show authentication error modal
  */
-function showAuthError(title, message, actionUrl) {
+function showAuthError(title, message, actionUrl, showSwitchNetwork = false) {
     const modal = document.createElement('div');
     modal.className = 'auth-error-modal';
+    
+    const switchNetworkBtn = showSwitchNetwork ? `
+        <button class="btn btn-primary" onclick="switchToMainnet()">🔄 Switch to Mainnet</button>
+    ` : '';
+    
     modal.innerHTML = `
         <div class="auth-error-content">
             <div class="auth-error-header">
@@ -411,7 +466,8 @@ function showAuthError(title, message, actionUrl) {
                 <p>${message}</p>
             </div>
             <div class="auth-error-actions">
-                ${actionUrl ? `<a href="${actionUrl}" class="btn btn-primary">Learn More</a>` : ''}
+                ${switchNetworkBtn}
+                ${actionUrl ? `<a href="${actionUrl}" class="btn btn-secondary">Learn More</a>` : ''}
                 <button class="btn btn-secondary" onclick="this.closest('.auth-error-modal').remove()">Close</button>
             </div>
         </div>
@@ -490,3 +546,6 @@ window.MembersAuth = {
     checkAuth: isAuthenticated, // Alias for compatibility
     logout: handleLogout
 };
+
+// Export utility functions
+window.switchToMainnet = switchToMainnet;
