@@ -132,13 +132,13 @@
             <div class="container">
                 <h2 class="section-title">⚡ Quick Actions</h2>
                 <div class="quick-actions-grid">
-                    <button class="action-card" onclick="openNetworking()">
+                    <button class="action-card" onclick="MembersPortal.openNetworking()">
                         <div class="action-icon">🤝</div>
                         <h3>Elite Networking</h3>
                         <p>Connect with fellow members</p>
                     </button>
                     
-                    <button class="action-card" onclick="openRewards()">
+                    <button class="action-card" onclick="MembersPortal.openRewards()">
                         <div class="action-icon">🎁</div>
                         <h3>Claim Rewards</h3>
                         <p>Exclusive member benefits</p>
@@ -150,7 +150,7 @@
                         <p>Live blockchain metrics & insights</p>
                     </a>
                     
-                    <button class="action-card" onclick="openEvents()">
+                    <button class="action-card" onclick="MembersPortal.openEvents()">
                         <div class="action-icon">📅</div>
                         <h3>Exclusive Events</h3>
                         <p>VIP access & meetups</p>
@@ -332,130 +332,20 @@
     </main>
 
     <!-- Scripts -->
-    <script src="./src/js/members.js"></script>
-    <script src="./src/js/wallet.js"></script>
-    
-    <!-- Web3 Integration -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="./src/js/members-auth.js"></script>
+    <script src="./src/js/members.js"></script>
     
     <script>
-        // Members portal initialization
+        // Additional member portal features
         document.addEventListener('DOMContentLoaded', function() {
-            initMembersPortal();
+            setupMemberFeatures();
         });
         
-        function initMembersPortal() {
-            // Check if user is already authenticated
-            const isAuthenticated = checkMemberAuthentication();
-            
-            if (isAuthenticated) {
-                showMembersDashboard();
-            } else {
-                showAuthGuard();
-            }
-        }
-        
-        function checkMemberAuthentication() {
-            // Check localStorage for previous authentication
-            const memberData = localStorage.getItem('skunksquad_member');
-            return memberData ? JSON.parse(memberData) : false;
-        }
-        
-        function showAuthGuard() {
-            document.getElementById('authGuard').style.display = 'flex';
-            document.getElementById('membersDashboard').style.display = 'none';
-        }
-        
-        function showMembersDashboard() {
-            document.getElementById('authGuard').style.display = 'none';
-            document.getElementById('membersDashboard').style.display = 'block';
-            loadMemberData();
-        }
-        
-        function loadMemberData() {
-            // Load member data and update UI
-            const memberData = checkMemberAuthentication();
-            if (memberData) {
-                document.getElementById('memberName').textContent = memberData.name || 'Elite Member';
-                document.getElementById('welcomeName').textContent = memberData.name || 'Elite Member';
-            }
-        }
-        
-        // Authentication handlers
-        document.getElementById('connectWalletAuth').addEventListener('click', async function() {
-            try {
-                // Connect wallet and verify NFT ownership
-                if (typeof window.ethereum !== 'undefined') {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    const address = accounts[0];
-                    
-                    // Simulate NFT verification (replace with actual smart contract call)
-                    const hasNFT = await verifyNFTOwnership(address);
-                    
-                    if (hasNFT) {
-                        authenticateMember({
-                            address: address,
-                            name: address.slice(0, 6) + '...' + address.slice(-4),
-                            authenticated: true
-                        });
-                        showMembersDashboard();
-                    } else {
-                        alert('❌ No SkunkSquad NFT found in this wallet.\n\nPlease connect a wallet that owns a SkunkSquad NFT or purchase one at skunksquadnft.com');
-                    }
-                } else {
-                    alert('Please install MetaMask or another Web3 wallet to continue.');
-                }
-            } catch (error) {
-                console.error('Authentication error:', error);
-                alert('Authentication failed. Please try again.');
-            }
-        });
-        
-        document.getElementById('verifyTokenBtn').addEventListener('click', function() {
-            const tokenId = document.getElementById('tokenIdInput').value;
-            if (tokenId) {
-                // Simulate token verification
-                authenticateMember({
-                    tokenId: tokenId,
-                    name: `Member #${tokenId}`,
-                    authenticated: true
-                });
-                showMembersDashboard();
-            } else {
-                alert('Please enter a valid token ID.');
-            }
-        });
-        
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('skunksquad_member');
-            window.location.reload();
-        });
-        
-        function authenticateMember(memberData) {
-            localStorage.setItem('skunksquad_member', JSON.stringify(memberData));
-        }
-        
-        async function verifyNFTOwnership(address) {
-            // Placeholder for actual smart contract verification
-            // This would check if the address owns any SkunkSquad NFTs
-            return true; // Simulate success for demo
-        }
-        
-        // Quick action handlers
-        function openNetworking() {
-            alert('🤝 Elite Networking\n\nConnect with fellow SkunkSquad members worldwide. Share insights, collaborate on projects, and build lasting professional relationships.\n\n🚀 Coming soon!');
-        }
-        
-        function openRewards() {
-            alert('🎁 Member Rewards\n\n• Monthly airdrops\n• Exclusive merchandise\n• Event tickets\n• Partnership discounts\n\n🚀 Claim system launching soon!');
-        }
-        
-        function openAnalytics() {
-            alert('📊 Portfolio Analytics\n\nTrack your SkunkSquad NFT performance:\n• Real-time valuations\n• Rarity rankings\n• Market trends\n• Trading insights\n\n🚀 Advanced analytics coming soon!');
-        }
-        
-        function openEvents() {
-            alert('📅 Exclusive Events\n\n• VIP networking dinners\n• Private investment seminars\n• Tech conferences access\n• Global meetups\n\n🚀 Event calendar launching soon!');
+        function setupMemberFeatures() {
+            // Setup additional member portal features
+            console.log('🦨 Member portal features initialized');
         }
         
         console.log('🦨 SkunkSquad Members Portal Loaded');

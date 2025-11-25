@@ -685,3 +685,41 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
 }
+
+/* Dashboard Member Info */
+.dashboard-member-info {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-member-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.member-icon {
+    font-size: 1.25rem;
+}
+
+.dashboard-logout-btn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.25rem;
+}
+
+.dashboard-logout-btn:hover {
+    background: var(--error);
+    color: white;
+}
