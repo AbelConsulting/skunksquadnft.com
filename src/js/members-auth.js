@@ -127,7 +127,13 @@ async function handleWalletAuth() {
         
         // Verify NFT ownership
         button.innerHTML = '<span class="btn-icon">🔍</span> Verifying NFTs...';
+        
+        console.log('🔍 Checking NFT balance for address:', address);
+        console.log('📝 Contract:', MEMBERS_CONFIG.CONTRACT_ADDRESS);
+        console.log('🌐 Network ID:', networkId);
+        
         const nftBalance = await contract.methods.balanceOf(address).call();
+        console.log('💎 NFT Balance:', nftBalance);
         
         if (parseInt(nftBalance) === 0) {
             throw new Error('NO_NFT');
@@ -171,7 +177,13 @@ async function handleWalletAuth() {
         }, 1000);
         
     } catch (error) {
-        console.error('Authentication error:', error);
+        console.error('❌ Authentication error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
+        
         button.innerHTML = originalText;
         button.disabled = false;
         
@@ -192,7 +204,7 @@ async function handleWalletAuth() {
             showAuthError(
                 '❌ No NFT Found',
                 'This wallet does not own any SkunkSquad NFTs. Please connect a different wallet or mint an NFT first.',
-                '../index.html#home'
+                './index.html#home'
             );
         } else if (error.code === 4001) {
             showAuthError(
@@ -475,5 +487,6 @@ window.MembersAuth = {
     init: initMembersAuth,
     getCurrentMember,
     isAuthenticated,
+    checkAuth: isAuthenticated, // Alias for compatibility
     logout: handleLogout
 };

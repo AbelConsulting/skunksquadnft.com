@@ -160,8 +160,8 @@ let pendingRequests = [4]; // IDs of pending connection requests
 // Initialize networking page
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication
-    if (typeof MembersAuth === 'undefined' || !MembersAuth.checkAuth()) {
-        window.location.href = '/members.html';
+    if (typeof MembersAuth === 'undefined' || !MembersAuth.isAuthenticated()) {
+        window.location.href = './members.html';
         return;
     }
 
