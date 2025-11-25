@@ -196,8 +196,10 @@ async function handleWalletAuth() {
         } else if (error.message === 'NO_NFT') {
             showAuthError(
                 '❌ No NFT Found',
-                'This wallet does not own any SkunkSquad NFTs. Please connect a different wallet or mint an NFT first.',
-                './index.html#home'
+                'This wallet does not own any SkunkSquad NFTs on Ethereum Mainnet.',
+                null,
+                false,
+                true // Show mint/buy options
             );
         } else if (error.code === 4001) {
             showAuthError(
@@ -422,12 +424,31 @@ async function switchToMainnet() {
 /**
  * Show authentication error modal
  */
-function showAuthError(title, message, actionUrl, showSwitchNetwork = false) {
+function showAuthError(title, message, actionUrl, showSwitchNetwork = false, showNFTOptions = false) {
     const modal = document.createElement('div');
     modal.className = 'auth-error-modal';
     
     const switchNetworkBtn = showSwitchNetwork ? `
         <button class="btn btn-primary" onclick="switchToMainnet()">🔄 Switch to Mainnet</button>
+    ` : '';
+    
+    const nftOptionsHtml = showNFTOptions ? `
+        <div style="margin: 1.5rem 0; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 8px;">
+            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                <strong>To access the members portal, you need a SkunkSquad NFT:</strong>
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <a href="https://opensea.io/collection/skunksquad" target="_blank" class="btn btn-primary" style="flex: 1; min-width: 150px;">
+                    🛒 Buy on OpenSea
+                </a>
+                <a href="https://blur.io/collection/skunksquad" target="_blank" class="btn btn-primary" style="flex: 1; min-width: 150px;">
+                    ⚡ Buy on Blur
+                </a>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                Or connect a different wallet that owns a SkunkSquad NFT
+            </p>
+        </div>
     ` : '';
     
     modal.innerHTML = `
@@ -437,10 +458,11 @@ function showAuthError(title, message, actionUrl, showSwitchNetwork = false) {
             </div>
             <div class="auth-error-body">
                 <p>${message}</p>
+                ${nftOptionsHtml}
             </div>
             <div class="auth-error-actions">
                 ${switchNetworkBtn}
-                ${actionUrl ? `<a href="${actionUrl}" class="btn btn-secondary">Learn More</a>` : ''}
+                ${actionUrl && !showNFTOptions ? `<a href="${actionUrl}" class="btn btn-secondary">Learn More</a>` : ''}
                 <button class="btn btn-secondary" onclick="this.closest('.auth-error-modal').remove()">Close</button>
             </div>
         </div>
@@ -448,12 +470,14 @@ function showAuthError(title, message, actionUrl, showSwitchNetwork = false) {
     
     document.body.appendChild(modal);
     
-    // Auto-close after 10 seconds
-    setTimeout(() => {
-        if (modal.parentNode) {
-            modal.remove();
-        }
-    }, 10000);
+    // Don't auto-close if showing NFT options
+    if (!showNFTOptions) {
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.remove();
+            }
+        }, 10000);
+    }
 }
 
 /**
