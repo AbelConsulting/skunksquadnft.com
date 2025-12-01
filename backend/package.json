@@ -1,0 +1,34 @@
+{
+  "name": "skunksquad-networking-backend",
+  "version": "1.0.0",
+  "description": "Backend API for SkunkSquad Networking Portal",
+  "main": "networking-server.js",
+  "scripts": {
+    "start": "node networking-server.js",
+    "dev": "nodemon networking-server.js",
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js"
+  },
+  "keywords": ["nft", "networking", "web3", "ethereum"],
+  "author": "SkunkSquad",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3",
+    "web3": "^4.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
