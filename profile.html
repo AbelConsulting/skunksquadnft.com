@@ -97,6 +97,17 @@
                             <textarea id="bioInput" class="form-textarea" rows="4" placeholder="Tell other members about yourself, your background, and what you're interested in..." maxlength="500"></textarea>
                             <small class="form-help"><span id="bioCount">0</span>/500 characters</small>
                         </div>
+                        
+                        <!-- Badge Showcase -->
+                        <div class="form-section" style="margin-top: 2rem; padding: 1.5rem; background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 1rem;">
+                            <h3 style="color: #f1f5f9; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                🏆 Achievements & Badges
+                            </h3>
+                            <div id="profileBadges" class="profile-badges-showcase">
+                                <p style="color: #94a3b8; text-align: center; padding: 2rem;">Loading badges...</p>
+                            </div>
+                            <a href="./badges.html" class="btn btn-outline" style="width: 100%; margin-top: 1rem;">View All Badges →</a>
+                        </div>
 
                         <!-- Industry -->
                         <div class="form-group">
@@ -235,6 +246,7 @@
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
     <script src="./backend/networking-api-client.js"></script>
     <script src="./src/js/members-auth.js"></script>
+    <script src="./src/js/badges.js"></script>
     <script src="./src/js/profile-editor.js"></script>
 </body>
 </html>

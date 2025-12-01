@@ -30,6 +30,15 @@ const ProfileEditor = {
         // Load existing profile
         await this.loadProfile();
         
+        // Load badges
+        if (window.BadgeSystem) {
+            await window.BadgeSystem.init();
+            const badgesContainer = document.getElementById('profileBadges');
+            if (badgesContainer) {
+                window.BadgeSystem.renderBadgeList('profileBadges', { limit: 6 });
+            }
+        }
+        
         console.log('✅ Profile Editor initialized');
     },
 

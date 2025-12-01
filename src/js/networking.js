@@ -449,7 +449,10 @@ function renderMemberGrid() {
             <div class="member-card-header">
                 <img src="${member.avatar}" alt="${member.name}" class="member-avatar">
                 <div class="member-basic-info">
-                    <div class="member-name">${member.name}</div>
+                    <div class="member-name">
+                        ${member.name}
+                        <span class="member-badges-inline" data-member-id="${member.id}"></span>
+                    </div>
                     <div class="member-title">${member.title}</div>
                 </div>
             </div>
@@ -484,6 +487,16 @@ function renderMemberGrid() {
     `).join('');
 
     if (visibleCount) visibleCount.textContent = filteredMembers.length;
+    
+    // Load badges for all members
+    if (window.BadgeSystem) {
+        filteredMembers.forEach(member => {
+            const container = document.querySelector(`[data-member-id="${member.id}"]`);
+            if (container) {
+                BadgeSystem.renderInlineBadges(member.id, container, { limit: 3 });
+            }
+        });
+    }
 }
 
 // =============================================================================

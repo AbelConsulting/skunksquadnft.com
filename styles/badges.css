@@ -1,5 +1,44 @@
 /* Badge System Styles */
 
+/* Inline Badges (for member cards, profiles) */
+.member-badges-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.member-badges-inline .badge-inline {
+    font-size: 0.875rem;
+}
+
+/* Badge Showcase (Profile/Dashboard) */
+.profile-badges-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.profile-badges-showcase .badge-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.profile-badges-showcase .badge-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-badges-showcase .badge-name {
+    font-size: 0.875rem;
+}
+
+.profile-badges-showcase .badge-description {
+    display: none;
+}
+
 /* Badge Cards (List View) */
 .badge-card {
     display: flex;

@@ -329,6 +329,16 @@ function initMemberPortal() {
     initMemberCharts();
     loadMemberNFTs();
     
+    // Load badges
+    if (window.BadgeSystem) {
+        window.BadgeSystem.init().then(() => {
+            const badgesContainer = document.getElementById('dashboardBadges');
+            if (badgesContainer) {
+                window.BadgeSystem.renderBadgeList('dashboardBadges', { limit: 6 });
+            }
+        });
+    }
+    
     // Activity tracking
     setInterval(updateMemberActivity, 60000);
     
