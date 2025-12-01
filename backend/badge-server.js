@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./config/db-sqlite');
+const badgeService = require('./services/badge-service-simple');
 
 const app = express();
 const PORT = 3001;
@@ -28,28 +29,61 @@ app.get('/api/badges', async (req, res) => {
 // Get badges for a specific member
 app.get('/api/badges/my', async (req, res) => {
     try {
-        // For now, return sample earned badges
-        // In production, this would check authentication and query member_badges
-        const result = await db.query(`
-            SELECT bd.* FROM badge_definitions bd
-            LIMIT 3
-        `);
-        res.json(result.rows);
+        // For demo, use member ID 1 or from query param
+        const memberId = parseInt(req.query.memberId) || 1;
+        
+        const badges = await badgeService.getMemberBadges(memberId);
+        res.json(badges);
     } catch (error) {
         console.error('Error fetching member badges:', error);
         res.status(500).json({ error: 'Failed to fetch member badges' });
     }
 });
 
-// Check and award badges (simplified for testing)
+// Check and award badges (auto-award based on current stats)
 app.post('/api/badges/check', async (req, res) => {
     try {
-        // For testing, return empty array (no new badges)
-        // In production, this would check criteria and award badges
-        res.json({ badges: [], message: 'No new badges at this time' });
+        const { memberId = 1, nftCount = 0, connectionCount = 0, verified = false } = req.body;
+        
+        // Member data for checking
+        const memberData = {
+            nftCount,
+            connectionCount,
+            memberNumber: memberId, // Use member ID as member number for demo
+            verified
+        };
+        
+        // Check and award badges
+        const newBadges = await badgeService.checkAllBadges(memberId, memberData);
+        
+        res.json({ 
+            badges: newBadges,
+            message: newBadges.length > 0 
+                ? `Awarded ${newBadges.length} new badge(s)!` 
+                : 'No new badges at this time'
+        });
     } catch (error) {
         console.error('Error checking badges:', error);
         res.status(500).json({ error: 'Failed to check badges' });
+    }
+});
+
+// Get badge progress for a member
+app.get('/api/badges/progress', async (req, res) => {
+    try {
+        const memberId = parseInt(req.query.memberId) || 1;
+        const nftCount = parseInt(req.query.nftCount) || 0;
+        const connectionCount = parseInt(req.query.connectionCount) || 0;
+        
+        const progress = await badgeService.getBadgeProgress(memberId, {
+            nftCount,
+            connectionCount
+        });
+        
+        res.json(progress);
+    } catch (error) {
+        console.error('Error fetching badge progress:', error);
+        res.status(500).json({ error: 'Failed to fetch badge progress' });
     }
 });
 
@@ -97,12 +131,17 @@ app.listen(PORT, () => {
     console.log(`   GET  /health                     - Health check`);
     console.log(`   GET  /api/badges                 - Get all badges`);
     console.log(`   GET  /api/badges/my              - Get my badges`);
-    console.log(`   POST /api/badges/check           - Check for new badges`);
+    console.log(`   POST /api/badges/check           - Check & auto-award badges`);
+    console.log(`   GET  /api/badges/progress        - Get badge progress`);
     console.log(`   GET  /api/badges/leaderboard     - Get leaderboard`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
     console.log('✨ Ready to test! Try:');
     console.log(`   http://localhost:${PORT}/api/badges`);
+    console.log('');
+    console.log('🏆 Auto-Award Example:');
+    console.log(`   POST http://localhost:${PORT}/api/badges/check`);
+    console.log(`   Body: {"memberId": 1, "nftCount": 5, "connectionCount": 10}`);
     console.log('');
 });
 
