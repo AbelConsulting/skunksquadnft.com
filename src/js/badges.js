@@ -87,31 +87,60 @@ const BadgeSystem = {
         return [];
     },
 
-    renderBadgeList(containerId, badgeList = null) {
+    renderBadgeList(containerId, options = {}) {
         const container = document.getElementById(containerId);
         if (!container) return;
         
-        const badges = badgeList || this.myBadges;
+        const limit = options.limit || null;
+        let badges = options.badges || this.myBadges;
+        
+        if (limit && badges.length > limit) {
+            badges = badges.slice(0, limit);
+        }
         
         if (badges.length === 0) {
-            container.innerHTML = '<p class="empty-state">No badges earned yet. Start exploring to unlock achievements!</p>';
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #94a3b8;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                    <p>No badges earned yet. Start exploring to unlock achievements!</p>
+                </div>
+            `;
             return;
         }
         
-        container.innerHTML = badges.map(badge => `
-            <div class="badge-card ${badge.rarity}">
-                <div class="badge-icon">${badge.icon}</div>
-                <div class="badge-info">
-                    <h4 class="badge-name">${badge.name}</h4>
-                    <p class="badge-description">${badge.description}</p>
-                    <div class="badge-meta">
-                        <span class="badge-rarity ${badge.rarity}">${this.capitalizeFirst(badge.rarity)}</span>
-                        <span class="badge-points">+${badge.points} pts</span>
-                        ${badge.earned_at ? `<span class="badge-date">Earned ${this.formatDate(badge.earned_at)}</span>` : ''}
+        container.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                ${badges.map(badge => `
+                    <div class="badge-card ${badge.rarity || 'common'}" style="cursor: pointer;" onclick="BadgeSystem.showBadgeModal(${badge.id})">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-info">
+                            <h4 class="badge-name">${badge.name}</h4>
+                            ${badge.tier ? `<div class="badge-tier badge-tier-${badge.tier}">${this.capitalizeFirst(badge.tier)}</div>` : ''}
+                            <div class="badge-meta">
+                                <span class="badge-rarity ${badge.rarity || 'common'}">${this.capitalizeFirst(badge.rarity || 'common')}</span>
+                                ${badge.points ? `<span class="badge-points">+${badge.points} pts</span>` : ''}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                `).join('')}
             </div>
-        `).join('');
+        `;
+    },
+
+    renderInlineBadges(memberId, container, options = {}) {
+        const limit = options.limit || 3;
+        
+        // For now, show sample badges - will be replaced with real member badges from API
+        const badges = this.myBadges.slice(0, limit);
+        
+        if (!container || badges.length === 0) {
+            if (container) container.innerHTML = '';
+            return;
+        }
+        
+        container.innerHTML = badges.map(badge => 
+            `<span class="badge-inline badge-tier-${badge.tier || 'bronze'}" title="${badge.name}">${badge.icon}</span>`
+        ).join('');
     },
 
     renderBadgeGrid(containerId, options = {}) {
@@ -131,14 +160,83 @@ const BadgeSystem = {
             const locked = !earned && showLocked;
             
             return `
-                <div class="badge-item ${badge.rarity} ${locked ? 'locked' : ''}">
+                <div class="badge-item ${badge.rarity} ${locked ? 'locked' : ''}" onclick="BadgeSystem.showBadgeModal(${badge.id})">
                     <div class="badge-icon-large">${locked ? '🔒' : badge.icon}</div>
                     <div class="badge-title">${badge.name}</div>
+                    ${badge.tier ? `<div class="badge-tier badge-tier-${badge.tier}">${this.capitalizeFirst(badge.tier)}</div>` : ''}
                     <div class="badge-rarity-tag ${badge.rarity}">${this.capitalizeFirst(badge.rarity)}</div>
                     ${earned ? '<div class="badge-earned">✓ Earned</div>' : ''}
+                    ${!earned && badge.progress ? `<div class="badge-progress-info">${badge.progress.current}/${badge.progress.required}</div>` : ''}
                 </div>
             `;
         }).join('');
+    },
+
+    showBadgeModal(badgeId) {
+        const badge = this.badges.find(b => b.id === badgeId) || this.myBadges.find(b => b.id === badgeId);
+        if (!badge) return;
+        
+        const earned = this.myBadges.some(mb => mb.id === badgeId);
+        
+        const modal = document.createElement('div');
+        modal.className = 'badge-modal';
+        modal.innerHTML = `
+            <div class="badge-modal-overlay" onclick="BadgeSystem.closeBadgeModal()"></div>
+            <div class="badge-modal-content">
+                <button class="badge-modal-close" onclick="BadgeSystem.closeBadgeModal()">&times;</button>
+                <div class="badge-modal-header">
+                    <div class="badge-icon-huge">${badge.icon}</div>
+                    <h2>${badge.name}</h2>
+                    ${badge.tier ? `<div class="badge-tier badge-tier-${badge.tier}">${this.capitalizeFirst(badge.tier)}</div>` : ''}
+                </div>
+                <div class="badge-modal-body">
+                    <p class="badge-description">${badge.description}</p>
+                    <div class="badge-stats">
+                        <div class="badge-stat">
+                            <span class="badge-stat-label">Rarity</span>
+                            <span class="badge-stat-value ${badge.rarity}">${this.capitalizeFirst(badge.rarity)}</span>
+                        </div>
+                        <div class="badge-stat">
+                            <span class="badge-stat-label">Points</span>
+                            <span class="badge-stat-value">${badge.points}</span>
+                        </div>
+                        ${badge.category ? `
+                            <div class="badge-stat">
+                                <span class="badge-stat-label">Category</span>
+                                <span class="badge-stat-value">${this.capitalizeFirst(badge.category)}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${earned ? `
+                        <div class="badge-earned-info">
+                            <span class="badge-earned-check">✓</span> 
+                            Earned ${badge.earned_at ? this.formatDate(badge.earned_at) : 'recently'}
+                        </div>
+                    ` : badge.progress ? `
+                        <div class="badge-progress-section">
+                            <div class="badge-progress-header">
+                                <span>Progress</span>
+                                <span>${badge.progress.current}/${badge.progress.required}</span>
+                            </div>
+                            <div class="badge-progress-bar">
+                                <div class="badge-progress-fill" style="width: ${(badge.progress.current / badge.progress.required) * 100}%"></div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('active'), 10);
+    },
+
+    closeBadgeModal() {
+        const modal = document.querySelector('.badge-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            setTimeout(() => modal.remove(), 300);
+        }
     },
 
     renderBadgeRow(badges, maxDisplay = 5) {

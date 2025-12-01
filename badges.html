@@ -137,25 +137,44 @@
                 return;
             }
 
+            // Show loading state
+            showLoadingState();
+
             // Wait for BadgeSystem to initialize
             if (window.BadgeSystem) {
                 await window.BadgeSystem.init();
                 await loadBadgeData();
+            } else {
+                // BadgeSystem not loaded, show error
+                showErrorState();
             }
         });
 
+        function showLoadingState() {
+            document.getElementById('myBadgesList').innerHTML = '<div style="text-align: center; padding: 3rem;"><div class="loading-spinner">⏳</div><p style="color: #94a3b8; margin-top: 1rem;">Loading badges...</p></div>';
+        }
+
+        function showErrorState() {
+            document.getElementById('myBadgesList').innerHTML = '<div style="text-align: center; padding: 3rem;"><p style="color: #ef4444;">Error loading badge system. Please refresh the page.</p></div>';
+        }
+
         async function loadBadgeData() {
-            // Render my badges
-            BadgeSystem.renderBadgeList('myBadgesList');
-            
-            // Render all badges grid
-            renderAllBadges();
-            
-            // Render leaderboard
-            BadgeSystem.renderLeaderboard('badgeLeaderboard', 20);
-            
-            // Update stats
-            updateStats();
+            try {
+                // Render my badges
+                BadgeSystem.renderBadgeList('myBadgesList');
+                
+                // Render all badges grid
+                renderAllBadges();
+                
+                // Render leaderboard
+                BadgeSystem.renderLeaderboard('badgeLeaderboard', 20);
+                
+                // Update stats
+                updateStats();
+            } catch (error) {
+                console.error('Error loading badge data:', error);
+                showErrorState();
+            }
         }
 
         function renderAllBadges() {
@@ -171,7 +190,7 @@
         }
 
         function updateStats() {
-            const myBadges = BadgeSystem.myBadges;
+            const myBadges = BadgeSystem.myBadges || [];
             
             document.getElementById('totalBadgesEarned').textContent = myBadges.length;
             
@@ -182,6 +201,24 @@
                 b.rarity === 'rare' || b.rarity === 'epic' || b.rarity === 'legendary'
             ).length;
             document.getElementById('rareBadges').textContent = rareBadges;
+            
+            // Leaderboard rank will be updated via API
+            updateLeaderboardRank();
+        }
+        
+        async function updateLeaderboardRank() {
+            try {
+                const leaderboard = await BadgeSystem.getLeaderboard(100);
+                const member = window.MembersAuth?.getCurrentMember();
+                if (member && leaderboard) {
+                    const myRank = leaderboard.findIndex(m => m.wallet_address === member.walletAddress);
+                    if (myRank !== -1) {
+                        document.getElementById('leaderboardRank').textContent = `#${myRank + 1}`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting rank:', error);
+            }
         }
 
         function switchTab(tabName) {
