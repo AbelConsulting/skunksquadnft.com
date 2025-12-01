@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Integration Test | SkunkSquad</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    <link rel="stylesheet" href="./styles/badges.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="members-body">
+    <!-- Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">TEST MODE</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding: 3rem 0;">
+        <div class="container" style="max-width: 1200px;">
+            
+            <h1 style="text-align: center; color: #f1f5f9; margin-bottom: 1rem;">
+                🧪 Badge System Integration Test
+            </h1>
+            <p style="text-align: center; color: #94a3b8; margin-bottom: 3rem;">
+                Testing badge integration with live backend
+            </p>
+
+            <!-- API Status -->
+            <section class="quick-actions-section" style="margin-bottom: 2rem;">
+                <div class="container">
+                    <h2 class="section-title">📡 Backend Connection</h2>
+                    <div id="apiStatus" style="padding: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem;">
+                        <p style="color: #94a3b8;">Checking connection...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Badge Stats -->
+            <section class="quick-actions-section" style="margin-bottom: 2rem;">
+                <div class="container">
+                    <h2 class="section-title">📊 Badge Statistics</h2>
+                    <div class="quick-actions-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                        <div class="action-card" style="text-align: center;">
+                            <div class="action-icon">🏆</div>
+                            <h3 id="totalBadgesAvailable">--</h3>
+                            <p>Total Badges Available</p>
+                        </div>
+                        <div class="action-card" style="text-align: center;">
+                            <div class="action-icon">✨</div>
+                            <h3 id="myBadgesEarned">--</h3>
+                            <p>My Badges Earned</p>
+                        </div>
+                        <div class="action-card" style="text-align: center;">
+                            <div class="action-icon">🎯</div>
+                            <h3 id="totalPoints">--</h3>
+                            <p>Total Points</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Available Badges -->
+            <section class="my-nfts-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">🎯 All Available Badges</h2>
+                    </div>
+                    <div id="allBadgesDisplay" style="margin-top: 1.5rem;">
+                        <div style="text-align: center; padding: 2rem;">
+                            <div class="loading-spinner">⏳</div>
+                            <p style="color: #94a3b8; margin-top: 1rem;">Loading badges from backend...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Earned Badges -->
+            <section class="my-nfts-section" style="margin-top: 3rem;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">🏆 My Earned Badges (Sample)</h2>
+                    </div>
+                    <div id="myBadgesDisplay" style="margin-top: 1.5rem;">
+                        <div style="text-align: center; padding: 2rem;">
+                            <div class="loading-spinner">⏳</div>
+                            <p style="color: #94a3b8; margin-top: 1rem;">Loading your badges...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section style="margin-top: 3rem; text-align: center;">
+                <a href="./badges.html" class="btn btn-primary" style="margin: 0.5rem;">
+                    View Full Badge Page →
+                </a>
+                <a href="./badge-demo.html" class="btn btn-outline" style="margin: 0.5rem;">
+                    View Demo Page
+                </a>
+                <a href="./members.html" class="btn btn-outline" style="margin: 0.5rem;">
+                    Members Portal
+                </a>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="./backend/networking-api-client.js"></script>
+    <script src="./src/js/badges.js"></script>
+    
+    <script>
+        const API_BASE = 'http://localhost:3001';
+
+        // Test API connection
+        async function testConnection() {
+            const statusDiv = document.getElementById('apiStatus');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/badges`);
+                
+                if (response.ok) {
+                    const badges = await response.json();
+                    statusDiv.innerHTML = `
+                        <div style="color: #10b981;">
+                            ✅ <strong>Connected to Backend</strong>
+                            <p style="margin-top: 0.5rem; color: #94a3b8;">
+                                Server: ${API_BASE}<br>
+                                Badges loaded: ${badges.length}
+                            </p>
+                        </div>
+                    `;
+                    return badges;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div style="color: #ef4444;">
+                        ❌ <strong>Backend Connection Failed</strong>
+                        <p style="margin-top: 0.5rem; color: #94a3b8;">
+                            Error: ${error.message}<br>
+                            Make sure the server is running: <code>node backend/badge-server.js</code>
+                        </p>
+                    </div>
+                `;
+                return null;
+            }
+        }
+
+        // Load and display badges
+        async function loadBadges() {
+            const badges = await testConnection();
+            
+            if (!badges) {
+                document.getElementById('allBadgesDisplay').innerHTML = `
+                    <p style="text-align: center; color: #ef4444; padding: 2rem;">
+                        Failed to load badges. Check backend connection.
+                    </p>
+                `;
+                return;
+            }
+
+            // Update stats
+            document.getElementById('totalBadgesAvailable').textContent = badges.length;
+            document.getElementById('myBadgesEarned').textContent = '3'; // Sample
+            
+            const totalPoints = badges.reduce((sum, b) => sum + (b.points || 0), 0);
+            document.getElementById('totalPoints').textContent = totalPoints;
+
+            // Display all badges
+            const allBadgesHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                    ${badges.map((badge, index) => {
+                        const earned = index < 3; // First 3 are "earned" for demo
+                        return `
+                            <div class="badge-card ${badge.rarity}" style="cursor: pointer; opacity: ${earned ? 1 : 0.6};" onclick="showBadgeDetail(${badge.id}, ${JSON.stringify(badge).replace(/"/g, '&quot;')})">
+                                <div class="badge-icon">${earned ? badge.icon : '🔒'}</div>
+                                <div class="badge-info">
+                                    <h4 class="badge-name">${badge.name}</h4>
+                                    <div class="badge-tier badge-tier-${badge.tier}">${badge.tier}</div>
+                                    <div class="badge-meta">
+                                        <span class="badge-rarity ${badge.rarity}">${badge.rarity}</span>
+                                        <span class="badge-points">+${badge.points} pts</span>
+                                    </div>
+                                    ${earned ? '<div style="color: #10b981; margin-top: 0.5rem; font-size: 0.75rem;">✓ Earned</div>' : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            document.getElementById('allBadgesDisplay').innerHTML = allBadgesHTML;
+
+            // Display earned badges
+            const earnedBadges = badges.slice(0, 3);
+            const myBadgesHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
+                    ${earnedBadges.map(badge => `
+                        <div class="badge-card ${badge.rarity}" style="cursor: pointer;" onclick="showBadgeDetail(${badge.id}, ${JSON.stringify(badge).replace(/"/g, '&quot;')})">
+                            <div class="badge-icon">${badge.icon}</div>
+                            <div class="badge-info">
+                                <h4 class="badge-name">${badge.name}</h4>
+                                <p class="badge-description">${badge.description}</p>
+                                <div class="badge-tier badge-tier-${badge.tier}">${badge.tier}</div>
+                                <div class="badge-meta">
+                                    <span class="badge-rarity ${badge.rarity}">${badge.rarity}</span>
+                                    <span class="badge-points">+${badge.points} pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('myBadgesDisplay').innerHTML = myBadgesHTML;
+        }
+
+        // Show badge detail modal
+        function showBadgeDetail(badgeId, badge) {
+            if (typeof badge === 'string') {
+                badge = JSON.parse(badge.replace(/&quot;/g, '"'));
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'badge-modal active';
+            modal.innerHTML = `
+                <div class="badge-modal-overlay" onclick="this.parentElement.remove()"></div>
+                <div class="badge-modal-content">
+                    <button class="badge-modal-close" onclick="this.closest('.badge-modal').remove()">&times;</button>
+                    <div class="badge-modal-header">
+                        <div class="badge-icon-huge">${badge.icon}</div>
+                        <h2>${badge.name}</h2>
+                        <div class="badge-tier badge-tier-${badge.tier}">${badge.tier}</div>
+                    </div>
+                    <div class="badge-modal-body">
+                        <p class="badge-description">${badge.description}</p>
+                        <div class="badge-stats">
+                            <div class="badge-stat">
+                                <span class="badge-stat-label">Rarity</span>
+                                <span class="badge-stat-value ${badge.rarity}">${badge.rarity}</span>
+                            </div>
+                            <div class="badge-stat">
+                                <span class="badge-stat-label">Points</span>
+                                <span class="badge-stat-value">${badge.points}</span>
+                            </div>
+                            <div class="badge-stat">
+                                <span class="badge-stat-label">Category</span>
+                                <span class="badge-stat-value">${badge.category}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 0.5rem;">
+                            <strong>Criteria:</strong>
+                            <pre style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">${badge.criteria}</pre>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Badge Integration Test - Loading...');
+            loadBadges();
+        });
+    </script>
+</body>
+</html>

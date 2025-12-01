@@ -84,6 +84,7 @@
     "nft.storage": "^7.2.0",
     "nodemon": "^3.0.2",
     "serve": "^14.2.1",
+    "sqlite3": "^5.1.7",
     "stripe": "^14.21.0"
   },
   "directories": {

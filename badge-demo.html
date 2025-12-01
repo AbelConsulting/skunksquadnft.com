@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Demo | SkunkSquad</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/badges.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            font-family: 'Inter', -apple-system, sans-serif;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #8b5cf6;
+            margin-bottom: 2rem;
+        }
+        .demo-section {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .demo-section h2 {
+            color: #c4b5fd;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🏆 Badge System Demo</h1>
+        
+        <div class="demo-section">
+            <h2>Sample Badges - List View</h2>
+            <div id="badgeDemo1"></div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Sample Badges - Grid View</h2>
+            <div id="badgeDemo2"></div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Inline Badges Example</h2>
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 0.5rem;">
+                <strong style="font-size: 1.125rem;">SuperSkunk420</strong>
+                <span id="badgeDemo3"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample badge data
+        const sampleBadges = [
+            { id: 1, name: 'First Skunk', icon: '🦨', description: 'Minted your first SkunkSquad NFT', rarity: 'common', category: 'collection', points: 10, tier: 'bronze' },
+            { id: 2, name: 'Diamond Hands', icon: '💎', description: 'Own 3+ SkunkSquad NFTs', rarity: 'rare', category: 'collection', points: 25, tier: 'gold' },
+            { id: 3, name: 'Whale Status', icon: '🐋', description: 'Own 5+ SkunkSquad NFTs', rarity: 'epic', category: 'collection', points: 50, tier: 'platinum' },
+            { id: 4, name: 'Early Adopter', icon: '🎯', description: 'Joined in first 100 members', rarity: 'rare', category: 'social', points: 50, tier: 'silver' },
+            { id: 5, name: 'Network Builder', icon: '🤝', description: 'Connected with 10+ members', rarity: 'rare', category: 'social', points: 30, tier: 'bronze' },
+            { id: 6, name: 'Verified Member', icon: '✓', description: 'Verified NFT ownership', rarity: 'common', category: 'achievement', points: 5, tier: 'bronze' }
+        ];
+
+        // Render List View
+        document.getElementById('badgeDemo1').innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                ${sampleBadges.slice(0, 3).map(badge => `
+                    <div class="badge-card ${badge.rarity}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-info">
+                            <h4 class="badge-name">${badge.name}</h4>
+                            <div class="badge-tier badge-tier-${badge.tier}">${badge.tier.charAt(0).toUpperCase() + badge.tier.slice(1)}</div>
+                            <div class="badge-meta">
+                                <span class="badge-rarity ${badge.rarity}">${badge.rarity.charAt(0).toUpperCase() + badge.rarity.slice(1)}</span>
+                                <span class="badge-points">+${badge.points} pts</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Render Grid View
+        document.getElementById('badgeDemo2').innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+                ${sampleBadges.map((badge, index) => {
+                    const locked = index > 2;
+                    return `
+                        <div class="badge-item ${badge.rarity} ${locked ? 'locked' : ''}" style="text-align: center; padding: 1rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 0.75rem; cursor: pointer; opacity: ${locked ? 0.5 : 1};">
+                            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${locked ? '🔒' : badge.icon}</div>
+                            <div style="font-size: 0.875rem; color: #f1f5f9; font-weight: 600;">${badge.name}</div>
+                            <div class="badge-tier badge-tier-${badge.tier}" style="margin-top: 0.5rem;">${badge.tier.charAt(0).toUpperCase() + badge.tier.slice(1)}</div>
+                            ${!locked ? '<div style="color: #10b981; margin-top: 0.5rem; font-size: 0.75rem;">✓ Earned</div>' : ''}
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        // Render Inline Badges
+        document.getElementById('badgeDemo3').innerHTML = sampleBadges.slice(0, 3).map(badge => 
+            `<span class="badge-inline badge-tier-${badge.tier}" title="${badge.name}" style="display: inline-block; font-size: 1.25rem; margin-left: 0.25rem;">${badge.icon}</span>`
+        ).join('');
+
+        console.log('✅ Badge Demo Loaded!');
+    </script>
+</body>
+</html>

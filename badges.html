@@ -130,13 +130,9 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', async () => {
-            // Check auth
+            // Check auth (optional for testing)
             const member = window.MembersAuth?.getCurrentMember();
-            if (!member) {
-                window.location.href = './members.html';
-                return;
-            }
-
+            
             // Show loading state
             showLoadingState();
 

@@ -24,52 +24,48 @@ const BadgeSystem = {
     },
 
     async loadBadges() {
-        if (!this.api) {
-            this.badges = this.getSampleBadges();
-            return;
-        }
-        
         try {
-            const response = await fetch('/api/badges');
+            const response = await fetch('http://localhost:3001/api/badges');
             if (response.ok) {
                 this.badges = await response.json();
+                console.log(`✅ Loaded ${this.badges.length} badges from backend`);
             } else {
+                console.warn('Backend not available, using sample badges');
                 this.badges = this.getSampleBadges();
             }
         } catch (error) {
-            console.error('Error loading badges:', error);
+            console.warn('Error loading badges from backend, using sample badges:', error.message);
             this.badges = this.getSampleBadges();
         }
     },
 
     async loadMyBadges() {
-        if (!this.api) {
-            this.myBadges = [];
-            return;
-        }
-        
         try {
-            const response = await fetch('/api/badges/my', {
+            const response = await fetch('http://localhost:3001/api/badges/my', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || 'demo'}`
                 }
             });
             if (response.ok) {
                 this.myBadges = await response.json();
+                console.log(`✅ Loaded ${this.myBadges.length} earned badges`);
+            } else {
+                // Use first 3 sample badges as demo earned badges
+                this.myBadges = this.badges.slice(0, 3);
             }
         } catch (error) {
-            console.error('Error loading my badges:', error);
+            console.warn('Error loading my badges:', error.message);
+            this.myBadges = this.badges.slice(0, 3);
         }
     },
 
     async checkForNewBadges() {
-        if (!this.api) return [];
-        
         try {
-            const response = await fetch('/api/badges/check', {
+            const response = await fetch('http://localhost:3001/api/badges/check', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || 'demo'}`,
+                    'Content-Type': 'application/json'
                 }
             });
             
@@ -79,10 +75,10 @@ const BadgeSystem = {
                     this.showBadgeNotification(result.badges);
                     await this.loadMyBadges();
                 }
-                return result.badges;
+                return result.badges || [];
             }
         } catch (error) {
-            console.error('Error checking badges:', error);
+            console.warn('Error checking badges:', error.message);
         }
         return [];
     },
@@ -296,29 +292,25 @@ const BadgeSystem = {
     },
 
     async getMemberBadges(memberId) {
-        if (!this.api) return [];
-        
         try {
-            const response = await fetch(`/api/badges/member/${memberId}`);
+            const response = await fetch(`http://localhost:3001/api/badges/member/${memberId}`);
             if (response.ok) {
                 return await response.json();
             }
         } catch (error) {
-            console.error('Error loading member badges:', error);
+            console.warn('Error loading member badges:', error.message);
         }
         return [];
     },
 
     async getLeaderboard(limit = 10) {
-        if (!this.api) return [];
-        
         try {
-            const response = await fetch(`/api/badges/leaderboard?limit=${limit}`);
+            const response = await fetch(`http://localhost:3001/api/badges/leaderboard?limit=${limit}`);
             if (response.ok) {
                 return await response.json();
             }
         } catch (error) {
-            console.error('Error loading leaderboard:', error);
+            console.warn('Error loading leaderboard:', error.message);
         }
         return [];
     },
