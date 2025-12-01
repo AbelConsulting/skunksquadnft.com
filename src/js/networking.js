@@ -1,7 +1,211 @@
-/**
- * SkunkSquad Networking Portal
- * Member directory and connections management
- */
+// =============================================================================
+// API INTEGRATION
+// =============================================================================
+
+const NetworkingPortal = {
+    api: null,
+    currentUser: null,
+    useBackend: false,
+
+    async init() {
+        console.log('🚀 Initializing Networking Portal...');
+        
+        // Try to initialize API
+        if (typeof NetworkingAPI !== 'undefined') {
+            this.api = new NetworkingAPI();
+            this.useBackend = true;
+            console.log('✅ Backend API connected');
+        } else {
+            console.log('⚠️ Using sample data (backend not connected)');
+        }
+        
+        // Get current user
+        const member = window.MembersAuth?.getCurrentMember();
+        if (member) {
+            this.currentUser = {
+                walletAddress: member.walletAddress,
+                displayName: member.displayName
+            };
+        }
+        
+        // Load members
+        await this.loadMembers();
+        
+        // Load connections
+        await this.loadConnections();
+        
+        console.log('✅ Networking Portal initialized');
+    },
+
+    async loadMembers() {
+        if (this.useBackend && this.api) {
+            try {
+                const members = await this.api.getMembers();
+                if (members && members.length > 0) {
+                    // Use backend members
+                    console.log(`Loaded ${members.length} members from backend`);
+                    filteredMembers = members.map(this.formatMember);
+                    renderMemberGrid();
+                    return;
+                }
+            } catch (error) {
+                console.error('Error loading members from backend:', error);
+            }
+        }
+        
+        // Fallback to sample data
+        filteredMembers = SAMPLE_MEMBERS;
+        renderMemberGrid();
+    },
+
+    async loadConnections() {
+        if (!this.useBackend || !this.api) {
+            this.loadSampleConnections();
+            return;
+        }
+        
+        try {
+            const connections = await this.api.getConnections();
+            this.renderConnections(connections);
+        } catch (error) {
+            console.error('Error loading connections:', error);
+            this.loadSampleConnections();
+        }
+    },
+
+    async sendConnectionRequest(memberId) {
+        if (!this.useBackend || !this.api) {
+            showToast('Connection request sent! (Demo mode)', 'success');
+            return true;
+        }
+        
+        try {
+            await this.api.sendConnectionRequest(memberId);
+            showToast('Connection request sent! ✅', 'success');
+            return true;
+        } catch (error) {
+            console.error('Error sending connection request:', error);
+            showToast('Failed to send request. Please try again.', 'error');
+            return false;
+        }
+    },
+
+    async acceptConnectionRequest(requestId) {
+        if (!this.useBackend || !this.api) {
+            showToast('Connection accepted! (Demo mode)', 'success');
+            return true;
+        }
+        
+        try {
+            await this.api.acceptConnection(requestId);
+            showToast('Connection accepted! 🤝', 'success');
+            await this.loadConnections();
+            return true;
+        } catch (error) {
+            console.error('Error accepting connection:', error);
+            showToast('Failed to accept connection. Please try again.', 'error');
+            return false;
+        }
+    },
+
+    async rejectConnectionRequest(requestId) {
+        if (!this.useBackend || !this.api) {
+            showToast('Connection rejected (Demo mode)', 'info');
+            return true;
+        }
+        
+        try {
+            await this.api.rejectConnection(requestId);
+            showToast('Connection request declined', 'info');
+            await this.loadConnections();
+            return true;
+        } catch (error) {
+            console.error('Error rejecting connection:', error);
+            return false;
+        }
+    },
+
+    formatMember(backendMember) {
+        // Convert backend member format to frontend format
+        return {
+            id: backendMember.id,
+            name: backendMember.display_name || backendMember.wallet_address?.substring(0, 8),
+            title: backendMember.title || 'Member',
+            location: backendMember.location || 'Unknown',
+            region: backendMember.region || 'other',
+            industry: backendMember.industry || 'other',
+            avatar: backendMember.avatar_url || `https://i.pravatar.cc/150?u=${backendMember.wallet_address}`,
+            bio: backendMember.bio || 'SkunkSquad member',
+            interests: backendMember.interests || [],
+            connections: backendMember.connection_count || 0,
+            nfts: backendMember.nft_count || 1,
+            joinDate: new Date(backendMember.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+            verified: true,
+            whale: backendMember.nft_count >= 5,
+            online: backendMember.is_online || false,
+            walletAddress: backendMember.wallet_address
+        };
+    },
+
+    renderConnections(connections) {
+        const connectionsList = document.getElementById('connectionsList');
+        const pendingList = document.getElementById('pendingList');
+        
+        if (!connectionsList || !pendingList) return;
+        
+        // Filter connections
+        const accepted = connections.filter(c => c.status === 'accepted');
+        const pending = connections.filter(c => c.status === 'pending');
+        
+        if (accepted.length === 0) {
+            connectionsList.innerHTML = '<p class="empty-state">No connections yet. Start networking!</p>';
+        } else {
+            connectionsList.innerHTML = accepted.map(conn => `
+                <div class="connection-card">
+                    <img src="${conn.avatar_url || 'https://i.pravatar.cc/150'}" alt="${conn.display_name}">
+                    <div class="connection-info">
+                        <h4>${conn.display_name}</h4>
+                        <p>${conn.title || 'Member'}</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline" onclick="handleMessage('${conn.id}')">💬</button>
+                </div>
+            `).join('');
+        }
+        
+        if (pending.length === 0) {
+            pendingList.innerHTML = '<p class="empty-state">No pending requests</p>';
+        } else {
+            pendingList.innerHTML = pending.map(req => `
+                <div class="connection-card pending">
+                    <img src="${req.avatar_url || 'https://i.pravatar.cc/150'}" alt="${req.display_name}">
+                    <div class="connection-info">
+                        <h4>${req.display_name}</h4>
+                        <p>${req.title || 'Member'}</p>
+                    </div>
+                    <div class="pending-actions">
+                        <button class="btn btn-sm btn-primary" onclick="acceptConnection('${req.id}')">✓</button>
+                        <button class="btn btn-sm btn-outline" onclick="declineConnection('${req.id}')">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+    },
+
+    loadSampleConnections() {
+        // Sample connections for demo
+        const connectionsList = document.getElementById('connectionsList');
+        if (connectionsList) {
+            connectionsList.innerHTML = `
+                <p class="empty-state">Connect with members to build your network!</p>
+            `;
+        }
+    }
+};
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+    NetworkingPortal.init();
+});
 
 // =============================================================================
 // SAMPLE DATA
@@ -425,12 +629,14 @@ function handleConnect(memberId) {
     const member = allMembers.find(m => m.id === memberId);
     if (!member) return;
 
-    pendingRequests.push(memberId);
-    updateNetworkStats();
-    renderPendingRequests();
-    closeProfile();
-    
-    showToast(`Connection request sent to ${member.name}! 🤝`, 'success');
+    NetworkingPortal.sendConnectionRequest(memberId).then(success => {
+        if (success) {
+            pendingRequests.push(memberId);
+            updateNetworkStats();
+            renderPendingRequests();
+            closeProfile();
+        }
+    });
 }
 
 function handleDisconnect(memberId) {
@@ -453,6 +659,29 @@ function handleMessage(memberId) {
     
     closeProfile();
     showToast('💬 Messaging feature coming soon!', 'info');
+}
+
+function acceptConnection(requestId) {
+    NetworkingPortal.acceptConnectionRequest(requestId).then(success => {
+        if (success) {
+            myConnections.push(requestId);
+            pendingRequests = pendingRequests.filter(id => id !== requestId);
+            updateNetworkStats();
+            renderMyConnections();
+            renderPendingRequests();
+        }
+    });
+}
+
+function declineConnection(requestId) {
+    if (confirm('Decline this connection request?')) {
+        NetworkingPortal.rejectConnectionRequest(requestId).then(success => {
+            if (success) {
+                pendingRequests = pendingRequests.filter(id => id !== requestId);
+                renderPendingRequests();
+            }
+        });
+    }
 }
 
 function acceptConnection(memberId) {

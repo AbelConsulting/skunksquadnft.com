@@ -142,11 +142,176 @@ function initMemberCharts() {
 // =============================================================================
 
 async function loadMemberNFTs() {
-    const member = window.MembersAuth?.getCurrentMember();
-    if (!member || !member.tokenIds) return;
+    const grid = document.getElementById('nftPreviewGrid');
+    if (!grid) return;
     
-    console.log('Loading NFTs for member:', member.displayName);
-    console.log('Token IDs:', member.tokenIds);
+    try {
+        const CONTRACT_ADDRESS = '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF';
+        const RPC_URL = 'https://ethereum.publicnode.com';
+        
+        // Check if Web3 is available
+        if (typeof ethers === 'undefined') {
+            console.error('Ethers.js not loaded');
+            grid.innerHTML = '<div class="nft-preview-loading"><p>Loading library...</p></div>';
+            return;
+        }
+        
+        const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, [
+            "function tokenURI(uint256 tokenId) view returns (string)",
+            "function ownerOf(uint256 tokenId) view returns (address)",
+            "function balanceOf(address owner) view returns (uint256)",
+            "function totalSupply() view returns (uint256)"
+        ], provider);
+        
+        // Get user's wallet address
+        let userAddress = null;
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                userAddress = accounts[0] || null;
+            } catch (e) {
+                console.error('Error getting accounts:', e);
+            }
+        }
+        
+        if (!userAddress) {
+            grid.innerHTML = `
+                <div class="nft-preview-loading">
+                    <p>Connect your wallet to view your NFT collection</p>
+                    <button onclick="window.ethereum.request({ method: 'eth_requestAccounts' }).then(() => location.reload())" class="btn btn-primary" style="margin-top: 1rem;">
+                        Connect Wallet
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Get user's NFT count
+        const balance = await contract.balanceOf(userAddress);
+        const totalSupply = await contract.totalSupply();
+        
+        document.getElementById('totalNFTs').textContent = balance.toString();
+        if (document.getElementById('nftCount')) {
+            document.getElementById('nftCount').textContent = balance.toString();
+        }
+        
+        if (balance.toNumber() === 0) {
+            grid.innerHTML = `
+                <div class="nft-preview-loading">
+                    <p>You don't own any SkunkSquad NFTs yet.</p>
+                    <a href="./index.html#home" class="btn btn-primary" style="margin-top: 1rem;">Mint Your First NFT</a>
+                </div>
+            `;
+            return;
+        }
+        
+        // Find user's NFTs (show max 6 in preview)
+        const userNFTs = [];
+        const maxToShow = Math.min(6, balance.toNumber());
+        
+        for (let tokenId = 1; tokenId <= totalSupply.toNumber() && userNFTs.length < maxToShow; tokenId++) {
+            try {
+                const owner = await contract.ownerOf(tokenId);
+                if (owner.toLowerCase() === userAddress.toLowerCase()) {
+                    const tokenURI = await contract.tokenURI(tokenId);
+                    userNFTs.push({ tokenId, tokenURI });
+                }
+            } catch (e) {
+                // Token doesn't exist or error, skip
+            }
+        }
+        
+        // Display NFT previews
+        grid.innerHTML = '';
+        
+        for (const nft of userNFTs) {
+            const card = await createNFTPreviewCard(nft);
+            grid.appendChild(card);
+        }
+        
+        // Show "View All" if they have more than 6
+        if (balance.toNumber() > 6) {
+            const viewAllCard = document.createElement('a');
+            viewAllCard.href = './my-nfts.html';
+            viewAllCard.className = 'nft-preview-card';
+            viewAllCard.style.display = 'flex';
+            viewAllCard.style.alignItems = 'center';
+            viewAllCard.style.justifyContent = 'center';
+            viewAllCard.style.background = 'rgba(139, 92, 246, 0.1)';
+            viewAllCard.style.border = '2px dashed rgba(139, 92, 246, 0.5)';
+            viewAllCard.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">➕</div>
+                    <div style="font-weight: 600; color: #8b5cf6;">View All ${balance.toString()} NFTs</div>
+                </div>
+            `;
+            grid.appendChild(viewAllCard);
+        }
+        
+        // Calculate portfolio stats
+        const floorPrice = 0.01; // ETH
+        const portfolioValueETH = balance.toNumber() * floorPrice;
+        const ethPrice = 4200; // Approximate USD
+        const portfolioValueUSD = portfolioValueETH * ethPrice;
+        
+        if (document.getElementById('portfolioValue')) {
+            document.getElementById('portfolioValue').textContent = `$${portfolioValueUSD.toLocaleString()}`;
+        }
+        if (document.getElementById('avgRarity')) {
+            document.getElementById('avgRarity').textContent = '--';
+        }
+        if (document.getElementById('rarestNFT')) {
+            document.getElementById('rarestNFT').textContent = userNFTs.length > 0 ? `#${userNFTs[0].tokenId}` : '--';
+        }
+        
+    } catch (error) {
+        console.error('Error loading NFTs:', error);
+        grid.innerHTML = '<div class="nft-preview-loading"><p style="color: #ef4444;">Error loading NFTs. Please try again.</p></div>';
+    }
+}
+
+async function createNFTPreviewCard(nft) {
+    const card = document.createElement('a');
+    card.href = './my-nfts.html';
+    card.className = 'nft-preview-card';
+    
+    // Fetch metadata
+    let metadata = { name: `SkunkSquad #${nft.tokenId}`, image: '' };
+    try {
+        const metadataURL = nft.tokenURI.replace('ar://', 'https://arweave.net/');
+        const response = await fetch(metadataURL);
+        if (response.ok) {
+            const data = await response.json();
+            
+            if (data.manifest === 'arweave/paths' && data.paths) {
+                const tokenKey = nft.tokenId.toString();
+                if (data.paths[tokenKey] && data.paths[tokenKey].id) {
+                    const actualURL = `https://arweave.net/${data.paths[tokenKey].id}`;
+                    const metaResponse = await fetch(actualURL);
+                    if (metaResponse.ok) {
+                        metadata = await metaResponse.json();
+                    }
+                }
+            } else if (data.name || data.image) {
+                metadata = data;
+            }
+        }
+    } catch (e) {
+        console.error('Error fetching metadata:', e);
+    }
+    
+    const imageURL = metadata.image ? metadata.image.replace('ar://', 'https://arweave.net/') : './assets/charlesskunk.webp';
+    
+    card.innerHTML = `
+        <img src="${imageURL}" alt="${metadata.name}" class="nft-preview-image" onerror="this.src='./assets/charlesskunk.webp'" loading="lazy">
+        <div class="nft-preview-info">
+            <div class="nft-preview-title">${metadata.name}</div>
+            <div class="nft-preview-id">#${nft.tokenId}</div>
+        </div>
+    `;
+    
+    return card;
 }
 
 function updateMemberActivity() {

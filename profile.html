@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | SkunkSquad Members</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Manage your SkunkSquad member profile">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    <link rel="stylesheet" href="./styles/profile.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+</head>
+<body class="members-body">
+    <!-- Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">MY PROFILE</span>
+                </div>
+                
+                <div class="member-status">
+                    <a href="./members.html" class="btn btn-outline btn-sm">← Back to Portal</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+        <div class="container" style="max-width: 900px;">
+            
+            <!-- Profile Header -->
+            <section class="profile-header-section">
+                <div class="profile-avatar-container">
+                    <img id="avatarPreview" src="./assets/charlesskunk.webp" alt="Profile" class="profile-avatar-large">
+                    <button class="avatar-upload-btn" onclick="document.getElementById('avatarInput').click()">
+                        📷 Change
+                    </button>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="profile-header-info">
+                    <h1 id="displayName">Loading...</h1>
+                    <p class="wallet-address" id="walletAddress">0x...</p>
+                    <div class="profile-badges">
+                        <span class="badge-item">✅ Verified Member</span>
+                        <span class="badge-item" id="nftBadge">💎 Holder</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Form -->
+            <section class="profile-form-section">
+                <div class="form-card">
+                    <h2>📝 Edit Profile</h2>
+                    
+                    <form id="profileForm">
+                        <!-- Display Name -->
+                        <div class="form-group">
+                            <label for="displayNameInput">Display Name *</label>
+                            <input type="text" id="displayNameInput" class="form-input" placeholder="Your name or alias" required>
+                            <small class="form-help">How other members will see you</small>
+                        </div>
+
+                        <!-- Title/Role -->
+                        <div class="form-group">
+                            <label for="titleInput">Title / Role</label>
+                            <input type="text" id="titleInput" class="form-input" placeholder="e.g., Founder, Developer, Investor">
+                        </div>
+
+                        <!-- Location -->
+                        <div class="form-group">
+                            <label for="locationInput">Location</label>
+                            <input type="text" id="locationInput" class="form-input" placeholder="e.g., San Francisco, CA">
+                            <small class="form-help">City, Country or Region</small>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="form-group">
+                            <label for="bioInput">Bio</label>
+                            <textarea id="bioInput" class="form-textarea" rows="4" placeholder="Tell other members about yourself, your background, and what you're interested in..." maxlength="500"></textarea>
+                            <small class="form-help"><span id="bioCount">0</span>/500 characters</small>
+                        </div>
+
+                        <!-- Industry -->
+                        <div class="form-group">
+                            <label for="industryInput">Industry</label>
+                            <select id="industryInput" class="form-select">
+                                <option value="">Select Industry</option>
+                                <option value="tech">Technology</option>
+                                <option value="finance">Finance</option>
+                                <option value="crypto">Crypto/Web3</option>
+                                <option value="entrepreneur">Entrepreneurship</option>
+                                <option value="creative">Creative/Arts</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Interests -->
+                        <div class="form-group">
+                            <label>Interests & Skills</label>
+                            <div class="interest-selector">
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-nft" value="NFTs">
+                                    <label for="int-nft">🎨 NFTs</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-defi" value="DeFi">
+                                    <label for="int-defi">💰 DeFi</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-web3" value="Web3">
+                                    <label for="int-web3">🌐 Web3</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-trading" value="Trading">
+                                    <label for="int-trading">📈 Trading</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-dev" value="Development">
+                                    <label for="int-dev">💻 Development</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-invest" value="Investing">
+                                    <label for="int-invest">💼 Investing</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-art" value="Art">
+                                    <label for="int-art">🎭 Art</label>
+                                </div>
+                                <div class="interest-option">
+                                    <input type="checkbox" id="int-gaming" value="Gaming">
+                                    <label for="int-gaming">🎮 Gaming</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="form-group">
+                            <label>🔗 Social Links</label>
+                            
+                            <div class="social-input-group">
+                                <span class="social-icon">𝕏</span>
+                                <input type="text" id="twitterInput" class="form-input" placeholder="Twitter/X username (without @)">
+                            </div>
+                            
+                            <div class="social-input-group">
+                                <span class="social-icon">💬</span>
+                                <input type="text" id="discordInput" class="form-input" placeholder="Discord username">
+                            </div>
+                            
+                            <div class="social-input-group">
+                                <span class="social-icon">🔗</span>
+                                <input type="text" id="linkedinInput" class="form-input" placeholder="LinkedIn profile URL">
+                            </div>
+                            
+                            <div class="social-input-group">
+                                <span class="social-icon">🌐</span>
+                                <input type="text" id="websiteInput" class="form-input" placeholder="Personal website or portfolio">
+                            </div>
+                        </div>
+
+                        <!-- Privacy Settings -->
+                        <div class="form-group">
+                            <label>🔒 Privacy Settings</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="showNFTs" checked>
+                                <label for="showNFTs">Show my NFT collection on profile</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="allowMessages" checked>
+                                <label for="allowMessages">Allow direct messages from connections</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="showOnline">
+                                <label for="showOnline">Show when I'm online</label>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <span id="saveButtonText">💾 Save Profile</span>
+                                <span id="saveButtonSpinner" style="display: none;">⏳ Saving...</span>
+                            </button>
+                            <button type="button" class="btn btn-outline" onclick="window.location.href='./members.html'">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Profile Preview -->
+                <div class="profile-preview-card">
+                    <h3>👁️ Profile Preview</h3>
+                    <p class="text-muted">This is how other members will see your profile</p>
+                    
+                    <div class="preview-content">
+                        <div class="preview-avatar">
+                            <img id="previewAvatar" src="./assets/charlesskunk.webp" alt="Avatar">
+                        </div>
+                        <div class="preview-info">
+                            <h4 id="previewName">Your Name</h4>
+                            <p id="previewTitle" class="text-muted">Your Title</p>
+                            <p id="previewLocation">📍 Your Location</p>
+                            <p id="previewBio" class="preview-bio">Your bio will appear here...</p>
+                            <div id="previewInterests" class="preview-tags"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./backend/networking-api-client.js"></script>
+    <script src="./src/js/members-auth.js"></script>
+    <script src="./src/js/profile-editor.js"></script>
+</body>
+</html>

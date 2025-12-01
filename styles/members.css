@@ -77,6 +77,117 @@
     gap: 0.5rem;
 }
 
+/* NFT Collection Section */
+.my-nfts-section {
+    padding: 3rem 0;
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.my-nfts-section .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.nft-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    min-height: 250px;
+}
+
+.nft-preview-loading {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #8b5cf6;
+}
+
+.loading-spinner {
+    font-size: 3rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.nft-preview-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nft-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.6);
+}
+
+.nft-preview-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.nft-preview-info {
+    padding: 1rem;
+}
+
+.nft-preview-title {
+    font-weight: 600;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.nft-preview-id {
+    font-size: 0.75rem;
+    color: #8b5cf6;
+}
+
+.nft-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.nft-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.nft-stat .stat-icon {
+    font-size: 2rem;
+}
+
+.nft-stat .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.nft-stat .stat-label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
 /* Authentication Guard */
 .auth-guard {
     position: fixed;

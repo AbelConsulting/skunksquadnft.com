@@ -47,6 +47,7 @@
                     </div>
                     
                     <div class="member-actions">
+                        <a href="./profile.html" class="btn btn-outline btn-sm">✏️ Edit Profile</a>
                         <button class="btn btn-outline btn-sm" id="logoutBtn">Logout</button>
                         <a href="./index.html" class="btn btn-secondary btn-sm">← Back to Site</a>
                     </div>
@@ -132,11 +133,17 @@
             <div class="container">
                 <h2 class="section-title">⚡ Quick Actions</h2>
                 <div class="quick-actions-grid">
-                    <button class="action-card" onclick="MembersPortal.openNetworking()">
+                    <a href="./my-nfts.html" class="action-card">
+                        <div class="action-icon">🎨</div>
+                        <h3>My NFT Collection</h3>
+                        <p>View your SkunkSquad NFTs</p>
+                    </a>
+                    
+                    <a href="./networking.html" class="action-card">
                         <div class="action-icon">🤝</div>
                         <h3>Elite Networking</h3>
                         <p>Connect with fellow members</p>
-                    </button>
+                    </a>
                     
                     <button class="action-card" onclick="MembersPortal.openRewards()">
                         <div class="action-icon">🎁</div>
@@ -155,6 +162,60 @@
                         <h3>Exclusive Events</h3>
                         <p>VIP access & meetups</p>
                     </button>
+                    
+                    <a href="./sampleart.html" class="action-card">
+                        <div class="action-icon">🏆</div>
+                        <h3>Rare Collection</h3>
+                        <p>Browse top 25 rarest NFTs</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- My NFT Collection -->
+        <section class="my-nfts-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🎨 Your SkunkSquad Collection</h2>
+                    <a href="./my-nfts.html" class="btn btn-primary">View Full Collection →</a>
+                </div>
+                
+                <div id="nftPreviewGrid" class="nft-preview-grid">
+                    <div class="nft-preview-loading">
+                        <div class="loading-spinner">⏳</div>
+                        <p>Loading your NFTs...</p>
+                    </div>
+                </div>
+                
+                <div class="nft-stats-row">
+                    <div class="nft-stat">
+                        <span class="stat-icon">💎</span>
+                        <div>
+                            <div class="stat-value" id="totalNFTs">--</div>
+                            <div class="stat-label">NFTs Owned</div>
+                        </div>
+                    </div>
+                    <div class="nft-stat">
+                        <span class="stat-icon">📈</span>
+                        <div>
+                            <div class="stat-value" id="portfolioValue">--</div>
+                            <div class="stat-label">Est. Portfolio Value</div>
+                        </div>
+                    </div>
+                    <div class="nft-stat">
+                        <span class="stat-icon">⭐</span>
+                        <div>
+                            <div class="stat-value" id="avgRarity">--</div>
+                            <div class="stat-label">Avg Rarity Score</div>
+                        </div>
+                    </div>
+                    <div class="nft-stat">
+                        <span class="stat-icon">🏆</span>
+                        <div>
+                            <div class="stat-value" id="rarestNFT">--</div>
+                            <div class="stat-label">Rarest NFT</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
