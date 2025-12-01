@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members Portal (Test Mode) | SkunkSquad</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    <link rel="stylesheet" href="./styles/badges.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+</head>
+<body class="members-body">
+    <!-- Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">TEST MODE</span>
+                </div>
+                
+                <div class="member-status">
+                    <span class="member-wallet">0x1234...5678</span>
+                    <a href="./index.html" class="btn btn-outline btn-sm">← Exit Test Mode</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="members-main">
+        
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="container">
+                <div class="welcome-content">
+                    <h1>Welcome to the Elite Members Portal 🦨</h1>
+                    <p class="welcome-subtitle">
+                        Access exclusive features, connect with fellow holders, and unlock rewards
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions-section">
+            <div class="container">
+                <h2 class="section-title">⚡ Quick Actions</h2>
+                <div class="quick-actions-grid">
+                    <a href="./my-nfts.html" class="action-card">
+                        <div class="action-icon">🎨</div>
+                        <h3>My NFT Collection</h3>
+                        <p>View your SkunkSquad NFTs</p>
+                    </a>
+                    
+                    <a href="./networking.html" class="action-card">
+                        <div class="action-icon">🤝</div>
+                        <h3>Elite Networking</h3>
+                        <p>Connect with fellow members</p>
+                    </a>
+                    
+                    <a href="./badges.html" class="action-card">
+                        <div class="action-icon">🏆</div>
+                        <h3>Achievements & Badges</h3>
+                        <p>View your progress & badges</p>
+                    </a>
+                    
+                    <a href="./dashboard/index.html" class="action-card">
+                        <div class="action-icon">📊</div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>Live blockchain metrics</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Badge Showcase -->
+        <section class="my-nfts-section" style="padding: 2rem 0;">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🏆 Recent Achievements</h2>
+                    <a href="./badges.html" class="btn btn-primary">View All Badges →</a>
+                </div>
+                <div id="dashboardBadges" style="margin-top: 1.5rem;">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner">⏳</div>
+                        <p style="color: #94a3b8; margin-top: 1rem;">Loading badges...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My NFT Collection -->
+        <section class="my-nfts-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🎨 Your SkunkSquad Collection</h2>
+                    <a href="./my-nfts.html" class="btn btn-primary">View Full Collection →</a>
+                </div>
+                
+                <div id="nftPreviewGrid" class="nft-preview-grid">
+                    <div class="nft-preview-loading">
+                        <div class="loading-spinner">⏳</div>
+                        <p>Loading your NFTs...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Analytics -->
+        <section class="portfolio-section" id="portfolio">
+            <div class="container">
+                <h2 class="section-title">📊 Portfolio Analytics</h2>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Total NFTs Owned</h3>
+                        <div class="analytics-value" id="totalNFTs">--</div>
+                        <p class="analytics-label">SkunkSquad NFTs</p>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Total Badges</h3>
+                        <div class="analytics-value" id="totalBadges">--</div>
+                        <p class="analytics-label">Achievements Unlocked</p>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Member Since</h3>
+                        <div class="analytics-value" id="memberSince">--</div>
+                        <p class="analytics-label">Days Active</p>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Connections</h3>
+                        <div class="analytics-value" id="totalConnections">--</div>
+                        <p class="analytics-label">Network Size</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./src/js/badges.js"></script>
+    
+    <script>
+        // Initialize badge display
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🦨 Members Portal (Test Mode) - Loading...');
+            
+            // Initialize BadgeSystem
+            if (window.BadgeSystem) {
+                await window.BadgeSystem.init();
+                
+                // Load badges for dashboard
+                const badgesContainer = document.getElementById('dashboardBadges');
+                if (badgesContainer) {
+                    window.BadgeSystem.renderBadgeList('dashboardBadges', { limit: 6 });
+                }
+                
+                // Update analytics
+                updateAnalytics();
+            }
+            
+            // Mock NFT loading
+            loadMockNFTs();
+        });
+        
+        function updateAnalytics() {
+            document.getElementById('totalNFTs').textContent = '2';
+            document.getElementById('totalBadges').textContent = BadgeSystem.myBadges.length;
+            document.getElementById('memberSince').textContent = '45';
+            document.getElementById('totalConnections').textContent = '12';
+        }
+        
+        function loadMockNFTs() {
+            const nftGrid = document.getElementById('nftPreviewGrid');
+            nftGrid.innerHTML = `
+                <div class="nft-preview-card">
+                    <img src="https://via.placeholder.com/300/8b5cf6/ffffff?text=Skunk+%231" alt="NFT 1">
+                    <div class="nft-preview-info">
+                        <h4>SkunkSquad #1</h4>
+                        <p>Rarity: Epic</p>
+                    </div>
+                </div>
+                <div class="nft-preview-card">
+                    <img src="https://via.placeholder.com/300/6366f1/ffffff?text=Skunk+%232" alt="NFT 2">
+                    <div class="nft-preview-info">
+                        <h4>SkunkSquad #2</h4>
+                        <p>Rarity: Rare</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
