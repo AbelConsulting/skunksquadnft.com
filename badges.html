@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Achievements & Badges | SkunkSquad</title>
+    
+    <!-- Meta -->
+    <meta name="description" content="View your SkunkSquad achievements and badges">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/members.css">
+    <link rel="stylesheet" href="./styles/badges.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+</head>
+<body class="members-body">
+    <!-- Header -->
+    <header class="members-header">
+        <div class="container">
+            <div class="members-nav">
+                <div class="nav-brand">
+                    <img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image">
+                    <span class="brand-text">SkunkSquad</span>
+                    <span class="members-badge">ACHIEVEMENTS</span>
+                </div>
+                
+                <div class="member-status">
+                    <a href="./members.html" class="btn btn-outline btn-sm">← Back to Portal</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="badges-main" style="padding: 3rem 0;">
+        <div class="container" style="max-width: 1200px;">
+            
+            <!-- Header Section -->
+            <section style="text-align: center; margin-bottom: 3rem;">
+                <h1 style="font-size: 2.5rem; color: #f1f5f9; margin-bottom: 1rem;">
+                    🏆 Achievements & Badges
+                </h1>
+                <p style="color: #94a3b8; font-size: 1.125rem; max-width: 700px; margin: 0 auto;">
+                    Unlock badges by completing challenges, building your collection, and engaging with the community
+                </p>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="badge-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <div class="stat-card" style="text-align: center; padding: 2rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;" id="totalBadgesEarned">0</div>
+                    <div style="color: #94a3b8;">Badges Earned</div>
+                </div>
+                <div class="stat-card" style="text-align: center; padding: 2rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #8b5cf6;" id="totalPoints">0</div>
+                    <div style="color: #94a3b8;">Total Points</div>
+                </div>
+                <div class="stat-card" style="text-align: center; padding: 2rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #fbbf24;" id="rareBadges">0</div>
+                    <div style="color: #94a3b8;">Rare+ Badges</div>
+                </div>
+                <div class="stat-card" style="text-align: center; padding: 2rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;" id="leaderboardRank">--</div>
+                    <div style="color: #94a3b8;">Leaderboard Rank</div>
+                </div>
+            </section>
+
+            <!-- Tabs -->
+            <div class="badge-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2);">
+                <button class="badge-tab active" data-tab="earned" onclick="switchTab('earned')">
+                    My Badges
+                </button>
+                <button class="badge-tab" data-tab="all" onclick="switchTab('all')">
+                    All Badges
+                </button>
+                <button class="badge-tab" data-tab="leaderboard" onclick="switchTab('leaderboard')">
+                    Leaderboard
+                </button>
+            </div>
+
+            <!-- My Badges Tab -->
+            <section id="earnedTab" class="tab-content active">
+                <h2 style="color: #f1f5f9; margin-bottom: 1.5rem;">✨ Your Earned Badges</h2>
+                <div id="myBadgesList"></div>
+            </section>
+
+            <!-- All Badges Tab -->
+            <section id="allTab" class="tab-content" style="display: none;">
+                <h2 style="color: #f1f5f9; margin-bottom: 1.5rem;">🎯 All Available Badges</h2>
+                
+                <!-- Category Filters -->
+                <div class="category-filters" style="display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-category="all" onclick="filterByCategory('all')">All</button>
+                    <button class="filter-btn" data-category="collection" onclick="filterByCategory('collection')">🦨 Collection</button>
+                    <button class="filter-btn" data-category="social" onclick="filterByCategory('social')">🤝 Social</button>
+                    <button class="filter-btn" data-category="activity" onclick="filterByCategory('activity')">🔥 Activity</button>
+                    <button class="filter-btn" data-category="achievement" onclick="filterByCategory('achievement')">🏆 Achievement</button>
+                </div>
+                
+                <div id="allBadgesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;"></div>
+            </section>
+
+            <!-- Leaderboard Tab -->
+            <section id="leaderboardTab" class="tab-content" style="display: none;">
+                <h2 style="color: #f1f5f9; margin-bottom: 1.5rem;">🏅 Top Badge Collectors</h2>
+                <div id="badgeLeaderboard"></div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./backend/networking-api-client.js"></script>
+    <script src="./src/js/members-auth.js"></script>
+    <script src="./src/js/badges.js"></script>
+    
+    <script>
+        let currentCategory = 'all';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check auth
+            const member = window.MembersAuth?.getCurrentMember();
+            if (!member) {
+                window.location.href = './members.html';
+                return;
+            }
+
+            // Wait for BadgeSystem to initialize
+            if (window.BadgeSystem) {
+                await window.BadgeSystem.init();
+                await loadBadgeData();
+            }
+        });
+
+        async function loadBadgeData() {
+            // Render my badges
+            BadgeSystem.renderBadgeList('myBadgesList');
+            
+            // Render all badges grid
+            renderAllBadges();
+            
+            // Render leaderboard
+            BadgeSystem.renderLeaderboard('badgeLeaderboard', 20);
+            
+            // Update stats
+            updateStats();
+        }
+
+        function renderAllBadges() {
+            const allBadges = BadgeSystem.badges;
+            const filteredBadges = currentCategory === 'all' 
+                ? allBadges 
+                : allBadges.filter(b => b.category === currentCategory);
+            
+            BadgeSystem.renderBadgeGrid('allBadgesGrid', { 
+                all: true, 
+                showLocked: true 
+            });
+        }
+
+        function updateStats() {
+            const myBadges = BadgeSystem.myBadges;
+            
+            document.getElementById('totalBadgesEarned').textContent = myBadges.length;
+            
+            const totalPoints = myBadges.reduce((sum, b) => sum + (b.points || 0), 0);
+            document.getElementById('totalPoints').textContent = totalPoints;
+            
+            const rareBadges = myBadges.filter(b => 
+                b.rarity === 'rare' || b.rarity === 'epic' || b.rarity === 'legendary'
+            ).length;
+            document.getElementById('rareBadges').textContent = rareBadges;
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.badge-tab').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show/hide content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}Tab`).style.display = 'block';
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            renderAllBadges();
+        }
+
+        // Check for new badges periodically
+        setInterval(() => {
+            if (window.BadgeSystem) {
+                BadgeSystem.checkForNewBadges();
+            }
+        }, 60000); // Check every minute
+    </script>
+    
+    <style>
+        .badge-tab {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #94a3b8;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .badge-tab:hover {
+            color: #c4b5fd;
+        }
+        
+        .badge-tab.active {
+            color: #8b5cf6;
+            border-bottom-color: #8b5cf6;
+        }
+        
+        .filter-btn {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #94a3b8;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            border-color: #8b5cf6;
+            color: #c4b5fd;
+        }
+        
+        .filter-btn.active {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+        }
+    </style>
+</body>
+</html>
