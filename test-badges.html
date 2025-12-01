@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge System Test | SkunkSquad</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/badges.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section h2 {
+            color: #8b5cf6;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0.5rem;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .status.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 style="text-align: center; margin-bottom: 2rem;">🏆 Badge System Test Page</h1>
+        
+        <!-- Status Section -->
+        <div class="test-section">
+            <h2>System Status</h2>
+            <div id="systemStatus">
+                <p>Checking badge system...</p>
+            </div>
+        </div>
+        
+        <!-- Sample Badges Display -->
+        <div class="test-section">
+            <h2>Sample Badges (Badge List View)</h2>
+            <button class="btn" onclick="testBadgeList()">Load Sample Badges</button>
+            <div id="badgeListTest" style="margin-top: 1.5rem;"></div>
+        </div>
+        
+        <!-- Badge Grid Test -->
+        <div class="test-section">
+            <h2>Badge Grid (All Badges with Locked State)</h2>
+            <button class="btn" onclick="testBadgeGrid()">Show Badge Grid</button>
+            <div id="badgeGridTest" style="margin-top: 1.5rem;"></div>
+        </div>
+        
+        <!-- Inline Badges Test -->
+        <div class="test-section">
+            <h2>Inline Badges (for Member Cards)</h2>
+            <button class="btn" onclick="testInlineBadges()">Show Inline Badges</button>
+            <div style="margin-top: 1.5rem;">
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+                    <strong>Member Name</strong>
+                    <span id="inlineBadgesTest"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Badge Modal Test -->
+        <div class="test-section">
+            <h2>Badge Modal (Detail View)</h2>
+            <button class="btn" onclick="testBadgeModal()">Show Badge Modal</button>
+        </div>
+        
+        <!-- Badge Notification Test -->
+        <div class="test-section">
+            <h2>Badge Notification (New Badge Earned)</h2>
+            <button class="btn" onclick="testBadgeNotification()">Show Notification</button>
+        </div>
+        
+        <!-- API Connection Test -->
+        <div class="test-section">
+            <h2>API Connection Test</h2>
+            <button class="btn" onclick="testAPIConnection()">Test Backend API</button>
+            <div id="apiTestResult" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="./backend/networking-api-client.js"></script>
+    <script src="./src/js/badges.js"></script>
+    
+    <script>
+        // Override auto-init to prevent immediate loading
+        const originalInit = BadgeSystem.init;
+        BadgeSystem.init = async function() {
+            console.log('Manual init triggered');
+            return originalInit.call(this);
+        };
+        
+        // Check system status
+        window.addEventListener('load', async () => {
+            const statusDiv = document.getElementById('systemStatus');
+            
+            try {
+                // Check if BadgeSystem is loaded
+                if (typeof BadgeSystem !== 'undefined') {
+                    statusDiv.innerHTML = `
+                        <p>✅ BadgeSystem loaded <span class="status success">OK</span></p>
+                        <p>📊 Sample badges available: ${BadgeSystem.getSampleBadges().length}</p>
+                        <p>🔌 API Client: ${typeof NetworkingAPI !== 'undefined' ? 'Loaded' : 'Not loaded'}</p>
+                    `;
+                } else {
+                    statusDiv.innerHTML = '<p class="status error">❌ BadgeSystem not loaded</p>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<p class="status error">❌ Error: ${error.message}</p>`;
+            }
+        });
+        
+        function testBadgeList() {
+            BadgeSystem.myBadges = BadgeSystem.getSampleBadges().slice(0, 4);
+            BadgeSystem.renderBadgeList('badgeListTest');
+        }
+        
+        function testBadgeGrid() {
+            BadgeSystem.badges = BadgeSystem.getSampleBadges();
+            BadgeSystem.myBadges = BadgeSystem.getSampleBadges().slice(0, 3);
+            BadgeSystem.renderBadgeGrid('badgeGridTest', { all: true, showLocked: true });
+        }
+        
+        function testInlineBadges() {
+            const container = document.getElementById('inlineBadgesTest');
+            BadgeSystem.myBadges = BadgeSystem.getSampleBadges().slice(0, 3);
+            BadgeSystem.renderInlineBadges(1, container, { limit: 3 });
+        }
+        
+        function testBadgeModal() {
+            const sampleBadge = BadgeSystem.getSampleBadges()[0];
+            BadgeSystem.badges = BadgeSystem.getSampleBadges();
+            BadgeSystem.myBadges = [sampleBadge];
+            BadgeSystem.showBadgeModal(sampleBadge.id);
+        }
+        
+        function testBadgeNotification() {
+            const newBadges = BadgeSystem.getSampleBadges().slice(0, 2);
+            BadgeSystem.showBadgeNotification(newBadges);
+        }
+        
+        async function testAPIConnection() {
+            const resultDiv = document.getElementById('apiTestResult');
+            resultDiv.innerHTML = '<p>Testing API connection...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/badges');
+                
+                if (response.ok) {
+                    const badges = await response.json();
+                    resultDiv.innerHTML = `
+                        <p class="status success">✅ API Connected</p>
+                        <p>Backend returned ${badges.length} badges</p>
+                        <details style="margin-top: 1rem;">
+                            <summary style="cursor: pointer; color: #8b5cf6;">View Response</summary>
+                            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-top: 0.5rem;">${JSON.stringify(badges, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="status error">❌ API Error: ${response.status} ${response.statusText}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="status error">❌ Connection Failed</p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">Backend server might not be running. Start it with:</p>
+                    <code style="display: block; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; margin-top: 0.5rem;">
+                        cd backend<br>
+                        node networking-server.js
+                    </code>
+                    <p style="color: #64748b; margin-top: 0.5rem; font-size: 0.875rem;">Error: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
