@@ -41,7 +41,18 @@ backend/
 
 - Node.js 18+
 - PostgreSQL 14+
-- Ethereum RPC endpoint (Infura, Alchemy, or public)
+- Ethereum RPC endpoint (using public nodes or Infura)
+- Domain/hosting for production deployment
+
+## 🔧 SkunkSquad Configuration
+
+The backend is pre-configured for SkunkSquad NFT collection:
+
+- **Contract Address**: `0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF`
+- **Network**: Ethereum Mainnet (Chain ID: 1)
+- **RPC**: Public Ethereum nodes + Infura backup
+- **Collection**: 10,000 NFTs
+- **Server Port**: 3001 (separate from payment server on 3002)
 
 ## 🛠️ Installation
 
@@ -63,7 +74,11 @@ psql -d skunksquad_networking -f db/schema.sql
 3. **Configure Environment**
 ```bash
 cp .env.example .env
-# Edit .env with your settings
+# Edit .env with your actual settings:
+# - Generate a secure JWT_SECRET
+# - Set your PostgreSQL credentials
+# - Update CORS_ORIGIN with your domain
+# - Keep the SkunkSquad contract settings as-is
 ```
 
 4. **Seed Sample Data** (optional)
@@ -130,18 +145,35 @@ Server will run on port **3001** (default) - different from the payment server (
 
 ## 🌐 Environment Variables
 
+### Required Configuration
+
 ```env
-PORT=3001
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=skunksquad_networking
-DB_USER=postgres
-DB_PASSWORD=your_password
-JWT_SECRET=your_secret_key
-ETH_RPC_URL=https://eth.llamarpc.com
+# Server
+PORT=3001                                              # API server port (3002 = payment server)
+NODE_ENV=production                                    # or 'development'
+
+# Database
+DB_HOST=localhost                                      # PostgreSQL host
+DB_PORT=5432                                           # PostgreSQL port
+DB_NAME=skunksquad_networking                         # Database name
+DB_USER=postgres                                       # Database user
+DB_PASSWORD=your_secure_password                       # Database password
+
+# JWT Authentication
+JWT_SECRET=your_long_random_secret_key                # MUST be secure in production
+
+# SkunkSquad Ethereum Configuration (Pre-configured)
+ETH_RPC_URL=https://ethereum.publicnode.com           # Public Ethereum RPC
+INFURA_PROJECT_ID=a2c6c1df8f4e4003bdd98abdec26ad64  # Backup Infura endpoint
 CONTRACT_ADDRESS=0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF
-CORS_ORIGIN=http://localhost:8080
+NETWORK_ID=1                                          # Ethereum Mainnet
+NETWORK_NAME=Ethereum Mainnet
+
+# CORS (Update with your domain)
+CORS_ORIGIN=https://skunksquadnft.com,https://www.skunksquadnft.com
+
+# Session
+SESSION_DURATION_HOURS=24                             # Session expiry
 ```
 
 ## 📝 Example Requests

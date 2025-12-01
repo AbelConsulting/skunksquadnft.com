@@ -33,8 +33,12 @@ router.post('/wallet', async (req, res) => {
             return res.status(400).json({ error: 'Wallet address required' });
         }
 
-        // Verify NFT ownership
-        const web3 = new Web3(process.env.ETH_RPC_URL);
+        // Verify NFT ownership using configured RPC with fallback
+        const rpcUrl = process.env.INFURA_PROJECT_ID 
+            ? `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+            : process.env.ETH_RPC_URL || 'https://ethereum.publicnode.com';
+            
+        const web3 = new Web3(rpcUrl);
         const contract = new web3.eth.Contract(NFT_ABI, process.env.CONTRACT_ADDRESS);
         
         const balance = await contract.methods.balanceOf(walletAddress).call();

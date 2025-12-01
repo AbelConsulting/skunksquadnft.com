@@ -71,9 +71,12 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`🚀 SkunkSquad Networking API running on port ${PORT}`);
+    console.log(`🦨 SkunkSquad Networking API running on port ${PORT}`);
     console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🌐 CORS enabled for: ${corsOptions.origin}`);
+    console.log(`📝 Contract: ${process.env.CONTRACT_ADDRESS}`);
+    console.log(`⛓️  Network: ${process.env.NETWORK_NAME || 'Ethereum Mainnet'}`);
+    console.log(`🔗 RPC: ${process.env.INFURA_PROJECT_ID ? 'Infura (primary)' : 'Public nodes'}`);
 });
 
 // Graceful shutdown

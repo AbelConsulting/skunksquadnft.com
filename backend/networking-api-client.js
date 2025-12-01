@@ -6,7 +6,10 @@
  * Server runs on port 3001 (separate from payment server on 3002)
  */
 
-const API_BASE_URL = 'http://localhost:3001/api';
+// Auto-detect environment
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3001/api'
+    : 'https://api.skunksquadnft.com/networking/api'; // Update with your production API URL
 
 class NetworkingAPI {
     constructor() {
