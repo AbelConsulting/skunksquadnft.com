@@ -575,6 +575,13 @@ async function initMemberPortal() {
             }
         }
         
+        // Setup logout button
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', handleLogout);
+            console.log('✅ Logout button connected');
+        }
+        
         // Setup activity tracking
         setInterval(updateMemberActivity, 60000); // Every minute
         
@@ -584,6 +591,27 @@ async function initMemberPortal() {
     } catch (error) {
         console.error('Error initializing member portal:', error);
         showToast('Some features failed to load. Please refresh the page.', 'warning');
+    }
+}
+
+/**
+ * Handle logout
+ */
+function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear session
+        localStorage.removeItem('skunksquad_member');
+        
+        // Show toast
+        showToast('Logging out...', 'info');
+        
+        // Clear current data
+        currentMemberData = null;
+        
+        // Redirect after short delay
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
     }
 }
 
@@ -607,7 +635,8 @@ window.MembersPortal = {
     showToast,
     showFeatureModal,
     loadMemberNFTs,
-    initMemberCharts
+    initMemberCharts,
+    logout: handleLogout
 };
 
 console.log('🦨 SkunkSquad Members Portal Script Loaded');
