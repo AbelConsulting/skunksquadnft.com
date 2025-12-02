@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>📱 Mobile Test - SkunkSquad NFT</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/mobile-polish.css">
+    <style>
+        .test-section {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px;
+        }
+
+        .test-section h2 {
+            color: #c4b5fd;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+
+        .test-item {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin: 8px 0;
+            cursor: pointer;
+            min-height: 48px;
+        }
+
+        .test-button:active {
+            transform: scale(0.96);
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            color: #67e8f9;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            color: #6ee7b7;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            color: #fbbf24;
+        }
+
+        .device-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            overflow-x: auto;
+        }
+
+        .touch-target-test {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .touch-target {
+            background: rgba(139, 92, 246, 0.2);
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .touch-target:active {
+            background: rgba(139, 92, 246, 0.4);
+            border-color: rgba(139, 92, 246, 0.8);
+        }
+
+        .touch-target.small {
+            min-height: 32px;
+            font-size: 12px;
+        }
+
+        .touch-target.large {
+            min-height: 56px;
+            font-size: 18px;
+        }
+
+        .scroll-test {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .scroll-test-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #c4b5fd;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 1000;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .stat-box {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #c4b5fd;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Site</a>
+
+    <div style="padding: 80px 0 40px;">
+        <div class="test-section">
+            <h2>📱 Mobile Device Detection</h2>
+            <div id="device-info" class="device-info">Loading...</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="screen-width">-</div>
+                    <div class="stat-label">Screen Width</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="screen-height">-</div>
+                    <div class="stat-label">Screen Height</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="pixel-ratio">-</div>
+                    <div class="stat-label">Pixel Ratio</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="orientation">-</div>
+                    <div class="stat-label">Orientation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>👆 Touch Target Test</h2>
+            <p style="color: #94a3b8; margin-bottom: 12px;">
+                All targets should be easily tappable (minimum 44x44px)
+            </p>
+            
+            <h3 style="color: #c4b5fd; font-size: 1rem; margin: 16px 0 8px;">Too Small (32px) ❌</h3>
+            <div class="touch-target-test">
+                <div class="touch-target small" onclick="testTouch(this, 'small')">Tap</div>
+                <div class="touch-target small" onclick="testTouch(this, 'small')">Tap</div>
+                <div class="touch-target small" onclick="testTouch(this, 'small')">Tap</div>
+            </div>
+
+            <h3 style="color: #c4b5fd; font-size: 1rem; margin: 16px 0 8px;">Perfect (44px) ✅</h3>
+            <div class="touch-target-test">
+                <div class="touch-target" onclick="testTouch(this, 'perfect')">Tap</div>
+                <div class="touch-target" onclick="testTouch(this, 'perfect')">Tap</div>
+                <div class="touch-target" onclick="testTouch(this, 'perfect')">Tap</div>
+            </div>
+
+            <h3 style="color: #c4b5fd; font-size: 1rem; margin: 16px 0 8px;">Large (56px) ✅</h3>
+            <div class="touch-target-test">
+                <div class="touch-target large" onclick="testTouch(this, 'large')">Tap</div>
+                <div class="touch-target large" onclick="testTouch(this, 'large')">Tap</div>
+                <div class="touch-target large" onclick="testTouch(this, 'large')">Tap</div>
+            </div>
+
+            <div id="touch-feedback" class="info-box" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>⚡ Button Tests</h2>
+            
+            <button class="test-button" onclick="testButton('Primary')">
+                Primary Button (48px height)
+            </button>
+            
+            <button class="test-button" onclick="testButton('Secondary')" style="background: rgba(6, 182, 212, 0.2); border: 2px solid rgba(6, 182, 212, 0.5);">
+                Secondary Button
+            </button>
+            
+            <button class="test-button" onclick="testButton('Disabled')" disabled style="opacity: 0.5; cursor: not-allowed;">
+                Disabled Button
+            </button>
+
+            <div id="button-feedback" class="success-box" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📜 Scroll Performance Test</h2>
+            <p style="color: #94a3b8; margin-bottom: 12px;">
+                Scrolling should be smooth with momentum
+            </p>
+            <div class="scroll-test">
+                <div class="scroll-test-item">Item 1 - Scroll smoothly</div>
+                <div class="scroll-test-item">Item 2 - No jank</div>
+                <div class="scroll-test-item">Item 3 - Momentum scroll</div>
+                <div class="scroll-test-item">Item 4 - Touch responsive</div>
+                <div class="scroll-test-item">Item 5 - Smooth as butter</div>
+                <div class="scroll-test-item">Item 6 - Keep scrolling</div>
+                <div class="scroll-test-item">Item 7 - Almost there</div>
+                <div class="scroll-test-item">Item 8 - Last one!</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔄 Orientation Test</h2>
+            <p style="color: #94a3b8; margin-bottom: 12px;">
+                Rotate your device to test orientation changes
+            </p>
+            <div class="info-box">
+                <strong>Current:</strong> <span id="current-orientation">-</span>
+            </div>
+            <div class="warning-box" id="orientation-warning" style="display: none;">
+                ⚠️ Orientation changed! Layout should adjust automatically.
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 Safe Area Test (iPhone X+)</h2>
+            <p style="color: #94a3b8; margin-bottom: 12px;">
+                Content should not overlap with notch or home indicator
+            </p>
+            <div class="info-box">
+                <strong>Safe Areas Detected:</strong> <span id="safe-areas">Checking...</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Feature Status</h2>
+            <div class="test-item">
+                <strong>✅ Mobile Enhancer:</strong> <span id="mobile-enhancer-status">-</span>
+            </div>
+            <div class="test-item">
+                <strong>✅ Touch Device:</strong> <span id="touch-status">-</span>
+            </div>
+            <div class="test-item">
+                <strong>✅ Haptic Feedback:</strong> <span id="haptic-status">-</span>
+            </div>
+            <div class="test-item">
+                <strong>✅ Lazy Loading:</strong> <span id="lazy-status">-</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎨 Visual Polish Checklist</h2>
+            <div class="success-box">
+                <strong>✅ Completed:</strong>
+                <ul style="margin: 8px 0; padding-left: 20px;">
+                    <li>Touch targets ≥ 44px</li>
+                    <li>Readable font sizes</li>
+                    <li>Proper spacing</li>
+                    <li>Smooth animations</li>
+                    <li>Fast loading</li>
+                    <li>Responsive layout</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="./src/js/mobile-enhancer.js"></script>
+    <script>
+        // Device info display
+        function updateDeviceInfo() {
+            const info = window.mobileEnhancer ? window.mobileEnhancer.getDeviceInfo() : {};
+            
+            document.getElementById('device-info').innerHTML = `
+                <strong>User Agent:</strong> ${navigator.userAgent}<br>
+                <strong>Platform:</strong> ${navigator.platform}<br>
+                <strong>Screen:</strong> ${info.screen || 'Unknown'}<br>
+                <strong>Viewport:</strong> ${info.viewport || 'Unknown'}<br>
+                <strong>Device Pixel Ratio:</strong> ${info.pixelRatio || 'Unknown'}<br>
+                <strong>Touch Support:</strong> ${info.isTouch ? 'Yes ✅' : 'No ❌'}<br>
+                <strong>Mobile Detected:</strong> ${info.isMobile ? 'Yes ✅' : 'No ❌'}
+            `;
+
+            // Update stats
+            document.getElementById('screen-width').textContent = window.innerWidth + 'px';
+            document.getElementById('screen-height').textContent = window.innerHeight + 'px';
+            document.getElementById('pixel-ratio').textContent = window.devicePixelRatio + 'x';
+            document.getElementById('orientation').textContent = info.orientation || '-';
+            document.getElementById('current-orientation').textContent = info.orientation || '-';
+
+            // Feature status
+            document.getElementById('mobile-enhancer-status').textContent = window.mobileEnhancer ? 'Loaded ✅' : 'Not loaded ❌';
+            document.getElementById('touch-status').textContent = info.isTouch ? 'Supported ✅' : 'Not supported ❌';
+            document.getElementById('haptic-status').textContent = navigator.vibrate ? 'Supported ✅' : 'Not supported ❌';
+            document.getElementById('lazy-status').textContent = 'loading' in HTMLImageElement.prototype ? 'Native ✅' : 'Polyfill ✅';
+
+            // Safe areas
+            const hasSafeAreas = CSS.supports('padding-top: env(safe-area-inset-top)');
+            document.getElementById('safe-areas').textContent = hasSafeAreas ? 'Yes ✅' : 'No ❌';
+        }
+
+        // Touch target test
+        function testTouch(element, size) {
+            const feedback = document.getElementById('touch-feedback');
+            feedback.style.display = 'block';
+            
+            let message = '';
+            if (size === 'small') {
+                message = '❌ Too small! Targets should be at least 44x44px for comfortable tapping.';
+                feedback.className = 'warning-box';
+            } else if (size === 'perfect') {
+                message = '✅ Perfect! This is the ideal touch target size (44x44px).';
+                feedback.className = 'success-box';
+            } else {
+                message = '✅ Great! Larger targets are even better for accessibility.';
+                feedback.className = 'success-box';
+            }
+            
+            feedback.textContent = message;
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 3000);
+        }
+
+        // Button test
+        function testButton(type) {
+            const feedback = document.getElementById('button-feedback');
+            feedback.style.display = 'block';
+            feedback.textContent = `✅ ${type} button tapped successfully! Button is properly sized for mobile.`;
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(20);
+            }
+
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+
+        // Orientation change detection
+        let lastOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+        
+        function checkOrientation() {
+            const currentOrientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+            
+            if (currentOrientation !== lastOrientation) {
+                const warning = document.getElementById('orientation-warning');
+                warning.style.display = 'block';
+                
+                setTimeout(() => {
+                    warning.style.display = 'none';
+                }, 3000);
+                
+                lastOrientation = currentOrientation;
+            }
+            
+            updateDeviceInfo();
+        }
+
+        // Initialize
+        setTimeout(updateDeviceInfo, 500);
+        
+        // Update on resize/orientation change
+        window.addEventListener('resize', updateDeviceInfo);
+        window.addEventListener('orientationchange', checkOrientation);
+
+        console.log('📱 Mobile test page loaded');
+        console.log('Use window.mobileEnhancer.showDeviceInfo() for detailed info');
+    </script>
+</body>
+</html>

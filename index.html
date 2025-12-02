@@ -83,6 +83,7 @@
     <link rel="stylesheet" href="./styles/notifications.css">
     <link rel="stylesheet" href="./styles/loading-overlay.css">
     <link rel="stylesheet" href="./styles/supply-counter.css">
+    <link rel="stylesheet" href="./styles/mobile-polish.css">
     
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
@@ -112,6 +113,9 @@
 
     </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#home" class="skip-to-main">Skip to main content</a>
+
     <!-- Unified Wallet & Mint Popup Card -->
     <div id="wallet-mint-card-overlay" style="display: none;">
         <div id="wallet-mint-card" class="wmc-card">
@@ -686,6 +690,7 @@
     <!-- Core Scripts (Order matters!) -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js" defer></script>
     <script src="./src/js/config.js?v=3" defer></script>
+    <script src="./src/js/mobile-enhancer.js?v=3" defer></script>
     <script src="./src/js/notifications.js?v=3" defer></script>
     <script src="./src/js/loading-overlay.js?v=3" defer></script>
     <script src="./src/js/supply-counter.js?v=3" defer></script>

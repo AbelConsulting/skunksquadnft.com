@@ -77,13 +77,16 @@
                     </div>
                     
                     <div class="auth-form">
-                        <input type="text" placeholder="Enter your NFT Token ID" id="tokenIdInput" class="form-input">
+                        <label for="tokenIdInput" style="display: block; margin-bottom: 0.5rem; color: #cbd5e1; font-size: 0.875rem;">Token ID (0-9999)</label>
+                        <input type="number" min="0" max="9999" placeholder="e.g., 1234" id="tokenIdInput" class="form-input">
                         <button class="btn btn-secondary" id="verifyTokenBtn">Verify Token</button>
+                        <p style="margin-top: 0.75rem; font-size: 0.875rem; color: #94a3b8;">💡 Note: Token verification is for demo purposes. Connect wallet for full verification.</p>
                     </div>
                 </div>
                 
                 <div class="auth-help">
                     <p>Don't have a SkunkSquad NFT yet? <a href="./index.html#home">Join the Elite →</a></p>
+                    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #94a3b8;">Need help? <a href="mailto:skunksquad411@gmail.com">Contact Support</a></p>
                 </div>
             </div>
         </div>
@@ -106,22 +109,22 @@
                 <div class="member-stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">🏆</div>
-                        <div class="stat-value" id="memberLevel">Level 5</div>
+                        <div class="stat-value" id="memberLevel"><span class="loading-dot">●●●</span></div>
                         <div class="stat-label">Member Level</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">💎</div>
-                        <div class="stat-value" id="nftCount">3</div>
+                        <div class="stat-value" id="nftCount"><span class="loading-dot">●●●</span></div>
                         <div class="stat-label">NFTs Owned</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">🔥</div>
-                        <div class="stat-value" id="rewardPoints">2,450</div>
+                        <div class="stat-value" id="rewardPoints"><span class="loading-dot">●●●</span></div>
                         <div class="stat-label">Reward Points</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">🌟</div>
-                        <div class="stat-value" id="memberSince">Oct 2025</div>
+                        <div class="stat-value" id="memberSince"><span class="loading-dot">●●●</span></div>
                         <div class="stat-label">Member Since</div>
                     </div>
                 </div>
@@ -416,7 +419,9 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="./src/js/config.js"></script>
     <script src="./src/js/members-auth.js"></script>
     <script src="./src/js/badges.js"></script>
     <script src="./src/js/members.js"></script>

@@ -1,0 +1,1024 @@
+/* ===================================================================
+   SKUNKSQUAD NFT - MOBILE POLISH
+   Enhanced mobile experience with touch optimization and performance
+   =================================================================== */
+
+/* ==========================================================================
+   MOBILE-FIRST TOUCH OPTIMIZATIONS
+   ========================================================================== */
+
+/* Increase touch targets for better mobile UX */
+@media (max-width: 768px) {
+    /* Minimum 44x44px touch targets (iOS/Android standards) */
+    button,
+    .btn,
+    .nav-link,
+    .social-link,
+    .floating-social-btn,
+    a[role="button"] {
+        min-width: 44px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Enhanced button spacing */
+    .btn {
+        padding: 14px 24px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+    /* Better tap feedback */
+    .btn:active,
+    button:active {
+        transform: scale(0.96);
+        transition: transform 0.1s ease-out;
+    }
+
+    /* Prevent double-tap zoom on buttons */
+    .btn,
+    button,
+    .nav-link,
+    .social-link {
+        touch-action: manipulation;
+    }
+}
+
+/* ==========================================================================
+   NAVIGATION ENHANCEMENTS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Top bar optimization */
+    .top-bar {
+        padding: 8px 0;
+        font-size: 13px;
+    }
+
+    .top-bar-container {
+        padding: 0 16px;
+        gap: 12px;
+    }
+
+    .top-bar-left {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .launch-badge,
+    .price-badge {
+        font-size: 12px;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
+
+    /* Hide USD price on very small screens */
+    .price-usd {
+        display: none;
+    }
+
+    /* Main navigation */
+    .navbar {
+        padding: 12px 0;
+    }
+
+    .nav-container {
+        padding: 0 16px;
+    }
+
+    .nav-brand {
+        gap: 10px;
+    }
+
+    .logo-image {
+        width: 36px;
+        height: 36px;
+    }
+
+    .brand-text {
+        font-size: 18px;
+    }
+
+    .beta-badge {
+        display: none;
+    }
+
+    /* Enhanced hamburger menu */
+    .hamburger {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .hamburger span {
+        width: 24px;
+        height: 3px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Mobile menu overlay */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 80px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        transition: right 0.3s ease;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .nav-link {
+        padding: 16px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #e2e8f0 !important;
+        background: rgba(255, 255, 255, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:active {
+        background: rgba(139, 92, 246, 0.3);
+        transform: scale(0.98);
+    }
+
+    /* Connect button on mobile */
+    #connectBuyBtn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .btn-icon {
+        font-size: 20px;
+    }
+
+    .btn-price {
+        font-size: 12px;
+    }
+}
+
+/* ==========================================================================
+   HERO SECTION MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 60px 0 40px;
+        min-height: auto;
+    }
+
+    .hero-content {
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    .hero-badges {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .badge {
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    .gradient-text,
+    .highlight {
+        font-size: 2.2rem;
+    }
+
+    .hero-description {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 28px;
+        padding: 0 10px;
+    }
+
+    /* Feature items - horizontal scroll on very small screens */
+    .hero-features {
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+        margin-bottom: 32px;
+    }
+
+    .feature-item {
+        flex: 0 0 auto;
+        min-width: 140px;
+        padding: 12px 16px;
+    }
+
+    .feature-icon {
+        font-size: 28px;
+        margin-bottom: 6px;
+    }
+
+    .feature-item span {
+        font-size: 13px;
+    }
+
+    /* Hero stats - 2 column grid on mobile */
+    .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .stat {
+        padding: 16px 12px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    /* Hide floating cards on mobile for performance */
+    .hero-visual {
+        display: none;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .gradient-text,
+    .highlight {
+        font-size: 1.9rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat {
+        padding: 14px 16px;
+    }
+}
+
+/* ==========================================================================
+   WALLET & MINT CARD MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    #wallet-mint-card-overlay {
+        padding: 16px;
+        align-items: flex-end;
+    }
+
+    .wmc-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 24px 20px;
+        border-radius: 20px 20px 0 0;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideUpMobile 0.3s ease-out;
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .wmc-card h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .wmc-close {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 28px;
+    }
+
+    .wmc-qty-controls {
+        gap: 10px;
+    }
+
+    .wmc-qty-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+    }
+
+    .wmc-qty-input {
+        font-size: 20px;
+        padding: 14px;
+    }
+
+    .wmc-total {
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    #wmc-total {
+        font-size: 26px;
+    }
+
+    .wmc-mint-btn {
+        padding: 18px;
+        font-size: 17px;
+        border-radius: 14px;
+    }
+}
+
+/* ==========================================================================
+   COLLECTION & GALLERY MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .collection-section {
+        padding: 50px 0;
+    }
+
+    .section-header {
+        margin-bottom: 40px;
+        padding: 0 20px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .section-subtitle {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+
+    /* Collection stats - responsive grid */
+    .collection-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 0 20px;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        padding: 20px 16px;
+        gap: 12px;
+    }
+
+    .stat-icon-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .stat-info .stat-number {
+        font-size: 24px;
+    }
+
+    .stat-info .stat-label {
+        font-size: 13px;
+    }
+
+    /* Rarity breakdown - single column on mobile */
+    .rarity-breakdown {
+        padding: 0 20px;
+        margin-bottom: 40px;
+    }
+
+    .rarity-breakdown h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .rarity-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .rarity-tier {
+        padding: 16px;
+    }
+
+    .rarity-tier-header h3 {
+        font-size: 16px;
+    }
+
+    .rarity-percentage {
+        font-size: 18px;
+    }
+
+    .rarity-tier p {
+        font-size: 13px;
+    }
+
+    /* Gallery optimization */
+    .sample-gallery {
+        padding: 0 20px;
+    }
+
+    .sample-gallery h3 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .gallery-item {
+        border-radius: 12px;
+    }
+
+    .gallery-img {
+        height: auto;
+        aspect-ratio: 1;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .gallery-info {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .gallery-id {
+        font-size: 12px;
+    }
+
+    .gallery-rarity {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+}
+
+/* Single column on very small screens */
+@media (max-width: 400px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .collection-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   BENEFITS SECTION MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .analytics-section {
+        padding: 50px 0;
+    }
+
+    .payment-section {
+        padding: 50px 0;
+    }
+
+    .payment-benefits {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 0 20px;
+    }
+
+    .benefit {
+        padding: 24px 20px;
+    }
+
+    .benefit-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .benefit h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .benefit p {
+        font-size: 14px;
+    }
+
+    /* Dashboard preview cards */
+    .dashboard-preview {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 20px;
+        margin-bottom: 32px;
+    }
+
+    .dashboard-card {
+        padding: 24px 20px;
+    }
+
+    .dashboard-card h3 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .metric {
+        padding: 16px;
+    }
+
+    .metric-label {
+        font-size: 13px;
+    }
+
+    .metric-value {
+        font-size: 20px;
+    }
+
+    .metric-change {
+        font-size: 12px;
+    }
+
+    .achievements-list {
+        gap: 12px;
+    }
+
+    .achievement-item {
+        padding: 12px;
+    }
+
+    .achievement-icon {
+        font-size: 24px;
+    }
+
+    .achievement-name {
+        font-size: 14px;
+    }
+
+    .achievement-count {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    /* Dashboard actions */
+    .dashboard-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 20px;
+    }
+
+    .dashboard-actions .btn {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   FOOTER MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 40px 0 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .footer-section h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .footer-section a {
+        font-size: 14px;
+        padding: 8px 0;
+    }
+
+    .social-links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .social-link {
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    .contract-address {
+        word-break: break-all;
+        font-size: 12px;
+    }
+
+    .contract-address code {
+        display: block;
+        margin: 8px 0;
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .copy-btn {
+        min-width: 44px;
+        min-height: 44px;
+        margin-top: 8px;
+    }
+
+    .footer-bottom {
+        padding: 20px;
+        font-size: 13px;
+    }
+
+    .footer-bottom p {
+        margin: 6px 0;
+    }
+}
+
+/* ==========================================================================
+   FLOATING ELEMENTS MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .floating-social {
+        bottom: 16px;
+        right: 16px;
+        gap: 10px;
+    }
+
+    .floating-social-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+    }
+
+    /* Ensure floating elements don't overlap with content */
+    .floating-social {
+        z-index: 999;
+    }
+}
+
+/* ==========================================================================
+   NEW FEATURES MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Notification system */
+    .toast-container {
+        top: 16px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        max-width: none;
+    }
+
+    .toast {
+        padding: 14px 16px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .toast-icon {
+        font-size: 20px;
+    }
+
+    .toast-close {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+
+    /* Loading overlay */
+    .loading-overlay-content h3 {
+        font-size: 18px;
+    }
+
+    .loading-overlay-content p {
+        font-size: 14px;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Supply counter in stats */
+    [data-supply-counter] {
+        font-size: inherit;
+    }
+
+    /* ETH price displays */
+    [data-eth-price] {
+        font-size: inherit;
+    }
+}
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Reduce animations for better performance */
+    .hero-background .hero-grid {
+        opacity: 0.3;
+    }
+
+    .hero-background .hero-glow {
+        opacity: 0.4;
+    }
+
+    /* Optimize gradient animations */
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .section-title {
+        animation-duration: 10s;
+    }
+
+    /* Disable hover effects on mobile */
+    .btn:hover,
+    .stat-card:hover,
+    .dashboard-card:hover,
+    .rarity-tier:hover,
+    .gallery-item:hover {
+        transform: none;
+    }
+
+    /* Keep only active states for mobile */
+    .btn:active,
+    .stat-card:active {
+        transform: scale(0.98);
+    }
+
+    /* Optimize images */
+    img {
+        image-rendering: auto;
+        -webkit-optimize-contrast: auto;
+    }
+
+    /* Reduce blur effects */
+    .wmc-card,
+    #wallet-mint-card-overlay {
+        backdrop-filter: blur(12px);
+    }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Ensure readable text sizes */
+    body {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    /* Better focus indicators for keyboard navigation */
+    *:focus {
+        outline: 3px solid rgba(139, 92, 246, 0.6);
+        outline-offset: 2px;
+    }
+
+    /* Ensure sufficient color contrast */
+    .hero-description,
+    .section-subtitle,
+    p {
+        color: #cbd5e1;
+    }
+
+    /* Skip to main content link */
+    .skip-to-main {
+        position: absolute;
+        top: -100px;
+        left: 16px;
+        background: var(--primary-color);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-weight: 600;
+    }
+
+    .skip-to-main:focus {
+        top: 16px;
+    }
+}
+
+/* ==========================================================================
+   LANDSCAPE MOBILE OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        padding: 40px 0 30px;
+    }
+
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .stat {
+        padding: 12px 10px;
+    }
+
+    .stat-number {
+        font-size: 16px;
+    }
+
+    .stat-label {
+        font-size: 11px;
+    }
+
+    .wmc-card {
+        max-height: 80vh;
+    }
+}
+
+/* ==========================================================================
+   SAFE AREAS FOR NOTCH DEVICES (iPhone X+)
+   ========================================================================== */
+
+@supports (padding: max(0px)) {
+    @media (max-width: 768px) {
+        .top-bar {
+            padding-top: max(8px, env(safe-area-inset-top));
+        }
+
+        .navbar {
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        .nav-menu {
+            padding-right: max(24px, env(safe-area-inset-right));
+        }
+
+        .hero-content {
+            padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right));
+        }
+
+        .footer {
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
+        .floating-social {
+            bottom: max(16px, env(safe-area-inset-bottom));
+            right: max(16px, env(safe-area-inset-right));
+        }
+
+        .wmc-card {
+            padding-bottom: max(24px, env(safe-area-inset-bottom));
+        }
+    }
+}
+
+/* ==========================================================================
+   TOUCH STATE FEEDBACK
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Visual feedback for touch */
+    .touch-device .btn.touching,
+    .touch-device button.touching {
+        transform: scale(0.96);
+        opacity: 0.9;
+    }
+
+    .touch-device .nav-link.touching {
+        background: rgba(139, 92, 246, 0.25) !important;
+    }
+
+    .touch-device .social-link.touching,
+    .touch-device .floating-social-btn.touching {
+        transform: scale(0.9);
+    }
+
+    .touch-device .gallery-item.touching {
+        transform: scale(0.98);
+    }
+}
+
+/* ==========================================================================
+   REDUCED MOTION PREFERENCE
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .hero-background .hero-grid,
+    .hero-background .hero-glow {
+        animation: none;
+    }
+}
+
+/* ==========================================================================
+   SCROLLBAR OPTIMIZATION
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Hide scrollbar but keep functionality */
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+    /* For Firefox */
+    * {
+        scrollbar-width: none;
+    }
+
+    /* Smooth momentum scrolling */
+    body {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+    @media (max-width: 768px) {
+        .btn {
+            border: 2px solid currentColor;
+        }
+
+        .nav-link {
+            border: 2px solid transparent;
+        }
+
+        .nav-link:focus,
+        .nav-link:active {
+            border-color: currentColor;
+        }
+    }
+}
