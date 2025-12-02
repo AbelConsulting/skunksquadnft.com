@@ -332,9 +332,20 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     // INITIALIZATION - MULTIPLE ATTEMPTS
     // ========================================
     
+    // Initialize WalletManager to make Web3 available
+    function initWeb3() {
+        if (typeof Web3 !== 'undefined' && typeof window.initWalletManager === 'function') {
+            window.initWalletManager();
+            console.log('✅ WalletManager initialized from main.js');
+        } else {
+            console.log('⏳ Waiting for Web3 and WalletManager...');
+        }
+    }
+    
     // Immediate
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
         initializeButtons();
+        initWeb3();
     }
     
     // DOM Ready
@@ -342,6 +353,7 @@ console.log('🦨 SkunkSquad Main JS Loading...');
         console.log('📄 DOM Ready');
         initializeButtons();
         initHamburgerMenu();
+        setTimeout(initWeb3, 100);
     });
     
     // Window Load
@@ -349,17 +361,20 @@ console.log('🦨 SkunkSquad Main JS Loading...');
         console.log('🪟 Window Loaded');
         initializeButtons();
         initHamburgerMenu();
+        setTimeout(initWeb3, 200);
     });
     
     // Delayed attempts
     setTimeout(() => {
         console.log('⏱️ Delayed init (500ms)');
         initializeButtons();
+        initWeb3();
     }, 500);
     
     setTimeout(() => {
         console.log('⏱️ Delayed init (2000ms)');
         initializeButtons();
+        initWeb3();
     }, 2000);
     
     // Make available globally
