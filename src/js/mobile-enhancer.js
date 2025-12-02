@@ -53,40 +53,61 @@ class MobileEnhancer {
     setupHamburgerMenu() {
         this.hamburger = document.getElementById('hamburger');
         this.navMenu = document.getElementById('nav-menu');
+        this.navSecondary = document.querySelector('.nav-secondary');
 
-        if (!this.hamburger || !this.navMenu) {
-            console.warn('⚠️ Hamburger menu elements not found');
+        if (!this.hamburger) {
+            console.warn('⚠️ Hamburger menu element not found');
+            return;
+        }
+
+        // Use nav-secondary for mobile overlay (as per main.css)
+        const mobileMenu = this.navSecondary || this.navMenu;
+
+        if (!mobileMenu) {
+            console.warn('⚠️ Mobile menu element not found');
             return;
         }
 
         // Toggle menu
-        this.hamburger.addEventListener('click', () => {
+        this.hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.toggleMenu();
         });
 
         // Close menu on link click
-        const navLinks = this.navMenu.querySelectorAll('.nav-link');
+        const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 this.closeMenu();
             });
         });
 
-        // Close menu on outside click
-        document.addEventListener('click', (e) => {
-            if (this.navMenu.classList.contains('active') && 
-                !this.navMenu.contains(e.target) && 
-                !this.hamburger.contains(e.target)) {
-                this.closeMenu();
-            }
-        });
+        // Close menu on outside click (only on the overlay area)
+        if (this.navSecondary) {
+            this.navSecondary.addEventListener('click', (e) => {
+                // Close if clicking the overlay background, not the menu content
+                if (e.target === this.navSecondary) {
+                    this.closeMenu();
+                }
+            });
+        }
 
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.navMenu.classList.contains('active')) {
+            if (e.key === 'Escape' && this.isMenuOpen()) {
                 this.closeMenu();
             }
         });
+    }
+
+    /**
+     * Check if menu is open
+     */
+    isMenuOpen() {
+        if (this.navSecondary) {
+            return this.navSecondary.classList.contains('active');
+        }
+        return this.navMenu && this.navMenu.classList.contains('active');
     }
 
     /**
@@ -94,10 +115,16 @@ class MobileEnhancer {
      */
     toggleMenu() {
         this.hamburger.classList.toggle('active');
-        this.navMenu.classList.toggle('active');
+        
+        // Toggle the correct menu element based on viewport
+        if (this.navSecondary) {
+            this.navSecondary.classList.toggle('active');
+        } else if (this.navMenu) {
+            this.navMenu.classList.toggle('active');
+        }
         
         // Prevent body scroll when menu is open
-        if (this.navMenu.classList.contains('active')) {
+        if (this.isMenuOpen()) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -109,7 +136,14 @@ class MobileEnhancer {
      */
     closeMenu() {
         this.hamburger.classList.remove('active');
-        this.navMenu.classList.remove('active');
+        
+        if (this.navSecondary) {
+            this.navSecondary.classList.remove('active');
+        }
+        if (this.navMenu) {
+            this.navMenu.classList.remove('active');
+        }
+        
         document.body.style.overflow = '';
     }
 
@@ -163,7 +197,7 @@ class MobileEnhancer {
             document.body.classList.add(orientation);
 
             // Close menu on orientation change
-            if (this.navMenu && this.navMenu.classList.contains('active')) {
+            if (this.isMenuOpen()) {
                 this.closeMenu();
             }
 
