@@ -49,6 +49,9 @@ class WalletManager {
             this.web3 = new Web3(this.provider);
             console.log('✅ Web3 initialized with provider');
             
+            // ✅ Expose Web3 globally for other scripts
+            window.web3Instance = this.web3;
+            
             // ✅ Check if already connected
             await this.checkConnection();
             
@@ -57,6 +60,9 @@ class WalletManager {
             
             // ✅ Setup contract immediately if connected
             if (this.isConnected) {
+                await this.setupContract();
+            } else {
+                // Even if not connected, setup contract for read-only operations
                 await this.setupContract();
             }
             
@@ -880,6 +886,9 @@ class WalletManager {
             this.contract = new this.web3.eth.Contract(contractABI, this.contractAddress);
             console.log('✅ Contract initialized:', this.contractAddress);
             
+            // ✅ Expose contract globally for other scripts
+            window.contractInstance = this.contract;
+            
             // Update contract info
             await this.updateContractInfo();
             
@@ -1318,7 +1327,7 @@ class WalletManager {
     }
 }
 
-// ✅ NO AUTOMATIC INITIALIZATION - Use lazy init
+// ✅ AUTO-INITIALIZE when Web3 is available
 // Global lazy WalletManager initialization
 if (typeof window.initWalletManager !== 'function') {
     window.initWalletManager = function() {
@@ -1330,4 +1339,21 @@ if (typeof window.initWalletManager !== 'function') {
     };
 }
 
-console.log('✅ Wallet.js loaded - Use window.initWalletManager() to initialize');
+// Auto-initialize when DOM is ready and Web3 is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            if (typeof Web3 !== 'undefined') {
+                window.initWalletManager();
+            }
+        }, 100);
+    });
+} else {
+    setTimeout(() => {
+        if (typeof Web3 !== 'undefined') {
+            window.initWalletManager();
+        }
+    }, 100);
+}
+
+console.log('✅ Wallet.js loaded - Auto-initializing when ready...');
