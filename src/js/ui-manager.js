@@ -146,29 +146,44 @@ class UIManager {
 
     // Notifications
     showSuccess(message) {
-        alert(message);
-        // TODO: Replace with better notification system (toast/snackbar)
+        if (window.notifications) {
+            window.notifications.success(message);
+        } else {
+            alert(message);
+        }
     }
 
     showError(message) {
-        alert(message);
-        // TODO: Replace with better error notification
+        if (window.notifications) {
+            window.notifications.error(message);
+        } else {
+            alert(message);
+        }
     }
 
     showInfo(message) {
-        alert(message);
-        // TODO: Replace with better info notification
+        if (window.notifications) {
+            window.notifications.info(message);
+        } else {
+            alert(message);
+        }
     }
 
     // Loading States
     showLoading(message = 'Loading...') {
-        // TODO: Implement loading overlay
-        console.log('⏳', message);
+        if (window.loadingOverlay) {
+            window.loadingOverlay.show(message);
+        } else {
+            console.log('⏳', message);
+        }
     }
 
     hideLoading() {
-        // TODO: Hide loading overlay
-        console.log('✅ Loading complete');
+        if (window.loadingOverlay) {
+            window.loadingOverlay.hide();
+        } else {
+            console.log('✅ Loading complete');
+        }
     }
 
     // Transaction Feedback

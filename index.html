@@ -80,6 +80,9 @@
     <link rel="stylesheet" href="./styles/components.css">
     <link rel="stylesheet" href="./styles/animations.css">
     <link rel="stylesheet" href="./styles/wallet-mint-card.css">
+    <link rel="stylesheet" href="./styles/notifications.css">
+    <link rel="stylesheet" href="./styles/loading-overlay.css">
+    <link rel="stylesheet" href="./styles/supply-counter.css">
     
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
@@ -240,20 +243,22 @@
                 
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">10,000</span>
-                        <span class="stat-label">Limited Members</span>
+                        <span class="stat-number" data-supply-counter data-supply-format="fraction">10,000/10,000</span>
+                        <span class="stat-label">NFTs Minted</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">0.01 ETH (~$42)</span>
-                        <span class="stat-label">Membership Fee</span>
+                        <span class="stat-number">
+                            <span data-eth-price data-eth-price-format="conversion" data-eth-amount="0.01">0.01 ETH (~$42)</span>
+                        </span>
+                        <span class="stat-label">Mint Price</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">3.2M+</span>
                         <span class="stat-label">Trait Combinations</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">195</span>
-                        <span class="stat-label">Countries Supported</span>
+                        <span class="stat-number" data-supply-counter data-supply-format="remaining">10,000</span>
+                        <span class="stat-label">Remaining</span>
                     </div>
                 </div>
             </div>
@@ -680,11 +685,17 @@
 
     <!-- Core Scripts (Order matters!) -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js" defer></script>
-    <script src="./src/js/config.js?v=2" defer></script>
-    <script src="./src/js/ui-manager.js?v=2" defer></script>
-    <script src="./src/js/wallet.js?v=2" defer></script>
-    <script src="./src/js/mint-handler.js?v=2" defer></script>
-    <script src="./src/js/main.js?v=2" defer></script>
+    <script src="./src/js/config.js?v=3" defer></script>
+    <script src="./src/js/notifications.js?v=3" defer></script>
+    <script src="./src/js/loading-overlay.js?v=3" defer></script>
+    <script src="./src/js/supply-counter.js?v=3" defer></script>
+    <script src="./src/js/transaction-tracker.js?v=3" defer></script>
+    <script src="./src/js/eth-price.js?v=3" defer></script>
+    <script src="./src/js/balance-checker.js?v=3" defer></script>
+    <script src="./src/js/ui-manager.js?v=3" defer></script>
+    <script src="./src/js/wallet.js?v=3" defer></script>
+    <script src="./src/js/mint-handler.js?v=3" defer></script>
+    <script src="./src/js/main.js?v=3" defer></script>
     <script>
         function copyContractAddress() {
             const address = document.getElementById('contract-address').textContent;
