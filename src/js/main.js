@@ -47,12 +47,19 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                 newHamburger.classList.toggle('active');
                 navSecondary.classList.toggle('active');
                 
-                // Prevent body scroll when menu is open
+                // Prevent body scroll and fix position when menu is open
                 if (!isActive) {
-                    document.body.style.overflow = 'hidden';
+                    // Save current scroll position
+                    const scrollY = window.scrollY;
+                    document.body.classList.add('menu-open');
+                    document.body.style.top = `-${scrollY}px`;
                     console.log('🍔 Menu OPENING');
                 } else {
-                    document.body.style.overflow = '';
+                    // Restore scroll position
+                    const scrollY = document.body.style.top;
+                    document.body.classList.remove('menu-open');
+                    document.body.style.top = '';
+                    window.scrollTo(0, parseInt(scrollY || '0') * -1);
                     console.log('🍔 Menu CLOSING');
                 }
             }, { capture: true });
@@ -69,7 +76,13 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                     setTimeout(() => {
                         newHamburger.classList.remove('active');
                         navSecondary.classList.remove('active');
-                        document.body.style.overflow = '';
+                        
+                        // Restore scroll position
+                        const scrollY = document.body.style.top;
+                        document.body.classList.remove('menu-open');
+                        document.body.style.top = '';
+                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                        
                         console.log('🍔 Menu closed by background click');
                     }, 100);
                 }
@@ -84,7 +97,13 @@ console.log('🦨 SkunkSquad Main JS Loading...');
                         setTimeout(() => {
                             newHamburger.classList.remove('active');
                             navSecondary.classList.remove('active');
-                            document.body.style.overflow = '';
+                            
+                            // Restore scroll position
+                            const scrollY = document.body.style.top;
+                            document.body.classList.remove('menu-open');
+                            document.body.style.top = '';
+                            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                            
                             console.log('🍔 Menu closed by nav link click');
                         }, 100);
                     });
