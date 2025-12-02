@@ -7,9 +7,9 @@
 // CONFIGURATION
 // =============================================================================
 
-const MEMBERS_CONFIG = {
-    CONTRACT_ADDRESS: '0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF',
-    NETWORK_ID: 1, // Ethereum Mainnet
+// Note: MEMBERS_CONFIG is defined in members-auth.js
+// Extended configuration for production features
+const PRODUCTION_CONFIG = {
     RPC_URL: 'https://ethereum.publicnode.com',
     ARWEAVE_GATEWAY: 'https://arweave.net',
     METADATA_BASE: 'ar://bAFyRZCSkZo-uiVIviMfq4AfN6eV52YNaHWLd1L25Zs',
@@ -327,7 +327,7 @@ async function initWeb3() {
             return false;
         }
         
-        provider = new ethers.providers.JsonRpcProvider(MEMBERS_CONFIG.RPC_URL);
+        provider = new ethers.providers.JsonRpcProvider(PRODUCTION_CONFIG.RPC_URL);
         contract = new ethers.Contract(MEMBERS_CONFIG.CONTRACT_ADDRESS, CONTRACT_ABI, provider);
         
         console.log('✅ Web3 initialized');
@@ -393,7 +393,7 @@ async function loadMemberNFTs() {
         grid.innerHTML = '<div class="nft-preview-loading"><div class="loading-spinner">⏳</div><p>Loading your NFTs...</p></div>';
         
         const nfts = [];
-        const maxToLoad = Math.min(MEMBERS_CONFIG.MAX_NFT_PREVIEW, balanceNum);
+        const maxToLoad = Math.min(PRODUCTION_CONFIG.MAX_NFT_PREVIEW, balanceNum);
         
         for (let i = 0; i < maxToLoad; i++) {
             try {
@@ -414,7 +414,7 @@ async function loadMemberNFTs() {
         }
         
         // Add "View All" card if more than 6 NFTs
-        if (balanceNum > MEMBERS_CONFIG.MAX_NFT_PREVIEW) {
+        if (balanceNum > PRODUCTION_CONFIG.MAX_NFT_PREVIEW) {
             const viewAllCard = createViewAllCard(balanceNum);
             grid.appendChild(viewAllCard);
         }
@@ -465,7 +465,7 @@ function createViewAllCard(totalCount) {
     card.className = 'nft-preview-card nft-view-all-card';
     card.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem; text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem; color: #8b5cf6;">+${totalCount - MEMBERS_CONFIG.MAX_NFT_PREVIEW}</div>
+            <div style="font-size: 3rem; margin-bottom: 1rem; color: #8b5cf6;">+${totalCount - PRODUCTION_CONFIG.MAX_NFT_PREVIEW}</div>
             <div style="font-weight: 600; color: #8b5cf6; font-size: 1.1rem;">View All</div>
             <div style="font-size: 0.875rem; color: #94a3b8; margin-top: 0.5rem;">${totalCount} NFTs Total</div>
         </div>
@@ -494,8 +494,8 @@ function updateNFTStats(nftCount) {
 }
 
 function calculatePortfolioValue(nftCount) {
-    const valueETH = nftCount * MEMBERS_CONFIG.FLOOR_PRICE_ETH;
-    const valueUSD = valueETH * MEMBERS_CONFIG.ETH_USD_PRICE;
+    const valueETH = nftCount * PRODUCTION_CONFIG.FLOOR_PRICE_ETH;
+    const valueUSD = valueETH * PRODUCTION_CONFIG.ETH_USD_PRICE;
     
     const portfolioEl = document.getElementById('portfolioValue');
     if (portfolioEl) {
