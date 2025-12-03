@@ -4,20 +4,25 @@
  */
 
 class PrintfulAPI {
-    constructor(apiToken) {
+    constructor(apiToken = null) {
         this.apiToken = apiToken;
-        this.baseURL = 'https://api.printful.com';
+        // Use backend server instead of direct API access
+        this.baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3001/api'
+            : '/api'; // Use relative path in production
         this.storeId = null;
+        this.useBackend = true; // Always use backend server
     }
 
     /**
-     * Make authenticated request to Printful API
+     * Make request through backend server
      */
     async request(endpoint, options = {}) {
-        const url = `${this.baseURL}${endpoint}`;
+        // Remove leading slash if present since baseURL already has /api
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+        const url = `${this.baseURL}/${cleanEndpoint}`;
         
         const headers = {
-            'Authorization': `Bearer ${this.apiToken}`,
             'Content-Type': 'application/json',
             ...options.headers
         };
@@ -28,13 +33,13 @@ class PrintfulAPI {
                 headers
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || `API Error: ${response.status}`);
+                throw new Error(data.error || `API Error: ${response.status}`);
             }
 
-            const data = await response.json();
-            return data.result;
+            return data;
         } catch (error) {
             console.error('Printful API Error:', error);
             throw error;
@@ -46,7 +51,7 @@ class PrintfulAPI {
      */
     async getStoreInfo() {
         try {
-            const data = await this.request('/store');
+            const data = await this.request('store');
             this.storeId = data.id;
             return data;
         } catch (error) {
@@ -60,7 +65,7 @@ class PrintfulAPI {
      */
     async getProducts() {
         try {
-            const products = await this.request('/store/products');
+            const products = await this.request('products');
             return products || [];
         } catch (error) {
             console.error('Failed to get products:', error);
@@ -73,7 +78,7 @@ class PrintfulAPI {
      */
     async getProduct(productId) {
         try {
-            const product = await this.request(`/store/products/${productId}`);
+            const product = await this.request(`products/${productId}`);
             return product;
         } catch (error) {
             console.error(`Failed to get product ${productId}:`, error);

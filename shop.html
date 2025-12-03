@@ -21,6 +21,9 @@
         img-src 'self' data: https: blob:;
         connect-src 'self' 
             https://api.printful.com
+            https://*.printful.com
+            https://mainnet.infura.io
+            wss://mainnet.infura.io
             https://www.google-analytics.com
             https://analytics.google.com;
         frame-src 'none';
@@ -102,6 +105,11 @@
             </div>
             
             <div class="nav-actions">
+                <button class="btn btn-secondary" id="cartBtn" type="button" style="margin-right: 0.5rem;">
+                    <span class="btn-icon">🛒</span>
+                    <span class="btn-text">Cart</span>
+                    <span id="cartBadge" class="cart-badge" style="display: none;">0</span>
+                </button>
                 <button class="btn btn-primary" id="connectWalletBtn" type="button">
                     <span class="btn-icon">👛</span>
                     <span class="btn-text">Connect Wallet</span>
@@ -155,6 +163,14 @@
                         <p>You get 15% off all purchases</p>
                     </div>
                 </div>
+                
+                <div id="demoBanner" style="display: none;" class="demo-banner">
+                    <div class="benefit-icon">ℹ️</div>
+                    <div class="benefit-text">
+                        <strong>Demo Mode Active</strong>
+                        <p>Showing sample products. Add real products in your Printful dashboard to see them here!</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -194,13 +210,20 @@
     <!-- Products Grid -->
     <section class="shop-products">
         <div class="container">
+            <div class="products-header">
+                <h2 id="productsTitle">All Products</h2>
+                <span id="productCount" class="product-count"></span>
+            </div>
+            
             <div id="loadingIndicator" class="loading-indicator">
                 <div class="spinner"></div>
                 <p>Loading products...</p>
             </div>
             
             <div id="errorMessage" class="error-message" style="display: none;">
-                <p>⚠️ Unable to load products. Please try again later.</p>
+                <div class="error-icon">⚠️</div>
+                <p>Unable to load products. Please try again later.</p>
+                <button class="btn btn-secondary" onclick="location.reload()">Retry</button>
             </div>
             
             <div id="productsGrid" class="products-grid">
@@ -211,9 +234,46 @@
                 <div class="empty-icon">🔍</div>
                 <h3>No products found</h3>
                 <p>Try adjusting your filters or search terms</p>
+                <button class="btn btn-primary" onclick="document.getElementById('categoryFilter').value='all'; document.getElementById('searchInput').value=''; applyFilters();">Clear Filters</button>
             </div>
         </div>
     </section>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal" style="display: none;">
+        <div class="modal-overlay" id="cartOverlay"></div>
+        <div class="modal-content cart-modal-content">
+            <button class="modal-close" id="cartClose">&times;</button>
+            <div class="cart-header">
+                <h2>🛒 Shopping Cart</h2>
+                <span id="cartItemCount" class="cart-item-count">0 items</span>
+            </div>
+            <div id="cartItems" class="cart-items">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div id="emptyCart" class="empty-cart" style="display: none;">
+                <div class="empty-icon">🛒</div>
+                <p>Your cart is empty</p>
+                <button class="btn btn-primary" onclick="closeCartModal()">Continue Shopping</button>
+            </div>
+            <div id="cartSummary" class="cart-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                    <span>NFT Holder Discount (15%):</span>
+                    <span id="cartDiscount" class="discount-amount">-$0.00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+                <button class="btn btn-primary btn-large" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                <button class="btn btn-secondary btn-large" onclick="clearCart()">Clear Cart</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Product Modal -->
     <div id="productModal" class="modal" style="display: none;">
