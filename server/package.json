@@ -5,7 +5,8 @@
   "main": "printful-server.js",
   "scripts": {
     "start": "node printful-server.js",
-    "dev": "nodemon printful-server.js"
+    "dev": "nodemon printful-server.js",
+    "dev:windows": "nodemon printful-server.js"
   },
   "keywords": [
     "printful",

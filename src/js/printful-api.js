@@ -6,12 +6,11 @@
 class PrintfulAPI {
     constructor(apiToken = null) {
         this.apiToken = apiToken;
-        // Use backend server instead of direct API access
-        this.baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:3001/api'
-            : '/api'; // Use relative path in production
+        // Always try localhost first, fallback to production
+        this.baseURL = 'http://localhost:3001/api';
+        this.productionURL = '/api';
         this.storeId = null;
-        this.useBackend = true; // Always use backend server
+        this.useLocalhost = true;
     }
 
     /**
@@ -20,8 +19,24 @@ class PrintfulAPI {
     async request(endpoint, options = {}) {
         // Remove leading slash if present since baseURL already has /api
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-        const url = `${this.baseURL}/${cleanEndpoint}`;
         
+        // Try localhost first
+        if (this.useLocalhost) {
+            try {
+                const url = `${this.baseURL}/${cleanEndpoint}`;
+                return await this.makeRequest(url, options);
+            } catch (error) {
+                console.log('Localhost failed, trying production...');
+                this.useLocalhost = false;
+            }
+        }
+        
+        // Fall back to production
+        const url = `${this.productionURL}/${cleanEndpoint}`;
+        return await this.makeRequest(url, options);
+    }
+    
+    async makeRequest(url, options = {}) {
         const headers = {
             'Content-Type': 'application/json',
             ...options.headers

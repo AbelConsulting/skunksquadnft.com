@@ -80,19 +80,41 @@ async function initShop() {
  */
 async function checkServerAvailability() {
     try {
-        const baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:3001/api'
-            : '/api';
+        // Always try localhost first for development
+        const baseURL = 'http://localhost:3001/api';
         
+        console.log('Checking server at:', baseURL);
         const response = await fetch(`${baseURL}/health`, { 
             method: 'GET',
             signal: AbortSignal.timeout(2000) // 2 second timeout
         });
-        return response.ok;
+        
+        if (response.ok) {
+            console.log('✅ Backend server is running');
+            return true;
+        }
     } catch (error) {
-        console.log('Backend server not available, using demo mode');
-        return false;
+        console.log('❌ Backend server not available at localhost:3001');
     }
+    
+    // Try production API if localhost failed
+    try {
+        const productionURL = '/api';
+        const response = await fetch(`${productionURL}/health`, {
+            method: 'GET',
+            signal: AbortSignal.timeout(2000)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Backend server is running (production)');
+            return true;
+        }
+    } catch (error) {
+        console.log('❌ Backend server not available (production)');
+    }
+    
+    console.log('Using demo mode');
+    return false;
 }
 
 /**
