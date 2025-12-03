@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Leaderboard - SkunkSquad NFT</title>
+    <meta name="description" content="SkunkSquad NFT Leaderboard - Top collectors, rarest NFTs, and community stats">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+            overflow-x: auto;
+            padding-bottom: 0;
+        }
+
+        .nav-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: #a855f7;
+        }
+
+        .nav-tab.active {
+            color: #8b5cf6;
+            border-bottom-color: #8b5cf6;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        .leaderboard-table {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 60px 1fr 150px 150px 100px;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #a855f7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 150px 150px 100px;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.3s;
+            align-items: center;
+        }
+
+        .table-row:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .rank {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .rank-1 { color: #fbbf24; }
+        .rank-2 { color: #94a3b8; }
+        .rank-3 { color: #cd7f32; }
+
+        .collector-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #8b5cf6;
+        }
+
+        .collector-name {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .collector-address {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-family: 'Courier New', monospace;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-whale {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+        }
+
+        .badge-og {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #0f172a;
+        }
+
+        .badge-legend {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: white;
+        }
+
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .nft-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .nft-card:hover {
+            transform: translateY(-4px);
+            border-color: #8b5cf6;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .nft-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .nft-info {
+            padding: 1.25rem;
+        }
+
+        .nft-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-rarity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .rarity-score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rarity-rank {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            color: #10b981;
+            margin-bottom: 1.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .your-stats {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.1));
+            border: 2px solid #8b5cf6;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .your-stats h2 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #a855f7);
+            border-radius: 1rem;
+            transition: width 0.5s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-tabs {
+                gap: 0.5rem;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 40px 1fr 80px;
+                gap: 0.5rem;
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .table-header .hide-mobile,
+            .table-row .hide-mobile {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nft-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .trophy {
+            display: inline-block;
+            margin-right: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 SkunkSquad Leaderboard</h1>
+            <p>Top collectors, rarest NFTs, and community stats</p>
+            <div style="display: flex; justify-content: center; margin-top: 1rem; gap: 1rem; flex-wrap: wrap;">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>Live Data</span>
+                </div>
+                <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('overview')">📊 Overview</button>
+            <button class="nav-tab" onclick="switchTab('holders')">👥 Top Holders</button>
+            <button class="nav-tab" onclick="switchTab('rarest')">💎 Rarest NFTs</button>
+            <button class="nav-tab" onclick="switchTab('recent')">⚡ Recent Activity</button>
+            <button class="nav-tab" onclick="switchTab('your-stats')">🎯 Your Stats</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Minted</h3>
+                    <div class="value" id="totalMinted">0</div>
+                    <div class="subtitle">of 10,000 NFTs</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="mintProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Unique Holders</h3>
+                    <div class="value" id="uniqueHolders">0</div>
+                    <div class="subtitle">Community members</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Floor Price</h3>
+                    <div class="value" id="floorPrice">0.01 ETH</div>
+                    <div class="subtitle">~$42 USD</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Total Volume</h3>
+                    <div class="value" id="totalVolume">0 ETH</div>
+                    <div class="subtitle">All-time trading</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Avg. Hold Time</h3>
+                    <div class="value" id="avgHoldTime">--</div>
+                    <div class="subtitle">Diamond hands 💎</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Mints Today</h3>
+                    <div class="value" id="mintsToday">0</div>
+                    <div class="subtitle">Last 24 hours</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Holders Tab -->
+        <div id="holders" class="tab-content">
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <div>Rank</div>
+                    <div>Collector</div>
+                    <div class="hide-mobile">NFTs Owned</div>
+                    <div class="hide-mobile">Total Value</div>
+                    <div>Badge</div>
+                </div>
+                <div id="holdersTable">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Rarest NFTs Tab -->
+        <div id="rarest" class="tab-content">
+            <div class="nft-grid" id="rarestNFTs">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Recent Activity Tab -->
+        <div id="recent" class="tab-content">
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <div>Time</div>
+                    <div>Event</div>
+                    <div class="hide-mobile">Token ID</div>
+                    <div class="hide-mobile">Price</div>
+                    <div>Tx</div>
+                </div>
+                <div id="recentActivity">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Stats Tab -->
+        <div id="your-stats" class="tab-content">
+            <div id="yourStatsContent">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔗</div>
+                    <h3>Connect Your Wallet</h3>
+                    <p>Connect your wallet to see your personal stats and rankings</p>
+                    <button class="refresh-btn" onclick="connectWallet()" style="margin-top: 1.5rem;">Connect Wallet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./src/js/config.js"></script>
+    <script src="./src/js/leaderboard.js"></script>
+</body>
+</html>
