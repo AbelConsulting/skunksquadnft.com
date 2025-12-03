@@ -5,8 +5,9 @@
 
 class Analytics {
     constructor() {
-        this.GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Replace with your GA4 ID
+        this.GA_MEASUREMENT_ID = 'G-4KN6SRZBP4'; // SkunkSquad NFT GA4 Tracking
         this.initialized = false;
+        this.enabled = true; // Set to false to disable tracking
     }
 
     /**

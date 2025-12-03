@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 GA4 Analytics Test - SkunkSquad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+        h1 {
+            color: #8b5cf6;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #6ee7b7;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #93c5fd;
+        }
+        button {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .log {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .log-entry {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #1e293b;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        code {
+            background: #1e293b;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .measurement-id {
+            background: #1e293b;
+            border: 1px solid #8b5cf6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #a78bfa;
+        }
+        .section {
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 GA4 Analytics Test</h1>
+        
+        <div id="ga-status" class="status info">
+            ⏳ Checking analytics status...
+        </div>
+
+        <div class="section">
+            <h2>📋 Current Configuration</h2>
+            <div class="measurement-id" id="measurement-id">
+                Loading...
+            </div>
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                Update this in: <code>src/js/analytics.js</code> line 8
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Test Events</h2>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">
+                Click buttons below to send test events to GA4:
+            </p>
+            <button onclick="testPageView()">📄 Test Page View</button>
+            <button onclick="testWalletConnect()">🔗 Test Wallet Connect</button>
+            <button onclick="testMintEvent()">🎨 Test Mint Event</button>
+            <button onclick="testButtonClick()">👆 Test Button Click</button>
+        </div>
+
+        <div class="section">
+            <h2>📊 Event Log</h2>
+            <div class="log" id="event-log">
+                <div class="log-entry" style="opacity: 0.5;">Waiting for events...</div>
+            </div>
+            <button onclick="clearLog()">🗑️ Clear Log</button>
+        </div>
+
+        <div class="section">
+            <h2>✅ Verification Steps</h2>
+            <ol style="line-height: 2; opacity: 0.9;">
+                <li>Open GA4: <a href="https://analytics.google.com/" target="_blank" style="color: #8b5cf6;">analytics.google.com</a></li>
+                <li>Go to <strong>Reports → Realtime</strong></li>
+                <li>Click test buttons above</li>
+                <li>Watch events appear in GA4 within 30 seconds!</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Load Analytics -->
+    <script src="./src/js/analytics.js"></script>
+    
+    <script>
+        let eventCount = 0;
+
+        // Initialize analytics
+        if (typeof Analytics !== 'undefined') {
+            window.analytics = new Analytics();
+            window.analytics.init();
+            
+            setTimeout(() => {
+                updateStatus();
+                updateMeasurementId();
+            }, 500);
+        } else {
+            document.getElementById('ga-status').className = 'status error';
+            document.getElementById('ga-status').innerHTML = '❌ Analytics.js not loaded!';
+        }
+
+        function updateStatus() {
+            const statusEl = document.getElementById('ga-status');
+            
+            if (!window.analytics) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '❌ Analytics not initialized';
+                return;
+            }
+
+            if (!window.analytics.initialized) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '❌ Analytics failed to initialize. Check console for errors.';
+                return;
+            }
+
+            if (!window.analytics.enabled) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '⚠️ Analytics is disabled (enabled = false)';
+                return;
+            }
+
+            if (window.analytics.GA_MEASUREMENT_ID.includes('YOUR-ACTUAL-ID') || 
+                window.analytics.GA_MEASUREMENT_ID.includes('XXXXXXXXXX')) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '⚠️ Please add your real GA4 Measurement ID!';
+                return;
+            }
+
+            statusEl.className = 'status success';
+            statusEl.innerHTML = '✅ Analytics initialized and ready to track!';
+        }
+
+        function updateMeasurementId() {
+            const idEl = document.getElementById('measurement-id');
+            if (window.analytics) {
+                const id = window.analytics.GA_MEASUREMENT_ID;
+                if (id.includes('YOUR-ACTUAL-ID') || id.includes('XXXXXXXXXX')) {
+                    idEl.innerHTML = `❌ Measurement ID: <span style="color: #ef4444;">${id}</span><br><small style="color: #fca5a5;">⚠️ This is a placeholder! Add your real GA4 ID.</small>`;
+                } else {
+                    idEl.innerHTML = `✅ Measurement ID: <span style="color: #10b981;">${id}</span>`;
+                }
+            } else {
+                idEl.innerHTML = '❌ Analytics not loaded';
+            }
+        }
+
+        function logEvent(eventName, details) {
+            eventCount++;
+            const logEl = document.getElementById('event-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span style="color: #64748b;">[${timestamp}]</span> 
+                <span style="color: #8b5cf6; font-weight: 600;">${eventName}</span>
+                ${details ? `<br><span style="color: #94a3b8; font-size: 0.85rem; margin-left: 4rem;">${JSON.stringify(details)}</span>` : ''}
+            `;
+            
+            if (logEl.querySelector('.log-entry[style*="opacity"]')) {
+                logEl.innerHTML = '';
+            }
+            
+            logEl.insertBefore(entry, logEl.firstChild);
+            
+            // Keep only last 20 entries
+            while (logEl.children.length > 20) {
+                logEl.removeChild(logEl.lastChild);
+            }
+        }
+
+        function testPageView() {
+            if (!window.analytics || !window.analytics.initialized) {
+                alert('Analytics not initialized!');
+                return;
+            }
+            
+            window.analytics.trackPageView('/test-page');
+            logEvent('page_view', { page: '/test-page' });
+        }
+
+        function testWalletConnect() {
+            if (!window.analytics || !window.analytics.initialized) {
+                alert('Analytics not initialized!');
+                return;
+            }
+            
+            window.analytics.trackWalletConnect('0x1234...5678');
+            logEvent('wallet_connect', { wallet: '0x1234...5678' });
+        }
+
+        function testMintEvent() {
+            if (!window.analytics || !window.analytics.initialized) {
+                alert('Analytics not initialized!');
+                return;
+            }
+            
+            window.analytics.trackMint(2, '0.02', 'test-tx-hash-123');
+            logEvent('mint_success', { quantity: 2, value: '0.02 ETH', tx: 'test-tx-hash-123' });
+        }
+
+        function testButtonClick() {
+            if (!window.analytics || !window.analytics.initialized) {
+                alert('Analytics not initialized!');
+                return;
+            }
+            
+            window.analytics.trackButtonClick('Test Button', '/test-page');
+            logEvent('button_click', { button: 'Test Button', page: '/test-page' });
+        }
+
+        function clearLog() {
+            const logEl = document.getElementById('event-log');
+            logEl.innerHTML = '<div class="log-entry" style="opacity: 0.5;">Log cleared. Click test buttons to generate events.</div>';
+            eventCount = 0;
+        }
+
+        // Auto-refresh status every 5 seconds
+        setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>

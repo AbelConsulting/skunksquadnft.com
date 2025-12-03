@@ -13,7 +13,9 @@
         script-src 'self' 'unsafe-inline' 
             https://unpkg.com 
             https://static.cloudflareinsights.com 
-            https://cloudflareinsights.com;
+            https://cloudflareinsights.com
+            https://www.googletagmanager.com
+            https://www.google-analytics.com;
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' https://fonts.gstatic.com;
         img-src 'self' data: https: blob:;
@@ -23,6 +25,8 @@
             https://api.coingecko.com 
             https://cloudflareinsights.com
             https://static.cloudflareinsights.com
+            https://www.google-analytics.com
+            https://analytics.google.com
             wss://mainnet.infura.io;
         frame-src 'none';
         object-src 'none';
@@ -70,10 +74,23 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4KN6SRZBP4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4KN6SRZBP4');
+    </script>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" href="./assets/charlesskunk.webp" type="image/webp">
+    <link rel="preload" as="image" href="./assets/skunksample12.png" type="image/png">
        
     <!-- CSS -->
     <link rel="stylesheet" href="./styles/main.css">
@@ -264,6 +281,20 @@
                         <span class="stat-number" data-supply-counter data-supply-format="remaining">10,000</span>
                         <span class="stat-label">Remaining</span>
                     </div>
+                </div>
+                
+                <!-- Social Proof -->
+                <div class="social-proof">
+                    <div class="social-proof-avatars">
+                        <img src="./assets/skunksample1.png" alt="Member" loading="lazy" class="social-proof-avatar">
+                        <img src="./assets/skunksample2.png" alt="Member" loading="lazy" class="social-proof-avatar">
+                        <img src="./assets/skunksample3.png" alt="Member" loading="lazy" class="social-proof-avatar">
+                        <img src="./assets/skunksample4.png" alt="Member" loading="lazy" class="social-proof-avatar">
+                        <span class="social-proof-more">+</span>
+                    </div>
+                    <p class="social-proof-text">
+                        <strong>Join the squad!</strong> Collectors worldwide are minting now 🔥
+                    </p>
                 </div>
             </div>
                                            
@@ -636,6 +667,7 @@
     <script src="./src/js/ui-manager.js?v=5" defer></script>
     <script src="./src/js/wallet.js?v=5" defer></script>
     <script src="./src/js/mint-handler.js?v=5" defer></script>
+    <script src="./src/js/analytics.js?v=5" defer></script>
     <script src="./src/js/main.js?v=5" defer></script>
     <script>
         function copyContractAddress() {
