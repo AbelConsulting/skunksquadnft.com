@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkunkSquad NFT - Social Media Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .og-card {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            filter: blur(80px);
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            padding: 80px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.5);
+        }
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .brand-name {
+            font-size: 42px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+        }
+        .brand-tagline {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+        .title {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #a78bfa 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .description {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            max-width: 800px;
+        }
+        .stats {
+            display: flex;
+            gap: 60px;
+            margin-top: 20px;
+        }
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #a78bfa;
+        }
+        .stat-label {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badges {
+            display: flex;
+            gap: 15px;
+        }
+        .badge {
+            padding: 12px 24px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            border-radius: 100px;
+            color: #a78bfa;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .url {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        .nft-preview {
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            opacity: 0.15;
+        }
+        .nft-card {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="og-card">
+        <div class="grid-background"></div>
+        <div class="glow"></div>
+        
+        <div class="content">
+            <div class="logo-section">
+                <div class="logo">🦨</div>
+                <div class="brand">
+                    <div class="brand-name">SkunkSquad</div>
+                    <div class="brand-tagline">Elite NFT Collection</div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <h1 class="title">
+                    Join the <span class="gradient-text">Elite<br>Networking Club</span>
+                </h1>
+                <p class="description">
+                    10,000 unique NFTs on Ethereum. Premium art, exclusive access, and real utility. Mint now at 0.01 ETH.
+                </p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">10,000</div>
+                        <div class="stat-label">Collection</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">0.01 ETH</div>
+                        <div class="stat-label">Mint Price</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3.2M+</div>
+                        <div class="stat-label">Traits</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="badges">
+                    <div class="badge">🚀 Now Minting</div>
+                    <div class="badge">⚡ Instant Access</div>
+                </div>
+                <div class="url">skunksquadnft.com</div>
+            </div>
+        </div>
+        
+        <div class="nft-preview">
+            <div class="nft-card"></div>
+            <div class="nft-card"></div>
+            <div class="nft-card"></div>
+            <div class="nft-card"></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center; color: white; font-family: monospace;">
+        <p style="margin-bottom: 10px;">📸 <strong>Screenshot Instructions:</strong></p>
+        <ol style="list-style: none; padding: 0; line-height: 2;">
+            <li>1. Press F11 for fullscreen (or Cmd+Shift+F on Mac)</li>
+            <li>2. Take screenshot of just the card (1200x630px)</li>
+            <li>3. Save as <code>og-image.png</code></li>
+            <li>4. Upload to your website's root folder</li>
+            <li>5. Update <code>index.html</code> meta tag to use it</li>
+        </ol>
+        <p style="margin-top: 20px; opacity: 0.7; font-size: 14px;">
+            Or use a tool like <a href="https://www.screely.com/" target="_blank" style="color: #a78bfa;">Screely</a> or browser DevTools screenshot feature
+        </p>
+    </div>
+</body>
+</html>
