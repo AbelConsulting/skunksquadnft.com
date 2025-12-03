@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 
+            https://unpkg.com 
+            https://static.cloudflareinsights.com 
+            https://cloudflareinsights.com
+            https://www.googletagmanager.com
+            https://www.google-analytics.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https: blob:;
+        connect-src 'self' 
+            https://api.printful.com
+            https://www.google-analytics.com
+            https://analytics.google.com;
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        upgrade-insecure-requests;
+    ">
+    
+    <title>🛍️ SkunkSquad Merch | Official Store</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Official SkunkSquad merchandise. Exclusive apparel and collectibles for NFT holders and fans.">
+    <meta name="keywords" content="SkunkSquad merch, NFT merchandise, SkunkSquad apparel, crypto merch">
+    <meta name="author" content="MontanaDad">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://skunksquadnft.com/shop.html">
+    <meta name="theme-color" content="#8b5cf6">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="SkunkSquad Official Merch Store">
+    <meta property="og:description" content="Get exclusive SkunkSquad merchandise and show your squad pride!">
+    <meta property="og:image" content="https://skunksquadnft.com/assets/charlesskunk.webp">
+    <meta property="og:url" content="https://skunksquadnft.com/shop.html">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="./public/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./public/apple-touch-icon.png">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4KN6SRZBP4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4KN6SRZBP4');
+    </script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/animations.css">
+    <link rel="stylesheet" href="./styles/shop.css">
+    <link rel="stylesheet" href="./styles/mobile-polish.css">
+</head>
+<body>
+    <!-- Skip to main content -->
+    <a href="#shop" class="skip-to-main">Skip to main content</a>
+
+    <!-- Top Info Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="launch-badge">🛍️ Official Merch Store</span>
+                <span class="price-badge">🎁 Member Discounts Available</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://discord.gg/QrqYCVZM" class="top-social-link" target="_blank">💬</a>
+                <a href="https://opensea.io/0x897f6d5a329d9481bef2ee10fd0a5628d1934266" class="top-social-link" target="_blank">🌊</a>
+                <a href="https://x.com/MontanaDad406" class="top-social-link" target="_blank">x-icon</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image" loading="lazy"></div>
+                <span class="brand-text">SkunkSquad</span>
+                <span class="beta-badge">Official Merch</span>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-primary" id="connectWalletBtn" type="button">
+                    <span class="btn-icon">👛</span>
+                    <span class="btn-text">Connect Wallet</span>
+                </button>
+            </div>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <!-- Second Row Navigation -->
+        <div class="nav-secondary">
+            <div class="nav-secondary-container">
+                <div class="nav-menu" id="nav-menu">
+                    <a href="./index.html" class="nav-link">Home</a>
+                    <a href="./shop.html" class="nav-link active">🛍️ Shop</a>
+                    <a href="./sampleart.html" class="nav-link">🏆 Rare Collection</a>
+                    <a href="./leaderboard.html" class="nav-link">📊 Leaderboard</a>
+                    <a href="./about.html" class="nav-link">About</a>
+                    <a href="./members.html" class="nav-link">🔒 Members Portal</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="shop" class="shop-hero">
+        <div class="container">
+            <div class="shop-hero-content">
+                <div class="hero-badges">
+                    <span class="badge badge-primary">🛍️ OFFICIAL STORE</span>
+                    <span class="badge badge-secondary">🎁 NFT HOLDER PERKS</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    SkunkSquad<br>
+                    <span class="gradient-text">Merch Store</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Represent the squad with exclusive apparel and collectibles. NFT holders get special discounts!
+                </p>
+                
+                <div id="memberBenefitBanner" style="display: none;" class="member-benefit-banner">
+                    <div class="benefit-icon">🎉</div>
+                    <div class="benefit-text">
+                        <strong>Squad Member Detected!</strong>
+                        <p>You get 15% off all purchases</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="shop-filters">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Products</option>
+                        <option value="apparel">Apparel</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="home">Home & Living</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="sortFilter">Sort By:</label>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest</option>
+                    </select>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="shop-products">
+        <div class="container">
+            <div id="loadingIndicator" class="loading-indicator">
+                <div class="spinner"></div>
+                <p>Loading products...</p>
+            </div>
+            
+            <div id="errorMessage" class="error-message" style="display: none;">
+                <p>⚠️ Unable to load products. Please try again later.</p>
+            </div>
+            
+            <div id="productsGrid" class="products-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+            
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">🔍</div>
+                <h3>No products found</h3>
+                <p>Try adjusting your filters or search terms</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal" style="display: none;">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalProductImage" src="" alt="Product Image">
+                </div>
+                <div class="modal-details">
+                    <h2 id="modalProductName"></h2>
+                    <div class="modal-price">
+                        <span id="modalProductPrice"></span>
+                        <span id="modalDiscountBadge" class="discount-badge" style="display: none;">NFT Holder: 15% OFF</span>
+                    </div>
+                    <p id="modalProductDescription"></p>
+                    
+                    <div class="modal-options">
+                        <div class="option-group">
+                            <label for="sizeSelect">Size:</label>
+                            <select id="sizeSelect" class="option-select">
+                                <option value="">Select Size</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="colorSelect">Color:</label>
+                            <select id="colorSelect" class="option-select">
+                                <option value="">Select Color</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="quantityInput">Quantity:</label>
+                            <input type="number" id="quantityInput" min="1" value="1" class="quantity-input">
+                        </div>
+                    </div>
+                    
+                    <button id="addToCartBtn" class="btn btn-primary btn-large">
+                        🛒 Add to Cart
+                    </button>
+                    
+                    <div class="product-meta">
+                        <p><strong>SKU:</strong> <span id="modalProductSku"></span></p>
+                        <p id="modalProductStock"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo"><img src="./assets/charlesskunk.webp" alt="SkunkSquad" class="logo-image"></div>
+                        <span class="brand-text">SkunkSquad</span>
+                    </div>
+                    <p>Art and entertainment by MontanaDad</p>
+                    <div class="social-links">
+                        <a href="https://x.com/MontanaDad406" class="social-link twitter" target="_blank" rel="noopener">
+                            <span class="social-icon">𝕏</span>
+                            <span class="social-text">Twitter</span>
+                        </a>
+                        <a href="https://discord.gg/QrqYCVZM" class="social-link discord" target="_blank" rel="noopener">
+                            <span class="social-icon">💬</span>
+                            <span class="social-text">Discord</span>
+                        </a>
+                        <a href="https://opensea.io/collection/skunksquad-nft" class="social-link opensea" target="_blank" rel="noopener">
+                            <span class="social-icon">🌊</span>
+                            <span class="social-text">OpenSea</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <a href="./shop.html">All Products</a>
+                    <a href="#" data-category="apparel">Apparel</a>
+                    <a href="#" data-category="accessories">Accessories</a>
+                    <a href="#" data-category="home">Home & Living</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <p>📧 Email: <a href="mailto:skunksquad411@gmail.com">skunksquad411@gmail.com</a></p>
+                    <p>Shipping & Returns</p>
+                    <p>FAQ</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contract Info</h4>
+                    <p class="contract-address">
+                        <code id="contract-address">0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF</code>
+                    </p>
+                    <a href="https://etherscan.io/address/0xAa5C50099bEb130c8988324A0F6Ebf65979f10EF" target="_blank">
+                        🔎 View on Etherscan
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SkunkSquad NFT. All rights reserved.</p>
+                <p>Built with ❤️ by MontanaDad</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js" defer></script>
+    <script src="./src/js/config.js" defer></script>
+    <script src="./src/js/printful-api.js" defer></script>
+    <script src="./src/js/shop.js" defer></script>
+    <script src="./src/js/analytics.js" defer></script>
+</body>
+</html>
