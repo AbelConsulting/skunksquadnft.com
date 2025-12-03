@@ -51,11 +51,14 @@ async function initShop() {
         // Initialize Printful API (no token needed - uses backend)
         printfulAPI = new PrintfulAPI();
         
+        // Check if backend server is available
+        const serverAvailable = await checkServerAvailability();
+        
         // Check if user is NFT holder
         await checkNFTOwnership();
         
         // Load products
-        await loadProducts();
+        await loadProducts(serverAvailable);
         
         // Setup event listeners
         setupEventListeners();
@@ -64,7 +67,31 @@ async function initShop() {
         applyFilters();
     } catch (error) {
         console.error('Failed to initialize shop:', error);
-        showError('Failed to load shop. Please try again later.');
+        // Load demo products as fallback
+        allProducts = getMockProducts();
+        filteredProducts = [...allProducts];
+        displayProducts(filteredProducts);
+        showDemoBanner();
+    }
+}
+
+/**
+ * Check if backend server is available
+ */
+async function checkServerAvailability() {
+    try {
+        const baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3001/api'
+            : '/api';
+        
+        const response = await fetch(`${baseURL}/health`, { 
+            method: 'GET',
+            signal: AbortSignal.timeout(2000) // 2 second timeout
+        });
+        return response.ok;
+    } catch (error) {
+        console.log('Backend server not available, using demo mode');
+        return false;
     }
 }
 
@@ -119,7 +146,7 @@ function showMemberBenefits() {
 /**
  * Load products from Printful
  */
-async function loadProducts() {
+async function loadProducts(serverAvailable = true) {
     const loadingIndicator = document.getElementById('loadingIndicator');
     const productsGrid = document.getElementById('productsGrid');
     const errorMessage = document.getElementById('errorMessage');
@@ -129,9 +156,19 @@ async function loadProducts() {
         errorMessage.style.display = 'none';
         productsGrid.innerHTML = '';
 
-        console.log('Loading products from Printful...');
+        console.log('Loading products...');
 
-        // Get products from Printful
+        // If server is not available, use demo products immediately
+        if (!serverAvailable) {
+            console.log('Using demo products (server not running)');
+            allProducts = getMockProducts();
+            filteredProducts = [...allProducts];
+            displayProducts(filteredProducts);
+            showDemoBanner();
+            return;
+        }
+
+        // Get products from backend/Printful
         let usingMockData = false;
         try {
             allProducts = await printfulAPI.getProducts();
@@ -143,22 +180,17 @@ async function loadProducts() {
             console.log('Using mock product data for demonstration');
             allProducts = getMockProducts();
             usingMockData = true;
-            
-            // Show demo banner
-            const demoBanner = document.getElementById('demoBanner');
-            if (demoBanner) {
-                demoBanner.style.display = 'flex';
-            }
+            showDemoBanner();
         }
         
         if (!allProducts || allProducts.length === 0) {
-            console.log('No products found');
-            showEmptyState('No products available yet. Add products to your Printful store to get started!');
-            return;
+            console.log('No products found, using demo products');
+            allProducts = getMockProducts();
+            showDemoBanner();
         }
 
         // Get detailed info for each product (if using real API)
-        if (allProducts[0] && !allProducts[0].retail_price) {
+        if (allProducts[0] && !allProducts[0].retail_price && !usingMockData) {
             const productsWithDetails = await Promise.all(
                 allProducts.map(async (product) => {
                     try {
@@ -179,14 +211,24 @@ async function loadProducts() {
         displayProducts(filteredProducts);
     } catch (error) {
         console.error('Error loading products:', error);
-        showError('Unable to load products. Using demo mode.');
         
         // Fallback to mock data
         allProducts = getMockProducts();
         filteredProducts = [...allProducts];
         displayProducts(filteredProducts);
+        showDemoBanner();
     } finally {
         loadingIndicator.style.display = 'none';
+    }
+}
+
+/**
+ * Show demo banner
+ */
+function showDemoBanner() {
+    const demoBanner = document.getElementById('demoBanner');
+    if (demoBanner) {
+        demoBanner.style.display = 'flex';
     }
 }
 
