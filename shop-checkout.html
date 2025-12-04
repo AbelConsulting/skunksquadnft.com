@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | SkunkSquad Merch</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    <link rel="stylesheet" href="./styles/shop.css">
+    
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .order-summary {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-color);
+        }
+        
+        .checkout-actions {
+            margin-top: 2rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(139, 92, 246, 0.3);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-right: 1rem;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-meta {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-summary {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <a href="./shop.html" style="text-decoration: none; color: var(--primary-color); margin-bottom: 1rem; display: inline-block;">
+                ← Back to Shop
+            </a>
+            <h1>Checkout</h1>
+            <p>Complete your order securely with Stripe</p>
+        </div>
+        
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            <p style="margin-top: 1rem;">Preparing checkout...</p>
+        </div>
+        
+        <div id="checkoutContent" class="checkout-grid" style="display: none;">
+            <div class="checkout-main">
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div id="orderItems"></div>
+                    
+                    <div class="summary-total">
+                        <div class="summary-item">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-item" id="discountRow" style="display: none;">
+                            <span>NFT Holder Discount:</span>
+                            <span id="discount" style="color: #10b981;">-$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Shipping:</span>
+                            <span id="shipping">Calculated at checkout</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkout-sidebar">
+                <div class="checkout-actions">
+                    <button id="checkoutButton" class="btn btn-primary btn-large" style="width: 100%;">
+                        🔒 Proceed to Payment
+                    </button>
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #94a3b8;">
+                        Secure payment powered by Stripe
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="errorMessage" style="display: none; text-align: center; padding: 2rem;">
+            <h2>⚠️ Checkout Error</h2>
+            <p id="errorText" style="color: #ef4444; margin: 1rem 0;"></p>
+            <a href="./shop.html" class="btn btn-secondary">Return to Shop</a>
+        </div>
+    </div>
+    
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="./src/js/shop-checkout-handler.js"></script>
+</body>
+</html>

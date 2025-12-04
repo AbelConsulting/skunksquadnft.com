@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed! | SkunkSquad Merch</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/components.css">
+    
+    <style>
+        .success-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .success-message {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 1rem;
+            padding: 3rem;
+            border: 2px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+        
+        .success-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .order-details {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">✅</div>
+        
+        <div class="success-message">
+            <h1 style="color: #10b981; margin-bottom: 1rem;">Order Confirmed!</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                Thank you for your purchase! Your order has been received and will be processed shortly.
+            </p>
+            
+            <div class="order-details" id="orderDetails">
+                <h3 style="margin-bottom: 1rem;">Order Details</h3>
+                <div class="detail-row">
+                    <span>Order ID:</span>
+                    <span id="orderId">Loading...</span>
+                </div>
+                <div class="detail-row">
+                    <span>Status:</span>
+                    <span style="color: #10b981;">Processing</span>
+                </div>
+            </div>
+            
+            <p style="margin-top: 2rem; color: #94a3b8;">
+                You will receive a confirmation email with tracking information once your order ships.
+            </p>
+        </div>
+        
+        <div class="success-actions">
+            <a href="./shop.html" class="btn btn-primary">
+                🛍️ Continue Shopping
+            </a>
+            <a href="./index.html" class="btn btn-secondary">
+                🏠 Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Get session ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        
+        if (sessionId) {
+            document.getElementById('orderId').textContent = sessionId.substring(0, 20) + '...';
+            
+            // Clear cart after successful purchase
+            localStorage.removeItem('skunkSquadCart');
+        } else {
+            document.getElementById('orderId').textContent = 'N/A';
+        }
+    </script>
+</body>
+</html>

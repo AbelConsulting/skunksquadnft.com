@@ -11,8 +11,28 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Initialize Stripe (only if API key is provided)
+let stripe;
+if (process.env.STRIPE_SECRET_KEY) {
+    stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    console.log('✅ Stripe initialized successfully');
+} else {
+    console.warn('⚠️ STRIPE_SECRET_KEY not found - payment processing disabled');
+}
+
+// Import Stripe handler
+const { router: stripeRouter, initializeStripe } = require('./stripe-handler');
+if (stripe) {
+    initializeStripe(stripe);
+}
+
 // Middleware
 app.use(cors());
+
+// Special handling for Stripe webhooks (needs raw body)
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
+
+// JSON middleware for all other routes
 app.use(express.json());
 
 // Printful API Configuration
@@ -186,6 +206,12 @@ app.get('/api/countries', async (req, res) => {
     }
 });
 
+// Stripe payment routes (merchandise only)
+if (stripe) {
+    app.use('/api/stripe', stripeRouter);
+    console.log('✅ Stripe payment routes enabled');
+}
+
 // Webhook endpoint for Printful events
 app.post('/api/webhooks/printful', async (req, res) => {
     try {
@@ -229,6 +255,10 @@ const server = app.listen(PORT, () => {
     console.log('  GET  /api/products/:id');
     console.log('  POST /api/orders');
     console.log('  POST /api/webhooks/printful');
+    if (stripe) {
+        console.log('  POST /api/stripe/create-checkout-session');
+        console.log('  POST /api/stripe/webhook');
+    }
 });
 
 // Handle server errors

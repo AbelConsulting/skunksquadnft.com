@@ -835,7 +835,8 @@ function clearCart() {
  * Proceed to checkout
  */
 function proceedToCheckout() {
-    alert('Checkout functionality coming soon!\n\nThis will integrate with Printful\'s order API and payment processing.');
+    // Redirect to checkout page
+    window.location.href = './shop-checkout.html';
 }
 
 /**
