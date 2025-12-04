@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏆 Leaderboard - SkunkSquad NFT</title>
+    <title>🏆 Leaderboard - SkunkSquad NFT Members</title>
     <meta name="description" content="SkunkSquad NFT Leaderboard - Top collectors, rarest NFTs, and community stats">
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +49,25 @@
         .header p {
             font-size: 1.1rem;
             opacity: 0.8;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 0.5rem;
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            transform: translateX(-4px);
         }
 
         .nav-tabs {
@@ -416,6 +436,8 @@
 </head>
 <body>
     <div class="container">
+        <a href="../members.html" class="back-btn">← Back to Members Portal</a>
+        
         <div class="header">
             <h1>🏆 SkunkSquad Leaderboard</h1>
             <p>Top collectors, rarest NFTs, and community stats</p>
@@ -535,7 +557,7 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
-    <script src="./src/js/config.js"></script>
-    <script src="./src/js/leaderboard.js"></script>
+    <script src="../src/js/config.js"></script>
+    <script src="./js/leaderboard.js"></script>
 </body>
 </html>

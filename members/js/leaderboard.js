@@ -26,12 +26,12 @@ class SkunkSquadLeaderboard {
         ];
 
         this.sampleRarest = [
-            { id: 1337, rarity: 156.8, rank: 1, traits: 'Ultra Rare', image: './assets/skunksample3.png' },
-            { id: 4269, rarity: 148.2, rank: 2, traits: 'Legendary', image: './assets/skunksample14.png' },
-            { id: 6969, rarity: 142.5, rank: 3, traits: 'Ultra Rare', image: './assets/skunksample13.png' },
-            { id: 420, rarity: 138.9, rank: 4, traits: 'Legendary', image: './assets/skunksample17.png' },
-            { id: 8888, rarity: 135.7, rank: 5, traits: 'Epic', image: './assets/skunksample6.png' },
-            { id: 777, rarity: 132.4, rank: 6, traits: 'Epic', image: './assets/skunksample11.png' }
+            { id: 1337, rarity: 156.8, rank: 1, traits: 'Ultra Rare', image: '../assets/skunksample3.png' },
+            { id: 4269, rarity: 148.2, rank: 2, traits: 'Legendary', image: '../assets/skunksample14.png' },
+            { id: 6969, rarity: 142.5, rank: 3, traits: 'Ultra Rare', image: '../assets/skunksample13.png' },
+            { id: 420, rarity: 138.9, rank: 4, traits: 'Legendary', image: '../assets/skunksample17.png' },
+            { id: 8888, rarity: 135.7, rank: 5, traits: 'Epic', image: '../assets/skunksample6.png' },
+            { id: 777, rarity: 132.4, rank: 6, traits: 'Epic', image: '../assets/skunksample11.png' }
         ];
 
         this.sampleActivity = [
