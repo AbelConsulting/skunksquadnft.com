@@ -227,7 +227,30 @@ async function loadProducts(serverAvailable = true) {
                 allProducts.map(async (product) => {
                     try {
                         const details = await printfulAPI.getProduct(product.id);
-                        return details;
+                        // Transform Printful V2 API response
+                        const syncProduct = details.sync_product || details;
+                        const syncVariants = details.sync_variants || [];
+                        
+                        // Extract first variant for pricing
+                        const firstVariant = syncVariants[0] || {};
+                        
+                        return {
+                            id: syncProduct.id,
+                            name: syncProduct.name,
+                            thumbnail_url: syncProduct.thumbnail_url,
+                            retail_price: firstVariant.retail_price || '0.00',
+                            currency: firstVariant.currency || 'USD',
+                            variants: syncVariants.map(v => ({
+                                id: v.id,
+                                size: v.size || 'One Size',
+                                color: v.color || v.product?.name?.match(/\(([^)]+)\)/)?.[1] || 'Default',
+                                retail_price: v.retail_price,
+                                sku: v.sku,
+                                files: v.files
+                            })),
+                            sync_product: syncProduct,
+                            sync_variants: syncVariants
+                        };
                     } catch (error) {
                         console.error(`Failed to load product ${product.id}:`, error);
                         return null;
@@ -461,6 +484,30 @@ async function showProductModal(productId) {
             colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
         });
     }
+    
+    // Update mockup image when variant is selected
+    const updateMockupImage = () => {
+        const selectedSize = sizeSelect.value;
+        const selectedColor = colorSelect.value;
+        
+        if (selectedSize && selectedColor && product.variants) {
+            const variant = product.variants.find(v => v.size === selectedSize && v.color === selectedColor);
+            if (variant && variant.files) {
+                // Find preview file
+                const previewFile = variant.files.find(f => f.type === 'preview');
+                if (previewFile && previewFile.preview_url) {
+                    document.getElementById('modalProductImage').src = previewFile.preview_url;
+                    return;
+                }
+            }
+        }
+        
+        // Fallback to product thumbnail
+        document.getElementById('modalProductImage').src = product.thumbnail_url || './assets/charlesskunk.webp';
+    };
+    
+    sizeSelect.addEventListener('change', updateMockupImage);
+    colorSelect.addEventListener('change', updateMockupImage);
 
     // Reset quantity
     document.getElementById('quantityInput').value = 1;
