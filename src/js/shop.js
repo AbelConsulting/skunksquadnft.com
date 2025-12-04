@@ -107,7 +107,7 @@ async function checkServerAvailability() {
     
     // Try production API if localhost failed
     try {
-        const productionURL = '/api';
+        const productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
         console.log('🔍 Trying production endpoint:', productionURL);
         const response = await fetch(`${productionURL}/health`, {
             method: 'GET',

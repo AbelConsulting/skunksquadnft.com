@@ -31,7 +31,7 @@ class PrintfulAPI {
             }
         }
         
-        // Fall back to production
+        // Fall back to production Railway URL
         const url = `${this.productionURL}/${cleanEndpoint}`;
         return await this.makeRequest(url, options);
     }
