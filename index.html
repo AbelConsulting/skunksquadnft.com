@@ -92,15 +92,23 @@
     <link rel="preload" as="image" href="./assets/charlesskunk.webp" type="image/webp">
     <link rel="preload" as="image" href="./assets/skunksample12.png" type="image/png">
        
-    <!-- CSS -->
+    <!-- CSS - Optimized Loading -->
     <link rel="stylesheet" href="./styles/main.css">
     <link rel="stylesheet" href="./styles/components.css">
-    <link rel="stylesheet" href="./styles/animations.css">
-    <link rel="stylesheet" href="./styles/wallet-mint-card.css">
-    <link rel="stylesheet" href="./styles/notifications.css">
-    <link rel="stylesheet" href="./styles/loading-overlay.css">
-    <link rel="stylesheet" href="./styles/supply-counter.css">
-    <link rel="stylesheet" href="./styles/mobile-polish.css">
+    <link rel="stylesheet" href="./styles/animations.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./styles/wallet-mint-card.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./styles/notifications.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./styles/loading-overlay.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./styles/supply-counter.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./styles/mobile-polish.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="./styles/animations.css">
+        <link rel="stylesheet" href="./styles/wallet-mint-card.css">
+        <link rel="stylesheet" href="./styles/notifications.css">
+        <link rel="stylesheet" href="./styles/loading-overlay.css">
+        <link rel="stylesheet" href="./styles/supply-counter.css">
+        <link rel="stylesheet" href="./styles/mobile-polish.css">
+    </noscript>
     
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
@@ -179,9 +187,9 @@
                 <span class="price-badge">💳 Only <span class="price-eth">0.01 ETH</span> <span class="price-usd">(~$42)</span></span>
             </div>
             <div class="top-bar-right">
-                <a href="https://discord.gg/QrqYCVZM" class="top-social-link" target="_blank">💬</a>
-                <a href="https://opensea.io/0x897f6d5a329d9481bef2ee10fd0a5628d1934266" class="top-social-link" target="_blank">🌊</a>
-                <a href="https://x.com/MontanaDad406" class="top-social-link" target="_blank">x-icon</a>
+                <a href="https://discord.gg/QrqYCVZM" class="top-social-link" target="_blank" title="Discord">💬</a>
+                <a href="https://opensea.io/0x897f6d5a329d9481bef2ee10fd0a5628d1934266" class="top-social-link" target="_blank" title="OpenSea">🌊</a>
+                <a href="https://x.com/MontanaDad406" class="top-social-link" target="_blank" title="Twitter/X">𝕏</a>
             </div>
         </div>
     </div>
@@ -328,24 +336,24 @@
             
             <div class="payment-benefits">
                 <div class="benefit">
-                    <div class="benefit-icon">🌍</div>
-                    <h3>Global Access</h3>
-                    <p>Accept payments from 40+ countries worldwide</p>
+                    <div class="benefit-icon">🎨</div>
+                    <h3>Generative Art</h3>
+                    <p>10,000 unique NFTs with 76 traits across 8 layers</p>
                 </div>
                 <div class="benefit">
-                    <div class="benefit-icon">🛡️</div>
-                    <h3>Enterprise Security</h3>
-                    <p>PCI-compliant payments with bank-level encryption</p>
+                    <div class="benefit-icon">🌐</div>
+                    <h3>Elite Network</h3>
+                    <p>Access exclusive community of collectors and creators</p>
                 </div>
                 <div class="benefit">
-                    <div class="benefit-icon">⚡</div>
-                    <h3>Instant Processing</h3>
-                    <p>NFTs delivered immediately after payment confirmation</p>
+                    <div class="benefit-icon">📊</div>
+                    <h3>Analytics Tools</h3>
+                    <p>Track portfolio and rarity rankings in real-time</p>
                 </div>
                 <div class="benefit">
-                    <div class="benefit-icon">📱</div>
-                    <h3>Mobile Optimized</h3>
-                    <p>Perfect checkout experience on any device</p>
+                    <div class="benefit-icon">🏆</div>
+                    <h3>Members Perks</h3>
+                    <p>Exclusive merch, events, and holder benefits</p>
                 </div>
             </div>
         </div>
@@ -431,100 +439,58 @@
                 <h3>Sample Collection Preview</h3>
                 <div class="gallery-grid">
                     <div class="gallery-item">
-                        <img src="./assets/skunksample1.png" alt="SkunkSquad Sample #1" class="gallery-img">
+                        <img src="./assets/skunksample1.png" alt="SkunkSquad Sample #1" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#2847</span>
                             <span class="gallery-rarity rare">Rare</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample2.png" alt="SkunkSquad Sample #2" class="gallery-img">
+                        <img src="./assets/skunksample2.png" alt="SkunkSquad Sample #2" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#5691</span>
                             <span class="gallery-rarity epic">Epic</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample3.png" alt="SkunkSquad Sample #3" class="gallery-img">
+                        <img src="./assets/skunksample3.png" alt="SkunkSquad Sample #3" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#1337</span>
                             <span class="gallery-rarity ultra">Ultra</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample4.png" alt="SkunkSquad Sample #4" class="gallery-img">
+                        <img src="./assets/skunksample4.png" alt="SkunkSquad Sample #4" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#9999</span>
                             <span class="gallery-rarity common">Common</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample5.png" alt="SkunkSquad Sample #5" class="gallery-img">
+                        <img src="./assets/skunksample5.png" alt="SkunkSquad Sample #5" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#4256</span>
                             <span class="gallery-rarity rare">Rare</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample6.png" alt="SkunkSquad Sample #6" class="gallery-img">
+                        <img src="./assets/skunksample6.png" alt="SkunkSquad Sample #6" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#7823</span>
                             <span class="gallery-rarity epic">Epic</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample7.png" alt="SkunkSquad Sample #7" class="gallery-img">
+                        <img src="./assets/skunksample7.png" alt="SkunkSquad Sample #7" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#3142</span>
                             <span class="gallery-rarity ultra">Ultra</span>
                         </div>
                     </div>
                     <div class="gallery-item">
-                        <img src="./assets/skunksample8.png" alt="SkunkSquad Sample #8" class="gallery-img">
+                        <img src="./assets/skunksample8.png" alt="SkunkSquad Sample #8" class="gallery-img" loading="lazy" width="300" height="300">
                         <div class="gallery-info">
                             <span class="gallery-id">#6547</span>
-                            <span class="gallery-rarity legendary">Legendary</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample11.png" alt="SkunkSquad Sample #11" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#5678</span>
-                            <span class="gallery-rarity epic">Epic</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample12.png" alt="SkunkSquad Sample #12" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#9012</span>
-                            <span class="gallery-rarity rare">Rare</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample13.png" alt="SkunkSquad Sample #13" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#3456</span>
-                            <span class="gallery-rarity ultra">Ultra</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample14.png" alt="SkunkSquad Sample #14" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#7890</span>
-                            <span class="gallery-rarity legendary">Legendary</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample15.png" alt="SkunkSquad Sample #15" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#2468</span>
-                            <span class="gallery-rarity epic">Epic</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="./assets/skunksample17.png" alt="SkunkSquad Sample #17" class="gallery-img">
-                        <div class="gallery-info">
-                            <span class="gallery-id">#9753</span>
                             <span class="gallery-rarity legendary">Legendary</span>
                         </div>
                     </div>
@@ -659,34 +625,24 @@
         </div>
     </footer>
 
-    <!-- Floating Social Bar -->
-    <div class="floating-social">
-        <a href="https://x.com/MontanaDad406" class="floating-social-btn twitter" target="_blank" rel="noopener" title="Follow us on Twitter/X">
-            <span class="floating-icon">𝕏</span>
-        </a>
-        <a href="https://discord.gg/QrqYCVZM" class="floating-social-btn discord" target="_blank" rel="noopener" title="Join our Discord">
-            <span class="floating-icon">💬</span>
-        </a>
-        <a href="https://opensea.io/collection/skunksquad-nft" class="floating-social-btn opensea" target="_blank" rel="noopener" title="View on OpenSea">
-            <span class="floating-icon">🌊</span>
-        </a>
-    </div>
+    <!-- Floating Social Bar - Hidden on mobile for better UX -->
+    <div class="floating-social" style="display: none;"><!-- Removed to reduce redundancy with top bar --></div>
 
-    <!-- Core Scripts (Order matters!) -->
-    <script src="https://unpkg.com/web3@latest/dist/web3.min.js" defer></script>
-    <script src="./src/js/config.js?v=5" defer></script>
-    <script src="./src/js/mobile-enhancer.js?v=5" defer></script>
-    <script src="./src/js/notifications.js?v=5" defer></script>
-    <script src="./src/js/loading-overlay.js?v=5" defer></script>
-    <script src="./src/js/supply-counter.js?v=5" defer></script>
-    <script src="./src/js/transaction-tracker.js?v=5" defer></script>
-    <script src="./src/js/eth-price.js?v=5" defer></script>
-    <script src="./src/js/balance-checker.js?v=5" defer></script>
-    <script src="./src/js/ui-manager.js?v=5" defer></script>
-    <script src="./src/js/wallet.js?v=5" defer></script>
-    <script src="./src/js/mint-handler.js?v=5" defer></script>
-    <script src="./src/js/analytics.js?v=5" defer></script>
-    <script src="./src/js/main.js?v=5" defer></script>
+    <!-- Core Scripts (Optimized Loading) -->
+    <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+    <script src="./src/js/config.js?v=6"></script>
+    <script src="./src/js/mobile-enhancer.js?v=6"></script>
+    <script src="./src/js/notifications.js?v=6"></script>
+    <script src="./src/js/loading-overlay.js?v=6"></script>
+    <script src="./src/js/supply-counter.js?v=6"></script>
+    <script src="./src/js/transaction-tracker.js?v=6"></script>
+    <script src="./src/js/eth-price.js?v=6"></script>
+    <script src="./src/js/balance-checker.js?v=6"></script>
+    <script src="./src/js/ui-manager.js?v=6"></script>
+    <script src="./src/js/wallet.js?v=6"></script>
+    <script src="./src/js/mint-handler.js?v=6"></script>
+    <script src="./src/js/analytics.js?v=6" async></script>
+    <script src="./src/js/main.js?v=6"></script>
     <script>
         function copyContractAddress() {
             const address = document.getElementById('contract-address').textContent;
