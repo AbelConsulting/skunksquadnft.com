@@ -79,13 +79,39 @@ async function initShop() {
  * Check if backend server is available
  */
 async function checkServerAvailability() {
+    // Try production API first (Railway deployment)
     try {
-        // Always try localhost first for development
-        const baseURL = 'http://localhost:3001/api';
+        const productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
+        console.log('🔍 Checking production server:', productionURL);
         
-        console.log('🔍 Checking server at:', baseURL);
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const response = await fetch(`${productionURL}/health`, {
+            method: 'GET',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('✅ Production server is running:', data);
+            return true;
+        } else {
+            console.log('❌ Production server returned status:', response.status);
+        }
+    } catch (error) {
+        console.log('❌ Production server not available:', error.message);
+    }
+    
+    // Try localhost as fallback for development
+    try {
+        const baseURL = 'http://localhost:3001/api';
+        console.log('🔍 Trying localhost for development:', baseURL);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout for localhost
         
         const response = await fetch(`${baseURL}/health`, { 
             method: 'GET',
@@ -96,34 +122,14 @@ async function checkServerAvailability() {
         
         if (response.ok) {
             const data = await response.json();
-            console.log('✅ Backend server is running:', data);
-            return true;
-        } else {
-            console.log('❌ Backend server returned status:', response.status);
-        }
-    } catch (error) {
-        console.log('❌ Backend server not available at localhost:3001:', error.message);
-    }
-    
-    // Try production API if localhost failed
-    try {
-        const productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
-        console.log('🔍 Trying production endpoint:', productionURL);
-        const response = await fetch(`${productionURL}/health`, {
-            method: 'GET',
-            signal: AbortSignal.timeout(2000)
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            console.log('✅ Backend server is running (production):', data);
+            console.log('✅ Localhost server is running:', data);
             return true;
         }
     } catch (error) {
-        console.log('❌ Backend server not available (production):', error.message);
+        console.log('❌ Localhost not available:', error.message);
     }
     
-    console.log('⚠️ Using demo mode - server not available');
+    console.log('⚠️ Using demo mode - no server available');
     return false;
 }
 

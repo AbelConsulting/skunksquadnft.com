@@ -6,11 +6,11 @@
 class PrintfulAPI {
     constructor(apiToken = null) {
         this.apiToken = apiToken;
-        // Always try localhost first, fallback to production
-        this.baseURL = 'http://localhost:3001/api';
-        this.productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
+        // Use production by default, try localhost as fallback for development
+        this.baseURL = 'https://skunksquadnftcom-production.up.railway.app/api';
+        this.localhostURL = 'http://localhost:3001/api';
         this.storeId = null;
-        this.useLocalhost = true;
+        this.useProduction = true;
     }
 
     /**
@@ -20,19 +20,19 @@ class PrintfulAPI {
         // Remove leading slash if present since baseURL already has /api
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
         
-        // Try localhost first
-        if (this.useLocalhost) {
+        // Try production first (Railway deployment)
+        if (this.useProduction) {
             try {
                 const url = `${this.baseURL}/${cleanEndpoint}`;
                 return await this.makeRequest(url, options);
             } catch (error) {
-                console.log('Localhost failed, trying production...');
-                this.useLocalhost = false;
+                console.log('Production failed, trying localhost for development...');
+                this.useProduction = false;
             }
         }
         
-        // Fall back to production Railway URL
-        const url = `${this.productionURL}/${cleanEndpoint}`;
+        // Fall back to localhost for development
+        const url = `${this.localhostURL}/${cleanEndpoint}`;
         return await this.makeRequest(url, options);
     }
     
