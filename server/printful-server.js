@@ -20,16 +20,23 @@ const PRINTFUL_API_TOKEN = process.env.PRINTFUL_API_TOKEN;
 const PRINTFUL_CLIENT_ID = process.env.PRINTFUL_CLIENT_ID;
 const PRINTFUL_CLIENT_SECRET = process.env.PRINTFUL_CLIENT_SECRET;
 const PRINTFUL_BASE_URL = 'https://api.printful.com';
+const API_VERSION = 'v2'; // Using V2 endpoints
 
 /**
  * Make authenticated request to Printful API
  */
 async function printfulRequest(endpoint, options = {}) {
-    const url = `${PRINTFUL_BASE_URL}${endpoint}`;
+    // Add /v2 prefix if not already present and not a legacy endpoint
+    const apiEndpoint = endpoint.startsWith('/v2') || endpoint.startsWith('/store') 
+        ? endpoint 
+        : `/v2${endpoint}`;
+    
+    const url = `${PRINTFUL_BASE_URL}${apiEndpoint}`;
     
     const headers = {
         'Authorization': `Bearer ${PRINTFUL_API_TOKEN}`,
         'Content-Type': 'application/json',
+        'X-PF-Store-Id': process.env.PRINTFUL_STORE_ID || '',
         ...options.headers
     };
 
@@ -45,7 +52,15 @@ async function printfulRequest(endpoint, options = {}) {
             throw new Error(data.error?.message || `API Error: ${response.status}`);
         }
 
-        return data.result;
+        // Log rate limit info from V2 headers
+        const rateLimitRemaining = response.headers.get('X-Ratelimit-Remaining');
+        const rateLimitReset = response.headers.get('X-Ratelimit-Reset');
+        
+        if (rateLimitRemaining && parseInt(rateLimitRemaining) < 10) {
+            console.warn(`⚠️ Rate limit warning: ${rateLimitRemaining} requests remaining. Resets at: ${rateLimitReset}`);
+        }
+
+        return data.result || data; // V2 may return data directly
     } catch (error) {
         console.error('Printful API Error:', error);
         throw error;
@@ -67,10 +82,14 @@ app.get('/api/store', async (req, res) => {
     }
 });
 
-// Get all products
+// Get all products (V2 endpoint)
 app.get('/api/products', async (req, res) => {
     try {
-        const products = await printfulRequest('/store/products');
+        // V2 endpoint with pagination support
+        const limit = req.query.limit || 100;
+        const offset = req.query.offset || 0;
+        
+        const products = await printfulRequest(`/store/products?limit=${limit}&offset=${offset}`);
         res.json(products || []);
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -78,7 +97,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// Get single product
+// Get single product (V2 endpoint)
 app.get('/api/products/:id', async (req, res) => {
     try {
         const product = await printfulRequest(`/store/products/${req.params.id}`);
@@ -111,9 +130,10 @@ app.post('/api/shipping/rates', async (req, res) => {
     }
 });
 
-// Create order
+// Create order (V2 endpoint with enhanced features)
 app.post('/api/orders', async (req, res) => {
     try {
+        // V2 allows more flexible itemized order building
         const order = await printfulRequest('/orders', {
             method: 'POST',
             body: JSON.stringify(req.body)
