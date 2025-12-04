@@ -211,19 +211,26 @@ async function loadProducts(serverAvailable = true) {
         try {
             allProducts = await printfulAPI.getProducts();
             console.log('Products loaded:', allProducts);
+            
+            // Check if we got real products
+            if (!allProducts || allProducts.length === 0) {
+                console.log('No products found from API, using demo products');
+                allProducts = getMockProducts();
+                showDemoBanner();
+            }
         } catch (apiError) {
             console.error('Printful API Error:', apiError);
             
-            // If CORS or API error, use mock data for demonstration
+            // Check if it's a token issue
+            if (apiError.message && apiError.message.includes('access token')) {
+                console.error('🔐 PRINTFUL TOKEN ERROR: The API token is invalid or not set.');
+                console.error('📝 Please check RAILWAY_SETUP.md for instructions on setting environment variables.');
+            }
+            
+            // Use mock data for demonstration
             console.log('Using mock product data for demonstration');
             allProducts = getMockProducts();
             usingMockData = true;
-            showDemoBanner();
-        }
-        
-        if (!allProducts || allProducts.length === 0) {
-            console.log('No products found, using demo products');
-            allProducts = getMockProducts();
             showDemoBanner();
         }
 

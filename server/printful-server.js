@@ -98,7 +98,17 @@ async function printfulRequest(endpoint, options = {}) {
 
 // Health check
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Printful server is running' });
+    const hasToken = !!PRINTFUL_API_TOKEN;
+    const tokenPreview = hasToken ? `${PRINTFUL_API_TOKEN.substring(0, 10)}...` : 'NOT SET';
+    
+    res.json({ 
+        status: 'ok', 
+        message: 'Printful server is running',
+        printfulConfigured: hasToken,
+        tokenPreview: tokenPreview,
+        stripeConfigured: !!stripe,
+        environment: process.env.NODE_ENV || 'development'
+    });
 });
 
 // Get store information

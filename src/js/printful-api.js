@@ -6,11 +6,11 @@
 class PrintfulAPI {
     constructor(apiToken = null) {
         this.apiToken = apiToken;
-        // Use production by default, try localhost as fallback for development
-        this.baseURL = 'https://skunksquadnftcom-production.up.railway.app/api';
+        // Use production by default
+        this.productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
         this.localhostURL = 'http://localhost:3001/api';
         this.storeId = null;
-        this.useProduction = true;
+        this.baseURL = this.productionURL; // Start with production
     }
 
     /**
@@ -20,20 +20,27 @@ class PrintfulAPI {
         // Remove leading slash if present since baseURL already has /api
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
         
-        // Try production first (Railway deployment)
-        if (this.useProduction) {
-            try {
-                const url = `${this.baseURL}/${cleanEndpoint}`;
-                return await this.makeRequest(url, options);
-            } catch (error) {
+        // Try current baseURL (production by default)
+        try {
+            const url = `${this.baseURL}/${cleanEndpoint}`;
+            return await this.makeRequest(url, options);
+        } catch (error) {
+            // If using production and it fails, try localhost
+            if (this.baseURL === this.productionURL) {
                 console.log('Production failed, trying localhost for development...');
-                this.useProduction = false;
+                try {
+                    const url = `${this.localhostURL}/${cleanEndpoint}`;
+                    const result = await this.makeRequest(url, options);
+                    // If localhost works, switch to it
+                    this.baseURL = this.localhostURL;
+                    return result;
+                } catch (localhostError) {
+                    // Both failed, throw original production error
+                    throw error;
+                }
             }
+            throw error;
         }
-        
-        // Fall back to localhost for development
-        const url = `${this.localhostURL}/${cleanEndpoint}`;
-        return await this.makeRequest(url, options);
     }
     
     async makeRequest(url, options = {}) {
