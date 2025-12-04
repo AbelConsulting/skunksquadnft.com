@@ -109,13 +109,16 @@
     .hamburger {
         width: 44px;
         height: 44px;
-        display: flex;
+        display: flex !important;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 5px;
         cursor: pointer;
-        z-index: 1001;
+        z-index: 1002;
+        background: transparent;
+        border: none;
+        padding: 8px;
     }
 
     .hamburger span {
@@ -123,7 +126,8 @@
         height: 3px;
         background: #e2e8f0;
         border-radius: 2px;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: block;
     }
 
     .hamburger.active span:nth-child(1) {
@@ -132,32 +136,45 @@
 
     .hamburger.active span:nth-child(2) {
         opacity: 0;
+        transform: translateX(20px);
     }
 
     .hamburger.active span:nth-child(3) {
         transform: rotate(-45deg) translate(6px, -6px);
     }
 
-    /* Mobile menu overlay */
+    /* Mobile menu overlay - optimized */
+    .nav-secondary {
+        display: block;
+    }
+
     .nav-menu {
         position: fixed;
         top: 0;
         right: -100%;
         width: 280px;
+        max-width: 85vw;
         height: 100vh;
-        background: rgba(15, 23, 42, 0.98);
+        height: 100dvh; /* Dynamic viewport height for mobile */
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         padding: 80px 24px 24px;
         display: flex;
         flex-direction: column;
         gap: 8px;
-        transition: right 0.3s ease;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-        z-index: 1000;
+        z-index: 1001;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        will-change: transform;
+        transform: translateZ(0);
     }
 
     .nav-menu.active {
         right: 0;
+        transform: translateZ(0);
     }
 
     .nav-link {
@@ -173,6 +190,13 @@
     .nav-link:active {
         background: rgba(139, 92, 246, 0.3);
         transform: scale(0.98);
+    }
+
+    /* Prevent background scroll when menu open */
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
     }
 
     /* Connect button on mobile */

@@ -16,18 +16,16 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     
     function initHamburgerMenu() {
         const hamburger = document.getElementById('hamburger');
-        const navSecondary = document.querySelector('.nav-secondary');
         const navMenu = document.getElementById('nav-menu');
         
         console.log('🍔 Initializing hamburger menu...', { 
             hamburger, 
-            navSecondary, 
             navMenu,
             hamburgerDisplay: hamburger ? window.getComputedStyle(hamburger).display : 'not found',
             hamburgerVisible: hamburger ? hamburger.offsetParent !== null : false
         });
         
-        if (hamburger && navSecondary) {
+        if (hamburger && navMenu) {
             // Remove any existing listeners first
             const newHamburger = hamburger.cloneNode(true);
             hamburger.parentNode.replaceChild(newHamburger, hamburger);
@@ -36,85 +34,42 @@ console.log('🦨 SkunkSquad Main JS Loading...');
             newHamburger.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                e.stopImmediatePropagation();
                 
                 console.log('🍔 Hamburger clicked!');
                 
-                const isActive = navSecondary.classList.contains('active');
+                const isActive = navMenu.classList.contains('active');
                 console.log('🍔 Current state:', isActive ? 'active' : 'inactive');
                 
                 // Toggle classes
                 newHamburger.classList.toggle('active');
-                navSecondary.classList.toggle('active');
+                navMenu.classList.toggle('active');
                 
-                // Prevent body scroll and fix position when menu is open
+                // Prevent body scroll when menu is open
                 if (!isActive) {
-                    // Save current scroll position
-                    const scrollY = window.scrollY;
-                    document.body.classList.add('menu-open');
-                    document.body.style.top = `-${scrollY}px`;
+                    document.body.style.overflow = 'hidden';
                     console.log('🍔 Menu OPENING');
                 } else {
-                    // Restore scroll position
-                    const scrollY = document.body.style.top;
-                    document.body.classList.remove('menu-open');
-                    document.body.style.top = '';
-                    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                    document.body.style.overflow = '';
                     console.log('🍔 Menu CLOSING');
-                }
-            }, { capture: true });
-            
-            // Add touch event for mobile
-            newHamburger.addEventListener('touchstart', function(e) {
-                e.stopPropagation();
-                console.log('🍔 Hamburger touched!');
-            }, { passive: false });
-            
-            // Close menu when clicking on nav-secondary background (with delay to avoid conflict)
-            navSecondary.addEventListener('click', function(e) {
-                if (e.target === navSecondary || e.target.classList.contains('nav-secondary-container')) {
-                    setTimeout(() => {
-                        newHamburger.classList.remove('active');
-                        navSecondary.classList.remove('active');
-                        
-                        // Restore scroll position
-                        const scrollY = document.body.style.top;
-                        document.body.classList.remove('menu-open');
-                        document.body.style.top = '';
-                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                        
-                        console.log('🍔 Menu closed by background click');
-                    }, 100);
                 }
             });
             
             // Close menu when clicking on a nav link
-            if (navMenu) {
-                const navLinks = navMenu.querySelectorAll('.nav-link');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        setTimeout(() => {
-                            newHamburger.classList.remove('active');
-                            navSecondary.classList.remove('active');
-                            
-                            // Restore scroll position
-                            const scrollY = document.body.style.top;
-                            document.body.classList.remove('menu-open');
-                            document.body.style.top = '';
-                            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                            
-                            console.log('🍔 Menu closed by nav link click');
-                        }, 100);
-                    });
+            const navLinks = navMenu.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    newHamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                    console.log('🍔 Menu closed by nav link click');
                 });
-            }
+            });
             
             console.log('✅ Hamburger menu initialized');
         } else {
-            console.error('❌ Hamburger or nav-secondary not found!', {
+            console.error('❌ Hamburger or nav-menu not found!', {
                 hamburger: !!hamburger,
-                navSecondary: !!navSecondary
+                navMenu: !!navMenu
             });
         }
     }

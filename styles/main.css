@@ -517,6 +517,13 @@ h1, h2, h3, h4, h5, h6 {
     flex-wrap: wrap;
 }
 
+/* Hide hamburger on desktop */
+@media (min-width: 769px) {
+    .hamburger {
+        display: none !important;
+    }
+}
+
 .nav-link {
     color: #e2e8f0 !important;
     text-decoration: none;
