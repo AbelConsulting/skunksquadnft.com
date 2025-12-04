@@ -212,6 +212,46 @@ if (stripe) {
     console.log('✅ Stripe payment routes enabled');
 }
 
+// Create Printful order endpoint
+app.post('/api/orders', async (req, res) => {
+    try {
+        console.log('📦 Creating Printful order...');
+        console.log('Order data:', JSON.stringify(req.body, null, 2));
+        
+        // Create order in Printful
+        const orderData = {
+            recipient: req.body.recipient,
+            items: req.body.items,
+            retail_costs: req.body.retail_costs,
+            external_id: req.body.external_id
+        };
+        
+        const result = await printfulRequest('/orders', 'POST', orderData);
+        
+        console.log('✅ Printful order created successfully');
+        console.log('Order ID:', result.id);
+        
+        res.json(result);
+    } catch (error) {
+        console.error('❌ Error creating Printful order:', error.message);
+        console.error('Error details:', error);
+        res.status(500).json({ 
+            error: error.message,
+            details: 'Failed to create Printful order. Please check logs.'
+        });
+    }
+});
+
+// Get order status
+app.get('/api/orders/:orderId', async (req, res) => {
+    try {
+        const order = await printfulRequest(`/orders/${req.params.orderId}`);
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Webhook endpoint for Printful events
 app.post('/api/webhooks/printful', async (req, res) => {
     try {
