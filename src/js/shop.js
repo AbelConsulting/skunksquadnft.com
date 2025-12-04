@@ -83,37 +83,47 @@ async function checkServerAvailability() {
         // Always try localhost first for development
         const baseURL = 'http://localhost:3001/api';
         
-        console.log('Checking server at:', baseURL);
+        console.log('🔍 Checking server at:', baseURL);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+        
         const response = await fetch(`${baseURL}/health`, { 
             method: 'GET',
-            signal: AbortSignal.timeout(2000) // 2 second timeout
+            signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
-            console.log('✅ Backend server is running');
+            const data = await response.json();
+            console.log('✅ Backend server is running:', data);
             return true;
+        } else {
+            console.log('❌ Backend server returned status:', response.status);
         }
     } catch (error) {
-        console.log('❌ Backend server not available at localhost:3001');
+        console.log('❌ Backend server not available at localhost:3001:', error.message);
     }
     
     // Try production API if localhost failed
     try {
         const productionURL = '/api';
+        console.log('🔍 Trying production endpoint:', productionURL);
         const response = await fetch(`${productionURL}/health`, {
             method: 'GET',
             signal: AbortSignal.timeout(2000)
         });
         
         if (response.ok) {
-            console.log('✅ Backend server is running (production)');
+            const data = await response.json();
+            console.log('✅ Backend server is running (production):', data);
             return true;
         }
     } catch (error) {
-        console.log('❌ Backend server not available (production)');
+        console.log('❌ Backend server not available (production):', error.message);
     }
     
-    console.log('Using demo mode');
+    console.log('⚠️ Using demo mode - server not available');
     return false;
 }
 

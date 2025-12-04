@@ -22,6 +22,15 @@ const PRINTFUL_CLIENT_SECRET = process.env.PRINTFUL_CLIENT_SECRET;
 const PRINTFUL_BASE_URL = 'https://api.printful.com';
 const API_VERSION = 'v2'; // Using V2 endpoints
 
+// Validate API token is loaded
+if (!PRINTFUL_API_TOKEN) {
+    console.error('❌ ERROR: PRINTFUL_API_TOKEN not found in environment variables');
+    console.error('Please check your .env file in the server directory');
+    process.exit(1);
+}
+
+console.log('✅ API Token loaded successfully');
+
 /**
  * Make authenticated request to Printful API
  */
@@ -209,7 +218,7 @@ app.post('/api/webhooks/printful', async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`🚀 Printful server running on http://localhost:${PORT}`);
     console.log(`📦 API endpoint: http://localhost:${PORT}/api`);
     console.log('');
@@ -220,4 +229,33 @@ app.listen(PORT, () => {
     console.log('  GET  /api/products/:id');
     console.log('  POST /api/orders');
     console.log('  POST /api/webhooks/printful');
+});
+
+// Handle server errors
+server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use`);
+        console.error('Please stop the other process or use a different port');
+    } else {
+        console.error('❌ Server error:', error);
+    }
+    process.exit(1);
+});
+
+// Handle uncaught errors to prevent crashes
+process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+    console.log('\n👋 Shutting down server...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
 });
