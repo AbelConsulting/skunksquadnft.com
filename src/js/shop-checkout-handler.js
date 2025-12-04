@@ -6,7 +6,7 @@
 // Initialize Stripe with your publishable key
 // IMPORTANT: Copy your STRIPE_PUBLISHABLE_KEY value from server/.env here
 // It should start with pk_test_ or pk_live_
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_your_key_here'; // ⚠️ REPLACE THIS with your actual publishable key
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51S9yVHCS4rkoLd5zQyk1ibtcf7VU04rWPikUVWuHCNbgT8hya3T2CnGuhEplrBgaQAAvKhVaZmi57pEuacUTOcEi00Ha6EkMPn';
 let stripe;
 
 // Server endpoints

@@ -1,10 +1,11 @@
 /**
  * Stripe Payment Handler for SkunkSquad Merchandise
- * Handles payment processing for Printful merchandise only
+ * Handles payment processing and Printful order fulfillment
  */
 
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
 // Stripe will be initialized in the main server file
 let stripe;
@@ -170,17 +171,118 @@ async function handleSuccessfulPayment(session) {
         
         const cartData = JSON.parse(session.metadata.cartData);
         const shippingAddress = session.shipping_details?.address;
+        const shippingName = session.shipping_details?.name || session.customer_details?.name || 'Customer';
         
-        // TODO: Create Printful order here
-        // This will be implemented when connecting to Printful API
-        console.log('Cart items:', cartData);
-        console.log('Shipping to:', shippingAddress);
+        // Extract name parts
+        const nameParts = shippingName.split(' ');
+        const firstName = nameParts[0] || 'Customer';
+        const lastName = nameParts.slice(1).join(' ') || '';
         
-        // For now, just log the successful payment
-        // In production, this would create the Printful order
+        // Format Printful order items
+        const printfulItems = cartData.map(item => {
+            // For demo products, we'll need to map to actual Printful variant IDs
+            // In production, these should be stored in your product database
+            return {
+                sync_variant_id: item.variantId || null, // Printful variant ID
+                quantity: item.quantity,
+                retail_price: item.price.toFixed(2),
+                name: item.name,
+                // Additional options if needed
+                files: item.files || []
+            };
+        });
+        
+        // Create Printful order payload
+        const printfulOrderData = {
+            external_id: session.id, // Use Stripe session ID for tracking
+            recipient: {
+                name: shippingName,
+                address1: shippingAddress?.line1 || '',
+                address2: shippingAddress?.line2 || '',
+                city: shippingAddress?.city || '',
+                state_code: shippingAddress?.state || '',
+                country_code: shippingAddress?.country || 'US',
+                zip: shippingAddress?.postal_code || '',
+                phone: session.customer_details?.phone || '',
+                email: session.customer_email || ''
+            },
+            items: printfulItems,
+            retail_costs: {
+                currency: 'USD',
+                subtotal: (session.amount_total / 100).toFixed(2),
+                shipping: '0.00', // Already included in Stripe checkout
+                tax: '0.00'
+            }
+        };
+        
+        console.log('📦 Creating Printful order...');
+        console.log('Order data:', JSON.stringify(printfulOrderData, null, 2));
+        
+        // Create Printful order via API
+        try {
+            const printfulResponse = await fetch('http://localhost:3001/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(printfulOrderData)
+            });
+            
+            if (printfulResponse.ok) {
+                const printfulOrder = await printfulResponse.json();
+                console.log('✅ Printful order created:', printfulOrder.id);
+                console.log('Order details:', printfulOrder);
+                
+                // TODO: Store order mapping in database
+                // orderMapping = {
+                //     stripeSessionId: session.id,
+                //     printfulOrderId: printfulOrder.id,
+                //     customerEmail: session.customer_email,
+                //     status: 'pending',
+                //     createdAt: new Date()
+                // }
+                
+                // TODO: Send confirmation email to customer
+                // sendOrderConfirmationEmail(session.customer_email, printfulOrder);
+                
+            } else {
+                const error = await printfulResponse.text();
+                console.error('❌ Printful order creation failed:', error);
+                
+                // TODO: Alert admin about failed order
+                // sendAdminAlert({
+                //     type: 'printful_order_failed',
+                //     stripeSessionId: session.id,
+                //     error: error
+                // });
+            }
+            
+        } catch (printfulError) {
+            console.error('❌ Error calling Printful API:', printfulError);
+            
+            // Fallback: Log order details for manual processing
+            console.error('⚠️ MANUAL ORDER REQUIRED:');
+            console.error('Stripe Session:', session.id);
+            console.error('Customer:', session.customer_email);
+            console.error('Items:', JSON.stringify(cartData, null, 2));
+            console.error('Shipping:', JSON.stringify(shippingAddress, null, 2));
+            
+            // TODO: Store in failed orders queue for retry
+            // failedOrdersQueue.add({
+            //     sessionId: session.id,
+            //     orderData: printfulOrderData,
+            //     error: printfulError.message,
+            //     timestamp: new Date()
+            // });
+        }
         
     } catch (error) {
-        console.error('Error handling successful payment:', error);
+        console.error('❌ Error handling successful payment:', error);
+        
+        // Critical error - needs immediate attention
+        console.error('⚠️ CRITICAL: Payment received but order processing failed');
+        console.error('Session ID:', session.id);
+        console.error('Error:', error.message);
     }
 }
 

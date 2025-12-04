@@ -671,10 +671,20 @@ function addToCart() {
     const price = parseFloat(product.retail_price || 0);
     const finalPrice = isNFTHolder ? price * (1 - NFT_HOLDER_DISCOUNT) : price;
 
+    // Find matching variant for Printful order creation
+    let variantId = null;
+    if (product.variants) {
+        const variant = product.variants.find(v => v.size === size && v.color === color);
+        if (variant && variant.id) {
+            variantId = variant.id;
+        }
+    }
+
     // Add to cart
     const cartItem = {
         id: `${product.id}-${size}-${color}`,
         productId: product.id,
+        variantId: variantId, // Important for Printful order fulfillment
         name: product.name,
         size,
         color,
