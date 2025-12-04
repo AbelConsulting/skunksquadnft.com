@@ -8,7 +8,7 @@ class PrintfulAPI {
         this.apiToken = apiToken;
         // Always try localhost first, fallback to production
         this.baseURL = 'http://localhost:3001/api';
-        this.productionURL = '/api';
+        this.productionURL = 'https://skunksquadnftcom-production.up.railway.app/api';
         this.storeId = null;
         this.useLocalhost = true;
     }
