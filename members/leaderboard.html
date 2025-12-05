@@ -432,9 +432,176 @@
             display: inline-block;
             margin-right: 0.25rem;
         }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mobile-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mobile-nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-nav-brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #8b5cf6;
+        }
+
+        .mobile-nav-brand span {
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .hamburger:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #8b5cf6;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 73px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 1rem;
+            z-index: 99;
+            animation: slideDown 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .mobile-menu a:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a855f7;
+            transform: translateX(4px);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .back-btn {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-nav {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-container">
+            <div class="mobile-nav-brand">
+                <img src="../assets/charlesskunk.webp" alt="SkunkSquad">
+                <span>SkunkSquad</span>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Dropdown -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../members.html">🏠 Members Portal</a>
+        <a href="./my-nfts.html">🎨 My NFTs</a>
+        <a href="./networking.html">🤝 Networking</a>
+        <a href="./leaderboard.html">🏆 Leaderboard</a>
+        <a href="./badges.html">🎖️ Badges</a>
+        <a href="../index.html">← Back to Main Site</a>
+    </div>
+
     <div class="container">
         <a href="../members.html" class="back-btn">← Back to Members Portal</a>
         
@@ -559,5 +726,39 @@
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
     <script src="../src/js/config.js"></script>
     <script src="./js/leaderboard.js"></script>
+    
+    <!-- Mobile Menu Script -->
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+            
+            // Close menu when clicking a link
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideMenu = mobileMenu.contains(event.target);
+                const isClickOnHamburger = hamburger.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnHamburger && mobileMenu.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
