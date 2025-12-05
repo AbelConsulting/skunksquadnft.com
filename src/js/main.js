@@ -17,59 +17,72 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     function initHamburgerMenu() {
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
+        const navSecondary = document.querySelector('.nav-secondary');
         
         console.log('🍔 Initializing hamburger menu...', { 
             hamburger, 
             navMenu,
+            navSecondary,
             hamburgerDisplay: hamburger ? window.getComputedStyle(hamburger).display : 'not found',
             hamburgerVisible: hamburger ? hamburger.offsetParent !== null : false
         });
         
-        if (hamburger && navMenu) {
+        if (hamburger && navSecondary) {
             // Remove any existing listeners first
             const newHamburger = hamburger.cloneNode(true);
             hamburger.parentNode.replaceChild(newHamburger, hamburger);
             
-            // Add click listener to the new element
-            newHamburger.addEventListener('click', function(e) {
+            // Add both click and touch listeners
+            function toggleMenu(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                console.log('🍔 Hamburger clicked!');
+                console.log('🍔 Hamburger toggled!');
                 
-                const isActive = navMenu.classList.contains('active');
+                const isActive = navSecondary.classList.contains('active');
                 console.log('🍔 Current state:', isActive ? 'active' : 'inactive');
                 
                 // Toggle classes
                 newHamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
+                navSecondary.classList.toggle('active');
                 
                 // Prevent body scroll when menu is open
                 if (!isActive) {
                     document.body.style.overflow = 'hidden';
+                    document.body.style.position = 'fixed';
+                    document.body.style.width = '100%';
                     console.log('🍔 Menu OPENING');
                 } else {
                     document.body.style.overflow = '';
+                    document.body.style.position = '';
+                    document.body.style.width = '';
                     console.log('🍔 Menu CLOSING');
                 }
-            });
+            }
+            
+            newHamburger.addEventListener('click', toggleMenu, { passive: false });
+            newHamburger.addEventListener('touchend', toggleMenu, { passive: false });
             
             // Close menu when clicking on a nav link
-            const navLinks = navMenu.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    newHamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.style.overflow = '';
-                    console.log('🍔 Menu closed by nav link click');
+            if (navMenu) {
+                const navLinks = navMenu.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        newHamburger.classList.remove('active');
+                        navSecondary.classList.remove('active');
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.width = '';
+                        console.log('🍔 Menu closed by nav link click');
+                    });
                 });
-            });
+            }
             
             console.log('✅ Hamburger menu initialized');
         } else {
-            console.error('❌ Hamburger or nav-menu not found!', {
+            console.error('❌ Hamburger or nav-secondary not found!', {
                 hamburger: !!hamburger,
-                navMenu: !!navMenu
+                navSecondary: !!navSecondary
             });
         }
     }
