@@ -480,14 +480,21 @@
             flex-direction: column;
             gap: 4px;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.75rem;
             background: rgba(139, 92, 246, 0.1);
             border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 0.5rem;
             transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
+            justify-content: center;
         }
 
-        .hamburger:hover {
+        .hamburger:hover,
+        .hamburger:active {
             background: rgba(139, 92, 246, 0.2);
             border-color: #8b5cf6;
         }
@@ -495,7 +502,7 @@
         .hamburger span {
             display: block;
             width: 24px;
-            height: 2px;
+            height: 3px;
             background: #8b5cf6;
             transition: all 0.3s;
             border-radius: 2px;
@@ -525,13 +532,15 @@
             z-index: 99;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             opacity: 0;
+            pointer-events: none;
         }
 
         .mobile-menu.active {
-            max-height: 500px;
+            max-height: 600px;
             opacity: 1;
+            pointer-events: auto;
         }
 
         .mobile-menu a {
@@ -578,7 +587,12 @@
             }
 
             .mobile-menu {
-                display: none !important;
+                display: block;
+                max-height: 0;
+            }
+
+            .mobile-menu.active {
+                max-height: 600px;
             }
         }
     </style>
@@ -732,40 +746,79 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
     <script src="../src/js/config.js"></script>
-    <script src="./js/leaderboard.js"></script>
     
-    <!-- Mobile Menu Script -->
+    <!-- Mobile Menu Script - Load First -->
     <script>
-        // Mobile menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        if (hamburger && mobileMenu) {
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-            });
+        (function() {
+            'use strict';
             
-            // Close menu when clicking a link
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    hamburger.classList.remove('active');
-                    mobileMenu.classList.remove('active');
-                });
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideMenu = mobileMenu.contains(event.target);
-                const isClickOnHamburger = hamburger.contains(event.target);
+            function initMobileMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const mobileMenu = document.getElementById('mobileMenu');
                 
-                if (!isClickInsideMenu && !isClickOnHamburger && mobileMenu.classList.contains('active')) {
-                    hamburger.classList.remove('active');
-                    mobileMenu.classList.remove('active');
+                console.log('Init mobile menu - Hamburger:', hamburger, 'Menu:', mobileMenu);
+                
+                if (!hamburger || !mobileMenu) {
+                    console.error('Elements not found!');
+                    return;
                 }
-            });
-        }
+                
+                // Toggle menu function
+                function toggleMenu(e) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    
+                    const isActive = hamburger.classList.contains('active');
+                    console.log('Toggle menu - currently active:', isActive);
+                    
+                    if (isActive) {
+                        hamburger.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    } else {
+                        hamburger.classList.add('active');
+                        mobileMenu.classList.add('active');
+                    }
+                }
+                
+                // Add click event with touch support
+                hamburger.addEventListener('click', toggleMenu, { passive: false });
+                hamburger.addEventListener('touchend', toggleMenu, { passive: false });
+                
+                // Close menu when clicking a link
+                const menuLinks = mobileMenu.querySelectorAll('a');
+                console.log('Found', menuLinks.length, 'menu links');
+                
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target)) {
+                        if (mobileMenu.classList.contains('active')) {
+                            hamburger.classList.remove('active');
+                            mobileMenu.classList.remove('active');
+                        }
+                    }
+                });
+                
+                console.log('Mobile menu initialized successfully');
+            }
+            
+            // Try to init immediately
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMobileMenu);
+            } else {
+                initMobileMenu();
+            }
+        })();
     </script>
+    
+    <script src="./js/leaderboard.js"></script>
 </body>
 </html>
