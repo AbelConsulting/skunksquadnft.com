@@ -15,6 +15,12 @@ console.log('🦨 SkunkSquad Main JS Loading...');
     // ========================================
     
     function initHamburgerMenu() {
+        // Skip if MobileEnhancer is already handling it
+        if (window.mobileEnhancer) {
+            console.log('🍔 Hamburger menu handled by MobileEnhancer');
+            return;
+        }
+        
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
         const navSecondary = document.querySelector('.nav-secondary');
