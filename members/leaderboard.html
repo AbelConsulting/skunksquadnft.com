@@ -476,7 +476,7 @@
         }
 
         .hamburger {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 4px;
             cursor: pointer;
@@ -514,7 +514,6 @@
         }
 
         .mobile-menu {
-            display: none;
             position: fixed;
             top: 73px;
             left: 0;
@@ -524,11 +523,15 @@
             border-bottom: 1px solid rgba(139, 92, 246, 0.3);
             padding: 1rem;
             z-index: 99;
-            animation: slideDown 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
         }
 
         .mobile-menu.active {
-            display: block;
+            max-height: 500px;
+            opacity: 1;
         }
 
         .mobile-menu a {
@@ -560,18 +563,22 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
             .back-btn {
                 display: none;
+            }
+
+            body {
+                padding-top: 0;
             }
         }
 
         @media (min-width: 769px) {
             .mobile-nav {
                 display: none;
+            }
+
+            .mobile-menu {
+                display: none !important;
             }
         }
     </style>
