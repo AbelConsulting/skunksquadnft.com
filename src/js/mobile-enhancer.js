@@ -114,20 +114,42 @@ class MobileEnhancer {
      * Toggle mobile menu
      */
     toggleMenu() {
+        console.log('🔄 Toggle menu called');
+        console.log('Elements:', {
+            hamburger: this.hamburger,
+            navSecondary: this.navSecondary,
+            navMenu: this.navMenu
+        });
+        
         this.hamburger.classList.toggle('active');
+        console.log('Hamburger active:', this.hamburger.classList.contains('active'));
         
         // Toggle the correct menu element based on viewport
         if (this.navSecondary) {
             this.navSecondary.classList.toggle('active');
+            console.log('Nav secondary active:', this.navSecondary.classList.contains('active'));
+            console.log('Nav secondary styles:', {
+                display: window.getComputedStyle(this.navSecondary).display,
+                opacity: window.getComputedStyle(this.navSecondary).opacity,
+                visibility: window.getComputedStyle(this.navSecondary).visibility,
+                zIndex: window.getComputedStyle(this.navSecondary).zIndex
+            });
         } else if (this.navMenu) {
             this.navMenu.classList.toggle('active');
+            console.log('Nav menu active:', this.navMenu.classList.contains('active'));
         }
         
         // Prevent body scroll when menu is open
         if (this.isMenuOpen()) {
             document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            console.log('✅ Menu OPENED - body scroll locked');
         } else {
             document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            console.log('❌ Menu CLOSED - body scroll restored');
         }
     }
 
