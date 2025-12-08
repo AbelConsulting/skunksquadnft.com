@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #16213e;
+            border-radius: 10px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .hamburger {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 8px;
+        }
+        
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-overlay.active {
+            display: flex;
+        }
+        
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .menu-link {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .menu-link:active {
+            background: rgba(139, 92, 246, 0.5);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #16213e;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mobile Menu Test</h1>
+    <p>Tap the hamburger to test the menu</p>
+    
+    <div class="header">
+        <div class="logo">SkunkSquad</div>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <a href="#" class="menu-link">Home</a>
+            <a href="#" class="menu-link">Shop</a>
+            <a href="#" class="menu-link">Collection</a>
+            <a href="#" class="menu-link">Members</a>
+            <a href="#" class="menu-link">About</a>
+        </div>
+    </div>
+    
+    <div class="status" id="status">
+        Status: Ready<br>
+        Clicks: 0<br>
+        Menu State: Closed
+    </div>
+    
+    <script>
+        let clicks = 0;
+        const hamburger = document.getElementById('hamburger');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const status = document.getElementById('status');
+        
+        function updateStatus(msg) {
+            status.innerHTML = `Status: ${msg}<br>Clicks: ${clicks}<br>Menu State: ${menuOverlay.classList.contains('active') ? 'OPEN' : 'Closed'}`;
+        }
+        
+        hamburger.addEventListener('click', function(e) {
+            clicks++;
+            console.log('Hamburger clicked!', clicks);
+            
+            hamburger.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            
+            updateStatus('Clicked!');
+        });
+        
+        // Close when clicking menu links
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                hamburger.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                updateStatus('Menu closed via link');
+            });
+        });
+        
+        // Close when clicking overlay
+        menuOverlay.addEventListener('click', function(e) {
+            if (e.target === menuOverlay) {
+                hamburger.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                updateStatus('Menu closed via overlay');
+            }
+        });
+        
+        updateStatus('Initialized');
+    </script>
+</body>
+</html>
