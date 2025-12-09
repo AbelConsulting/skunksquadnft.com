@@ -38,7 +38,9 @@ router.post('/create-checkout-session', async (req, res) => {
                         size: item.size,
                         color: item.color,
                         type: 'merchandise' // Distinguish from NFT purchases
-                    }
+                    },
+                    // Tax code for physical goods (apparel)
+                    tax_code: 'txcd_99999999', // General - Tangible Goods
                 },
                 unit_amount: Math.round(item.price * 100), // Convert to cents
             },
@@ -57,6 +59,10 @@ router.post('/create-checkout-session', async (req, res) => {
                 orderType: 'merchandise',
                 isNFTHolder: isNFTHolder ? 'true' : 'false',
                 cartData: JSON.stringify(items) // Store for webhook processing
+            },
+            // Enable automatic tax calculation
+            automatic_tax: {
+                enabled: true,
             },
             shipping_address_collection: {
                 allowed_countries: ['US', 'CA', 'GB', 'AU', 'NZ', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'CH', 'SE', 'NO', 'DK', 'FI', 'IE', 'PT', 'PL', 'CZ', 'JP', 'SG', 'HK'],
