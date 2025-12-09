@@ -3,10 +3,8 @@
  * Handles Stripe checkout for merchandise only
  */
 
-// Initialize Stripe with your publishable key
-// IMPORTANT: Copy your STRIPE_PUBLISHABLE_KEY value from server/.env here
-// It should start with pk_test_ or pk_live_
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51S9yVHCS4rkoLd5zQyk1ibtcf7VU04rWPikUVWuHCNbgT8hya3T2CnGuhEplrBgaQAAvKhVaZmi57pEuacUTOcEi00Ha6EkMPn';
+// Load Stripe configuration from environment
+const STRIPE_PUBLISHABLE_KEY = window.SHOP_CONFIG?.stripePublishableKey || '';
 let stripe;
 
 // Server endpoints
@@ -32,10 +30,13 @@ async function initCheckout() {
         displayOrderSummary(cart, isNFTHolder);
         
         // Initialize Stripe
-        if (STRIPE_PUBLISHABLE_KEY && STRIPE_PUBLISHABLE_KEY !== 'pk_test_your_key_here') {
+        if (STRIPE_PUBLISHABLE_KEY && STRIPE_PUBLISHABLE_KEY.startsWith('pk_')) {
             stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            console.log('✅ Stripe initialized');
         } else {
-            console.warn('Stripe not configured - using demo mode');
+            console.error('❌ Stripe publishable key not configured. Check shop-config.js');
+            showError('Payment system not configured. Please contact support.');
+            return;
         }
         
         // Show checkout content

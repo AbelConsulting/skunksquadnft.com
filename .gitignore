@@ -16,6 +16,7 @@ server/.env.local
 # Secrets and API tokens
 **/secrets.js
 **/config/secrets.js
+src/js/shop-config.js
 
 # Hardhat
 cache/
