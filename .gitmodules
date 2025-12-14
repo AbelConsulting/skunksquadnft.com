@@ -1,0 +1,3 @@
+[submodule "SkunkFU"]
+	path = SkunkFU
+	url = https://github.com/AbelConsulting/SkunkFU.git
