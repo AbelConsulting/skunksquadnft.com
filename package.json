@@ -11,6 +11,7 @@
     "deploy:sepolia": "npx hardhat run scripts/deploy.js --network sepolia",
     "deploy:mainnet": "npx hardhat run scripts/deploy.js --network mainnet",
     "deploy-enhanced": "npx hardhat run scripts/deploy-enhanced.js --network sepolia",
+    "start": "node index.js",
     "deploy-ultra": "npx hardhat run scripts/deploy-ultra-smart.js --network sepolia",
     "deploy-mainnet": "npx hardhat run scripts/deploy-mainnet-production.js --network mainnet",
     "deploy-payment-gateway": "npx hardhat run scripts/deploy-payment-gateway.js --network sepolia",
