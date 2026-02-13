@@ -1,0 +1,22 @@
+# Minimal Jekyll config for GitHub Pages
+# This site is static HTML — Jekyll only needs to copy files through.
+# Exclude directories that contain Liquid-incompatible syntax (e.g. node_modules).
+
+exclude:
+  - node_modules
+  - SkunkFU/node_modules
+  - SkunkFU/android
+  - vendor
+  - "*.py"
+  - "*.bat"
+  - "*.sh"
+  - Gemfile
+  - Gemfile.lock
+  - package-lock.json
+  - hardhat.config.js
+  - artifacts
+  - cache
+  - contracts
+  - deployments
+  - tmp
+  - .env
